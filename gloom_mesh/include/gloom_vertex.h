@@ -45,6 +45,16 @@ struct VertexPNT {
   }
 };
 
+struct VertexPT {
+  Types::Vector3f position_{0.0f};
+  Types::Vector2f uv_{0.0f};
+
+  static VertexFormat GetFormat() {
+    return VertexFormat(
+        {Gloom::Types::DataType::VECTOR3, Gloom::Types::DataType::VECTOR2});
+  }
+};
+
 } // namespace Gloom
 
 #endif // GLOOM_VERTEX_H

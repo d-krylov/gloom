@@ -36,10 +36,10 @@ void Buffer::FlushRange(std::size_t offset, std::size_t size) {
   glFlushMappedNamedBufferRange(buffer_handle_, offset, size);
 }
 
-void Buffer::SetData(std::span<const std::byte> data, std::size_t offset) {
+void Buffer::SetData(std::span<const std::byte> raw) {
   GLOOM_VERIFY(storage_ == Types::BufferStorage::DYNAMIC_STORAGE);
-  GLOOM_VERIFY(offset + data.size() <= buffer_size_);
-  glNamedBufferSubData(buffer_handle_, offset, data.size(), data.data());
+  GLOOM_VERIFY(buffer_offset_ + raw.size() <= buffer_size_);
+  glNamedBufferSubData(buffer_handle_, buffer_offset_, raw.size(), raw.data());
 }
 
 } // namespace Gloom

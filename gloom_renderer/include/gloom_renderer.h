@@ -1,13 +1,16 @@
 #ifndef GLOOM_RENDERER_H
 #define GLOOM_RENDERER_H
 
-#include "gloom_types.h"
+#include "gloom.h"
 
 namespace Gloom {
 
 class Renderer {
 public:
+  Renderer();
+
 private:
+  VertexArray vertex_array_;
 };
 
 } // namespace Gloom

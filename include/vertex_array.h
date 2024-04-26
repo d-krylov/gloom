@@ -11,7 +11,7 @@ public:
   VertexArray();
   ~VertexArray();
 
-  [[nodiscard]] Types::Handle GetHandle() const { return vertex_array_handle_; }
+  operator Types::Handle() const { return vertex_array_handle_; }
 
   void SetIndexBuffer(const Buffer &buffer);
   void AddVertexBuffer(const VertexBuffer &vbo);

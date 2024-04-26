@@ -11,18 +11,18 @@ void VertexArray::Bind() { glBindVertexArray(vertex_array_handle_); }
 
 void VertexArray::SetIndexBuffer(const Buffer &buffer) {
   GLOOM_VERIFY(buffer.GetTarget() == Types::BufferTarget::ELEMENT_ARRAY_BUFFER);
-  glVertexArrayElementBuffer(vertex_array_handle_, buffer.GetHandle());
+  glVertexArrayElementBuffer(vertex_array_handle_, buffer);
 }
 
 void VertexArray::AddVertexBuffer(const VertexBuffer &vbo) {
-  AddVertexBufferAndFormat(vbo(), vbo.GetFormat());
+  AddVertexBufferAndFormat(vbo, vbo.GetFormat());
 }
 
 void VertexArray::AddVertexBufferAndFormat(const Buffer &buffer,
                                            const VertexFormat &vertex_format) {
   GLOOM_VERIFY(buffer.GetTarget() == Types::BufferTarget::ARRAY_BUFFER);
-  glVertexArrayVertexBuffer(vertex_array_handle_, current_binding_,
-                            buffer.GetHandle(), 0, vertex_format.GetStride());
+  glVertexArrayVertexBuffer(vertex_array_handle_, current_binding_, buffer, 0,
+                            vertex_format.GetStride());
   SetVertexFormat(vertex_format);
   UpdateBinding();
 }

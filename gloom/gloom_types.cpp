@@ -146,4 +146,6 @@ std::size_t GetSize(DataType type) {
   return component_count * component_size;
 }
 
+float Radians(float degrees) { return PI * degrees / 180.0f; }
+
 } // namespace Gloom::Types

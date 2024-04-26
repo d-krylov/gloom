@@ -13,12 +13,11 @@ void GLFWInitialize() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-GLFW_window::GLFW_window(std::string_view name, uint32_t width, uint32_t height)
-    : width_(width), height_(height) {
+GLFW_window::GLFW_window(std::string_view name, uint32_t w, uint32_t h)
+    : width_(w), height_(h) {
   GLFWInitialize();
 
-  native_window_ =
-      glfwCreateWindow(width, height, name.data(), nullptr, nullptr);
+  native_window_ = glfwCreateWindow(w, h, name.data(), nullptr, nullptr);
 
   glfwMakeContextCurrent(native_window_);
 
@@ -28,7 +27,12 @@ GLFW_window::GLFW_window(std::string_view name, uint32_t width, uint32_t height)
 bool GLFW_window::ShouldClose() const {
   return glfwWindowShouldClose(native_window_);
 }
+
 void GLFW_window::PollEvents() { glfwPollEvents(); }
 void GLFW_window::Update() const { glfwSwapBuffers(native_window_); }
+
+float GLFW_window::GetAspectRatio() const {
+  return static_cast<float>(width_) / height_;
+}
 
 } // namespace Gloom

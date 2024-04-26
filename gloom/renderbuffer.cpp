@@ -1,3 +1,9 @@
 #include "renderbuffer.h"
 
-namespace Gloom {} // namespace Gloom
+namespace Gloom {
+
+Renderbuffer::Renderbuffer() {}
+
+Renderbuffer::~Renderbuffer() {}
+
+} // namespace Gloom

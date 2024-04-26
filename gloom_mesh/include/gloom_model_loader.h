@@ -1,5 +1,5 @@
-#ifndef GLOOM_MESH_LOADER_H
-#define GLOOM_MESH_LOADER_H
+#ifndef GLOOM_MODEL_LOADER_H
+#define GLOOM_MODEL_LOADER_H
 
 #include "gloom_mesh.h"
 #include <filesystem>
@@ -8,7 +8,7 @@
 
 namespace Gloom {
 
-class MeshLoader {
+class ModelLoader {
 public:
   void Load(std::filesystem::path path, Mesh &mesh);
 
@@ -17,4 +17,4 @@ private:
 
 } // namespace Gloom
 
-#endif // GLOOM_MESH_LOADER_H
+#endif // GLOOM_MODEL_LOADER_H

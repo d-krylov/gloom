@@ -18,9 +18,7 @@ public:
 
   ~ShaderPipeline();
 
-  [[nodiscard]] Types::Handle GetHandle() const {
-    return shader_pipeline_handle_;
-  }
+  operator Types::Handle() const { return shader_pipeline_handle_; }
 
   template <typename T>
   void SetUniform(Types::ShaderIndex index, std::string_view name, T value) {

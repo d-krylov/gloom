@@ -2,7 +2,7 @@
 #define GLOOM_MESH_H
 
 #include "gloom_macros.h"
-#include "gloom_types.h"
+#include "material.h"
 #include <filesystem>
 #include <span>
 #include <vector>

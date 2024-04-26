@@ -22,7 +22,8 @@ public:
 
   ~Texture();
 
-  [[nodiscard]] Types::Handle GetHandle() const { return texture_handle_; }
+  operator Types::Handle() const { return texture_handle_; }
+
   [[nodiscard]] Types::TextureInternalFormat GetFormat() const {
     return internal_format_;
   }

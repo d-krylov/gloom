@@ -25,4 +25,7 @@ make
 
 ### Gratitudes
 
+Many thanks:
 
+1. Yan Chernikov's [youtube](https://www.youtube.com/@TheCherno) channel and [github](https://github.com/TheCherno)
+2. [Learn OpenGL](https://learnopengl.com/)

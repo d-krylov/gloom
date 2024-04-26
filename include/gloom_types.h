@@ -121,6 +121,12 @@ enum class TextureFilter {
   LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
 };
 
+enum class FramebufferKind {
+  Read = GL_READ_FRAMEBUFFER,
+  Write = GL_DRAW_FRAMEBUFFER,
+  Full = GL_FRAMEBUFFER
+};
+
 using Handle = uint32_t;
 
 using Vector2f = linalg::aliases::float2;
@@ -133,6 +139,12 @@ using Vector2u = linalg::aliases::uint2;
 using Vector3u = linalg::aliases::uint3;
 using Vector4u = linalg::aliases::uint4;
 using Matrix4f = linalg::aliases::float4x4;
+
+constexpr auto X = Vector3f(1.0f, 0.0f, 0.0f);
+constexpr auto Y = Vector3f(0.0f, 1.0f, 0.0f);
+constexpr auto Z = Vector3f(0.0f, 1.0f, 1.0f);
+
+constexpr float PI = 3.1415926535897f;
 
 template <typename T, int N> const T *Cast(const linalg::vec<T, N> &v) {
   return &(v.x);
@@ -173,6 +185,9 @@ struct DrawElementsIndirectCommand {
 
 constexpr auto ARRAYS_COMMAND_SIZE = sizeof(DrawArraysIndirectCommand);
 constexpr auto ELEMENTS_COMMAND_SIZE = sizeof(DrawElementsIndirectCommand);
+
+[[nodiscard]] float Radians(float degrees);
+[[nodiscard]] float Degrees(float radians);
 
 [[nodiscard]] CoreType GetComponentType(DataType type);
 [[nodiscard]] std::size_t GetComponentCount(DataType type);

@@ -16,6 +16,7 @@ public:
   void Bind();
   void Unbind();
 
+protected:
   bool Verify();
 
 private:

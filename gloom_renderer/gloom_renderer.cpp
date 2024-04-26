@@ -1,3 +1,7 @@
 #include "gloom_renderer.h"
 
-namespace Gloom {} // namespace Gloom
+namespace Gloom {
+
+Renderer::Renderer() {}
+
+} // namespace Gloom

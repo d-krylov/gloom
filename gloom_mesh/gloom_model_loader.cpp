@@ -1,11 +1,11 @@
-#include "gloom_mesh_loader.h"
+#include "gloom_model_loader.h"
 #define TINYOBJLOADER_IMPLEMENTATION
 #define TINYOBJLOADER_USE_MAPBOX_EARCUT
 #include "tinyobjloader/tiny_obj_loader.h"
 
 namespace Gloom {
 
-void MeshLoader::Load(std::filesystem::path path, Mesh &mesh) {
+void ModelLoader::Load(std::filesystem::path path, Mesh &mesh) {
   tinyobj::ObjReader reader;
   tinyobj::ObjReaderConfig reader_config;
 

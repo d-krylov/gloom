@@ -17,6 +17,10 @@ public:
     return attributes_;
   }
 
+  [[nodiscard]] bool IsValid() const {
+    return (stride_ != 0) && (attributes_.empty() == false);
+  }
+
 protected:
   void AddAttribute(const VertexAttribute &attributed);
 

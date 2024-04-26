@@ -12,7 +12,7 @@ int main() {
   Gloom::Debug::EnableDebug();
 
   Gloom::Mesh mesh;
-  Gloom::MeshLoader loader;
+  Gloom::ModelLoader loader;
 
   Gloom::Commands::EnableFaceCulling();
 
@@ -50,8 +50,8 @@ int main() {
 
   auto att = mesh.GetAttributes();
 
-  vertex_buffer.SetData(std::as_bytes(std::span(att)),
-                        0); // std::as_bytes(std::span(att))
+  vertex_buffer.SetData(
+      std::as_bytes(std::span(att))); // std::as_bytes(std::span(att))
 
   pipeline.SetUniform(Gloom::Types::ShaderIndex::VERTEX, "ModelMatrix",
                       translate);

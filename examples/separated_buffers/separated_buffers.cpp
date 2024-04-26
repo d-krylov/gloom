@@ -38,9 +38,9 @@ int main() {
 
   std::array<uint32_t, 6> i = {0, 1, 2, 2, 3, 0};
 
-  position_buffer().SetData(std::as_bytes(std::span(position)));
-  color_buffer().SetData(std::as_bytes(std::span(color)));
-  uv_buffer().SetData(std::as_bytes(std::span(uv)));
+  position_buffer.SetData(std::as_bytes(std::span(position)));
+  color_buffer.SetData(std::as_bytes(std::span(color)));
+  uv_buffer.SetData(std::as_bytes(std::span(uv)));
 
   vao.AddVertexBuffer(position_buffer);
   vao.AddVertexBuffer(color_buffer);

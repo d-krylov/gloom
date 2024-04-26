@@ -1,21 +1,22 @@
 #ifndef GLFW_WINDOW_H
 #define GLFW_WINDOW_H
 
-#include "window.h"
+#include <string_view>
 
 struct GLFWwindow;
 
 namespace Gloom {
 
-class GLFW_window : public Window {
+class GLFW_window {
 public:
   GLFW_window(std::string_view name, uint32_t width, uint32_t height);
 
-  GLFWwindow *GetNativeWindow() { return native_window_; }
+  const GLFWwindow *GetNativeWindow() const { return native_window_; }
 
-  uint32_t GetWidth() const override { return width_; }
-  uint32_t GetHeight() const override { return height_; }
-  bool ShouldClose() const override;
+  uint32_t GetWidth() const { return width_; }
+  uint32_t GetHeight() const { return height_; }
+  bool ShouldClose() const;
+  float GetAspectRatio() const;
 
   void SetCallbacks();
   void SetUserPointer();

@@ -36,7 +36,7 @@ int main() {
   Gloom::VertexBuffer vbo(Gloom::Types::BufferStorage::DYNAMIC_STORAGE, 4_KiB,
                           Gloom::VertexPCT::GetFormat());
 
-  vbo().SetData(std::as_bytes(std::span(data)));
+  vbo.SetData(std::as_bytes(std::span(data)));
 
   vao.AddVertexBuffer(vbo);
   vao.Bind();
