@@ -53,9 +53,8 @@ int main() {
       Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {0.0f, 1.0f}}};
 
   auto root = Gloom::Tools::GetRoot();
-  Gloom::ShaderPipeline pipeline(root / "gloom_shaders/position3_texture2.vert",
-                                 root /
-                                     "gloom_shaders/position3_texture2.frag");
+  Gloom::GraphicsPipeline pipeline(root / "shaders/position3_texture2.vert",
+                                   root / "shaders/position3_texture2.frag");
 
   pipeline.Bind();
   Gloom::VertexArray vao;

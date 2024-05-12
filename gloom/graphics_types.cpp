@@ -1,4 +1,4 @@
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include "gloom_assert.h"
 
 namespace Gloom ::Types {

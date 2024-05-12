@@ -1,7 +1,7 @@
 #ifndef GLOOM_MATERIAL_H
 #define GLOOM_MATERIAL_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include "texture.h"
 #include <memory>
 

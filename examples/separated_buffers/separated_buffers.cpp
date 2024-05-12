@@ -12,8 +12,8 @@ int main() {
   Gloom::GLFW_window window("Texture", 800, 600);
   Gloom::Debug::EnableDebug();
   auto root = Gloom::Tools::GetRoot();
-  Gloom::ShaderPipeline pipeline(root / "gloom_shaders/gloom_2d.vert",
-                                 root / "gloom_shaders/gloom_2d.frag");
+  Gloom::GraphicsPipeline pipeline(root / "gloom_shaders/gloom_2d.vert",
+                                   root / "gloom_shaders/gloom_2d.frag");
   pipeline.Bind();
   Gloom::VertexArray vao;
   Gloom::VertexBuffer position_buffer(STORAGE, 4_KiB, Gloom::MakePosition3f());

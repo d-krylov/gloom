@@ -1,30 +1,30 @@
-#include "shader_pipeline.h"
+#include "graphics_pipeline.h"
 #include "gloom_assert.h"
 #include "gloom_debug.h"
 #include "gloom_tools.h"
 
 namespace Gloom {
 
-ShaderPipeline::ShaderPipeline() {
+GraphicsPipeline::GraphicsPipeline() {
   glCreateProgramPipelines(1, &shader_pipeline_handle_);
 }
 
-ShaderPipeline::ShaderPipeline(const std::string &vs, const std::string &fs)
-    : ShaderPipeline() {
+GraphicsPipeline::GraphicsPipeline(const std::string &vs, const std::string &fs)
+    : GraphicsPipeline() {
   AddShader(Types::ShaderIndex::VERTEX, vs);
   AddShader(Types::ShaderIndex::FRAGMENT, fs);
 }
 
-ShaderPipeline::ShaderPipeline(const std::filesystem::path &vs,
-                               const std::filesystem::path &fs)
-    : ShaderPipeline(Tools::ReadFile(vs), Tools::ReadFile(fs)) {}
+GraphicsPipeline::GraphicsPipeline(const std::filesystem::path &vs,
+                                   const std::filesystem::path &fs)
+    : GraphicsPipeline(Tools::ReadFile(vs), Tools::ReadFile(fs)) {}
 
-ShaderPipeline::~ShaderPipeline() {
+GraphicsPipeline::~GraphicsPipeline() {
   glDeleteProgramPipelines(1, &shader_pipeline_handle_);
 }
 
-void ShaderPipeline::AddShader(Types::ShaderIndex index,
-                               const std::string &source) {
+void GraphicsPipeline::AddShader(Types::ShaderIndex index,
+                                 const std::string &source) {
   auto source_cstr = source.c_str();
   auto kind = static_cast<uint16_t>(Types::GetShaderKind(index));
   shaders_[index] = glCreateShaderProgramv(kind, 1, &source_cstr);
@@ -33,12 +33,12 @@ void ShaderPipeline::AddShader(Types::ShaderIndex index,
   UseStage(index);
 }
 
-void ShaderPipeline::UseStage(Types::ShaderIndex index) {
+void GraphicsPipeline::UseStage(Types::ShaderIndex index) {
   auto stage = static_cast<uint32_t>(Types::GetShaderBit(index));
   glUseProgramStages(shader_pipeline_handle_, stage, shaders_[index]);
 }
 
-void ShaderPipeline::Bind() const {
+void GraphicsPipeline::Bind() const {
   GLOOM_VERIFY(shader_pipeline_handle_ != 0);
   glBindProgramPipeline(shader_pipeline_handle_);
 }

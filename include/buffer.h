@@ -1,7 +1,7 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include <span>
 
 namespace Gloom {

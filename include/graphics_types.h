@@ -112,7 +112,7 @@ enum class PixelFormat {
   RGBA = GL_RGBA
 };
 
-enum class TextureFilter {
+enum class TextureMinifyingFunction {
   NEAREST = GL_NEAREST,
   LINEAR = GL_LINEAR,
   NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
@@ -121,10 +121,45 @@ enum class TextureFilter {
   LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
 };
 
+enum class TextureMagnificationFunction {
+  NEAREST = GL_NEAREST,
+  LINEAR = GL_LINEAR
+};
+
 enum class FramebufferKind {
-  Read = GL_READ_FRAMEBUFFER,
-  Write = GL_DRAW_FRAMEBUFFER,
-  Full = GL_FRAMEBUFFER
+  READ = GL_READ_FRAMEBUFFER,
+  DRAW = GL_DRAW_FRAMEBUFFER,
+  FULL = GL_FRAMEBUFFER
+};
+
+enum class BlendEquation {
+  ADD = GL_FUNC_ADD,
+  SUBTRACT = GL_FUNC_SUBTRACT,
+  REVERSE_SUBTRACT = GL_FUNC_REVERSE_SUBTRACT,
+  MIN = GL_MIN,
+  MAX = GL_MAX
+};
+
+enum class BlendFunctionSeparate {
+  ZERO = GL_ZERO,
+  ONE = GL_ONE,
+  SRC_COLOR = GL_SRC_COLOR,
+  ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
+  DST_COLOR = GL_DST_COLOR,
+  ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
+  SRC_ALPHA = GL_SRC_ALPHA,
+  ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
+  DST_ALPHA = GL_DST_ALPHA,
+  ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA,
+  CONSTANT_COLOR = GL_CONSTANT_COLOR,
+  ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_COLOR,
+  CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
+  ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA,
+  SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE,
+  SRC1_COLOR = GL_SRC1_COLOR,
+  ONE_MINUS_SRC1_COLOR = GL_ONE_MINUS_SRC1_COLOR,
+  SRC1_ALPHA = GL_SRC1_ALPHA,
+  ONE_MINUS_SRC1_ALPHA = GL_ONE_MINUS_SRC1_ALPHA
 };
 
 using Handle = uint32_t;
@@ -185,6 +220,17 @@ struct DrawElementsIndirectCommand {
 
 constexpr auto ARRAYS_COMMAND_SIZE = sizeof(DrawArraysIndirectCommand);
 constexpr auto ELEMENTS_COMMAND_SIZE = sizeof(DrawElementsIndirectCommand);
+
+enum class DepthFunction {
+  NEVER = GL_NEVER,
+  LESS = GL_LESS,
+  EQUAL = GL_EQUAL,
+  LEQUAL = GL_LEQUAL,
+  GREATER = GL_GREATER,
+  NOTEQUAL = GL_NOTEQUAL,
+  GEQUAL = GL_GEQUAL,
+  ALWAYS = GL_ALWAYS
+};
 
 [[nodiscard]] float Radians(float degrees);
 [[nodiscard]] float Degrees(float radians);

@@ -1,7 +1,7 @@
 #ifndef GLOOM_MESH_TOOLS_H
 #define GLOOM_MESH_TOOLS_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include <vector>
 
 namespace Gloom {

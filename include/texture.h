@@ -2,10 +2,19 @@
 #define TEXTURE_H
 
 #include "gloom_image.h"
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include <span>
 
 namespace Gloom {
+
+struct TextureInformation {
+  int32_t width_;
+  int32_t height_;
+  Types::TextureTarget target;
+  Types::TextureInternalFormat internal_format_;
+  Types::TextureMagnificationFunction mag_filter_;
+  Types::TextureMinifyingFunction min_filter_;
+};
 
 class Texture {
 public:

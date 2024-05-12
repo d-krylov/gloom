@@ -9,7 +9,7 @@
 #include "gloom_model_loader.h"
 #include "gloom_tools.h"
 #include "gloom_vertex.h"
-#include "shader_pipeline.h"
+#include "graphics_pipeline.h"
 #include "texture.h"
 #include "vertex_array.h"
 

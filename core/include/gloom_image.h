@@ -1,7 +1,7 @@
 #ifndef GLOOM_IMAGE_H
 #define GLOOM_IMAGE_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include <filesystem>
 #include <span>
 

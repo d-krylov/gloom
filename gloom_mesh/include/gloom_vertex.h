@@ -1,7 +1,7 @@
 #ifndef GLOOM_VERTEX_H
 #define GLOOM_VERTEX_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include "vertex_format.h"
 
 namespace Gloom {

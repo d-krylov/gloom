@@ -2,7 +2,7 @@
 #define SHADER_INFORMATION_H
 
 #include "gloom_tools.h"
-#include "gloom_types.h"
+#include "graphics_types.h"
 
 namespace Gloom {
 

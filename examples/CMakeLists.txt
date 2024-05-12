@@ -9,3 +9,6 @@ target_link_libraries(separated_buffers PRIVATE gloom)
 
 add_executable(learn_opengl_camera ${CMAKE_CURRENT_SOURCE_DIR}/learn_opengl_camera/learn_opengl_camera.cpp)
 target_link_libraries(learn_opengl_camera PRIVATE gloom)
+
+add_executable(example ${CMAKE_CURRENT_SOURCE_DIR}/example/example.cpp)
+target_link_libraries(example PRIVATE gloom)

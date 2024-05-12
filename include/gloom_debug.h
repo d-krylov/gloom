@@ -1,7 +1,7 @@
 #ifndef GLOOM_DEBUG_H
 #define GLOOM_DEBUG_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include <optional>
 #include <string>
 

@@ -1,7 +1,7 @@
 #ifndef RENDERBUFFER_H
 #define RENDERBUFFER_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 
 namespace Gloom {
 

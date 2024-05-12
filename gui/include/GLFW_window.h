@@ -11,7 +11,7 @@ class GLFW_window {
 public:
   GLFW_window(std::string_view name, uint32_t width, uint32_t height);
 
-  const GLFWwindow *GetNativeWindow() const { return native_window_; }
+  GLFWwindow *GetNativeWindow() const { return native_window_; }
 
   uint32_t GetWidth() const { return width_; }
   uint32_t GetHeight() const { return height_; }

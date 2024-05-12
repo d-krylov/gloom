@@ -1,7 +1,7 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 
 namespace Gloom {
 

@@ -14,9 +14,9 @@ int main() {
   Gloom::Mesh mesh;
   Gloom::ModelLoader loader;
 
-  Gloom::Commands::EnableFaceCulling();
+  Gloom::Commands::SetFaceCulling(true);
 
-  Gloom::Commands::EnableDepthTesting();
+  Gloom::Commands::SetDepthTesting(true);
 
   Gloom::Scene::Camera camera;
 
@@ -24,8 +24,8 @@ int main() {
 
   loader.Load(root / "assets/obj/with_material/tree/Tree.obj", mesh);
 
-  Gloom::ShaderPipeline pipeline(root / "gloom_shaders/gloom_simple.vert",
-                                 root / "gloom_shaders/gloom_simple.frag");
+  Gloom::GraphicsPipeline pipeline(root / "gloom_shaders/gloom_simple.vert",
+                                   root / "gloom_shaders/gloom_simple.frag");
 
   pipeline.Bind();
 

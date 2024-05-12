@@ -35,8 +35,8 @@ void VertexArray::SetVertexFormat(const VertexFormat &vertex_format) {
     if (attribute.IsFloat()) {
       glVertexArrayAttribFormat(
           vertex_array_handle_, i + binding, attribute.GetComponentCount(),
-          static_cast<uint32_t>(attribute.GetComponentType()), GL_FALSE,
-          attribute.GetOffset());
+          static_cast<uint32_t>(attribute.GetComponentType()),
+          attribute.Normalize(), attribute.GetOffset());
     } else if (attribute.IsDouble()) {
       glVertexArrayAttribLFormat(
           vertex_array_handle_, i + binding, attribute.GetComponentCount(),

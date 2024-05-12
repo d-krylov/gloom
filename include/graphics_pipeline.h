@@ -1,7 +1,7 @@
 #ifndef SHADER_PIPELINE_H
 #define SHADER_PIPELINE_H
 
-#include "gloom_types.h"
+#include "graphics_types.h"
 #include "shader_uniform.h"
 #include <array>
 #include <filesystem>
@@ -9,21 +9,22 @@
 
 namespace Gloom {
 
-class ShaderPipeline {
+class GraphicsPipeline {
 public:
-  ShaderPipeline();
-  ShaderPipeline(const std::string &vs, const std::string &fs);
-  ShaderPipeline(const std::filesystem::path &vs,
-                 const std::filesystem::path &fs);
+  GraphicsPipeline();
+  GraphicsPipeline(const std::string &vs, const std::string &fs);
+  GraphicsPipeline(const std::filesystem::path &vs,
+                   const std::filesystem::path &fs);
 
-  ~ShaderPipeline();
+  ~GraphicsPipeline();
 
   operator Types::Handle() const { return shader_pipeline_handle_; }
 
   template <typename T>
-  void SetUniform(Types::ShaderIndex index, std::string_view name, T value) {
+  void SetUniform(Types::ShaderIndex index, std::string_view name, T value,
+                  bool transpose = false) {
     auto location = glGetUniformLocation(shaders_[index], name.data());
-    SetUniformInternal(shaders_[index], location, value);
+    SetUniformInternal(shaders_[index], location, value, transpose);
   }
 
   void AddShader(Types::ShaderIndex index, const std::string &source);
