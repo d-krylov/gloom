@@ -1,19 +1,19 @@
-#include "GLFW_window.h"
-#include "gloom.h"
+#include "graphics.h"
+#include "window.h"
 #include <iostream>
 
 auto STORAGE = Gloom::Types::BufferStorage::DYNAMIC_STORAGE;
 
-using Gloom::operator""_KiB;
-using Gloom::operator""_MiB;
+using Gloom::Types::operator""_KiB;
+using Gloom::Types::operator""_MiB;
 
 int main() {
 
-  Gloom::GLFW_window window("Texture", 800, 600);
+  Gloom::Window window("Texture", 800, 600);
   Gloom::Debug::EnableDebug();
   auto root = Gloom::Tools::GetRoot();
-  Gloom::GraphicsPipeline pipeline(root / "gloom_shaders/gloom_2d.vert",
-                                   root / "gloom_shaders/gloom_2d.frag");
+  Gloom::GraphicsPipeline pipeline(root / "shaders/gloom_2d.vert",
+                                   root / "shaders/gloom_2d.frag");
   pipeline.Bind();
   Gloom::VertexArray vao;
   Gloom::VertexBuffer position_buffer(STORAGE, 4_KiB, Gloom::MakePosition3f());
@@ -23,18 +23,13 @@ int main() {
   Gloom::Texture texture(Gloom::Types::TextureTarget::TEXTURE_2D, image);
   texture.SetData(image.GetData());
   texture.Bind(0);
-  Gloom::Types::Vector3f position[] = {{+0.5f, +0.5f, 0.0f},
-                                       {+0.5f, -0.5f, 0.0f},
-                                       {-0.5f, -0.5f, 0.0f},
-                                       {-0.5f, +0.5f, 0.0f}};
+  Gloom::Types::Vector3f position[] = {
+    {+0.5f, +0.5f, 0.0f}, {+0.5f, -0.5f, 0.0f}, {-0.5f, -0.5f, 0.0f}, {-0.5f, +0.5f, 0.0f}};
 
-  Gloom::Types::Vector3f color[] = {{1.0f, 0.0f, 0.0f},
-                                    {0.0f, 1.0f, 0.0f},
-                                    {0.0f, 0.0f, 1.0f},
-                                    {1.0f, 1.0f, 0.0f}};
+  Gloom::Types::Vector3f color[] = {
+    {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 0.0f}};
 
-  Gloom::Types::Vector2f uv[] = {
-      {1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}, {0.0f, 1.0f}};
+  Gloom::Types::Vector2f uv[] = {{1.0f, 1.0f}, {1.0f, 0.0f}, {0.0f, 0.0f}, {0.0f, 1.0f}};
 
   std::array<uint32_t, 6> i = {0, 1, 2, 2, 3, 0};
 

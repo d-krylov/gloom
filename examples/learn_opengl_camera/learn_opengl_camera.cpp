@@ -1,56 +1,57 @@
-#include "GLFW_window.h"
-#include "gloom.h"
+#include "graphics.h"
+#include "window.h"
 #include <array>
 
-using Gloom::operator""_KiB;
+using Gloom::Types::operator""_KiB;
+using Gloom::Types::operator""_MiB;
 
 int main() {
 
-  Gloom::GLFW_window window("Learn OpenGL: Camera", 800, 600);
+  Gloom::Window window("Learn OpenGL: Camera", 800, 600);
   Gloom::Debug::EnableDebug();
 
   std::array<Gloom::VertexPT, 36> vertices = {
-      Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f}},
-      Gloom::VertexPT{{+0.5f, -0.5f, -0.5f}, {1.0f, 0.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
-      Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {0.0f, 1.0f}},
-      Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, -0.5f, -0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
+    Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f}},
 
-      Gloom::VertexPT{{-0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
-      Gloom::VertexPT{{+0.5f, -0.5f, +0.5f}, {1.0f, 0.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 1.0f}},
-      Gloom::VertexPT{{-0.5f, +0.5f, +0.5f}, {0.0f, 1.0f}},
-      Gloom::VertexPT{{-0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, -0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 1.0f}},
+    Gloom::VertexPT{{-0.5f, +0.5f, +0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
 
-      Gloom::VertexPT{{-0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
-      Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
-      Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
-      Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
-      Gloom::VertexPT{{-0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
-      Gloom::VertexPT{{-0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
 
-      Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
 
-      Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, -0.5f, -0.5f}, {1.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, -0.5f, +0.5f}, {1.0f, 0.0f}},
-      Gloom::VertexPT{{+0.5f, -0.5f, +0.5f}, {1.0f, 0.0f}},
-      Gloom::VertexPT{{-0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
-      Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, -0.5f, -0.5f}, {1.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, -0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, -0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, +0.5f}, {0.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, -0.5f, -0.5f}, {0.0f, 1.0f}},
 
-      Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {0.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
-      Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
-      Gloom::VertexPT{{-0.5f, +0.5f, +0.5f}, {0.0f, 0.0f}},
-      Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {0.0f, 1.0f}}};
+    Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {0.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, -0.5f}, {1.0f, 1.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{+0.5f, +0.5f, +0.5f}, {1.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, +0.5f, +0.5f}, {0.0f, 0.0f}},
+    Gloom::VertexPT{{-0.5f, +0.5f, -0.5f}, {0.0f, 1.0f}}};
 
   auto root = Gloom::Tools::GetRoot();
   Gloom::GraphicsPipeline pipeline(root / "shaders/position3_texture2.vert",
@@ -76,8 +77,7 @@ int main() {
   while (window.ShouldClose() == false) {
     window.PollEvents();
     Gloom::Commands::Clear();
-    Gloom::Commands::DrawArrays(Gloom::Types::PrimitiveKind::TRIANGLES, 0,
-                                vertices.size());
+    Gloom::Commands::DrawArrays(Gloom::Types::PrimitiveKind::TRIANGLES, 0, vertices.size());
     window.Update();
   }
 

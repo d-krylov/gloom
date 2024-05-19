@@ -5,9 +5,9 @@
 
 namespace Gloom {
 
-Image::Image(std::filesystem::path path) {
-  auto data = reinterpret_cast<std::byte *>(
-      stbi_load(path.c_str(), &size_.x, &size_.y, &channels_, 0));
+Image::Image(const std::filesystem::path &path) {
+  auto data =
+    reinterpret_cast<std::byte *>(stbi_load(path.c_str(), &size_.x, &size_.y, &channels_, 0));
   if (data != nullptr) {
     image_data_ = std::span<std::byte>(data, size_.x * size_.y * channels_);
   }

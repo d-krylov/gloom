@@ -1,7 +1,7 @@
 #ifndef GLOOM_CAMERA_H
 #define GLOOM_CAMERA_H
 
-#include "graphics_types.h"
+#include "core_types.h"
 
 namespace Gloom ::Scene {
 

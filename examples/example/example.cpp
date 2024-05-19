@@ -1,8 +1,8 @@
-#include "GLFW_window.h"
 #include "imgui_renderer.h"
+#include "window.h"
 
 int main() {
-  Gloom::GLFW_window window("hello", 800, 600);
+  Gloom::Window window("hello", 800, 600);
 
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
@@ -11,7 +11,7 @@ int main() {
   // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
   ImGui_ImplGlfw_InitForOpenGL(window.GetNativeWindow(), true);
-  ImGui_ImplOpenGL3_Init("#version 410");
+  // ImGui_ImplOpenGL3_Init("#version 410");
 
   Gloom::ImGuiRenderer renderer;
 

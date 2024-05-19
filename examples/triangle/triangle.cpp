@@ -1,13 +1,13 @@
-#include "GLFW_window.h"
-#include "gloom.h"
+#include "graphics.h"
+#include "window.h"
 #include <iostream>
 
-using Gloom::operator""_KiB;
-using Gloom::operator""_MiB;
+using Gloom::Types::operator""_KiB;
+using Gloom::Types::operator""_MiB;
 
 int main() {
 
-  Gloom::GLFW_window window("hello", 800, 600);
+  Gloom::Window window("hello", 800, 600);
 
   Gloom::Debug::EnableDebug();
 
@@ -24,23 +24,21 @@ int main() {
 
   loader.Load(root / "assets/obj/with_material/tree/Tree.obj", mesh);
 
-  Gloom::GraphicsPipeline pipeline(root / "gloom_shaders/gloom_simple.vert",
-                                   root / "gloom_shaders/gloom_simple.frag");
+  Gloom::GraphicsPipeline pipeline(root / "shaders/gloom_simple.vert",
+                                   root / "shaders/gloom_simple.frag");
 
   pipeline.Bind();
 
   Gloom::VertexArray vao;
   Gloom::Buffer vertex_buffer(Gloom::Types::BufferTarget::ARRAY_BUFFER,
-                              Gloom::Types::BufferStorage::DYNAMIC_STORAGE,
-                              10_MiB);
+                              Gloom::Types::BufferStorage::DYNAMIC_STORAGE, 10_MiB);
 
   float data[] = {
-      -0.5f, -0.5f, 0.0f, 0.0f,  0.0f,  1.0f, +0.5f, -0.5f, 0.0f,
-      0.0f,  0.0f,  1.0f, +0.0f, +0.5f, 0.0f, 0.0f,  0.0f,  1.0f,
+    -0.5f, -0.5f, 0.0f, 0.0f,  0.0f,  1.0f, +0.5f, -0.5f, 0.0f,
+    0.0f,  0.0f,  1.0f, +0.0f, +0.5f, 0.0f, 0.0f,  0.0f,  1.0f,
   };
 
-  auto translate =
-      linalg::translation_matrix(Gloom::Types::Vector3f(0.0f, 0.0f, 0.0f));
+  auto translate = linalg::translation_matrix(Gloom::Types::Vector3f(0.0f, 0.0f, 0.0f));
 
   auto view = linalg::lookat_matrix(Gloom::Types::Vector3f(0.0f, 5.0f, 11.0f),
                                     Gloom::Types::Vector3f(0.0f, 0.0f, 0.0f),
@@ -50,11 +48,9 @@ int main() {
 
   auto att = mesh.GetAttributes();
 
-  vertex_buffer.SetData(
-      std::as_bytes(std::span(att))); // std::as_bytes(std::span(att))
+  vertex_buffer.SetData(std::as_bytes(std::span(att))); // std::as_bytes(std::span(att))
 
-  pipeline.SetUniform(Gloom::Types::ShaderIndex::VERTEX, "ModelMatrix",
-                      translate);
+  pipeline.SetUniform(Gloom::Types::ShaderIndex::VERTEX, "ModelMatrix", translate);
 
   pipeline.SetUniform(Gloom::Types::ShaderIndex::VERTEX, "ProjectionMatrix",
                       camera.GetPerspectiveMatrix());
@@ -62,7 +58,7 @@ int main() {
   pipeline.SetUniform(Gloom::Types::ShaderIndex::VERTEX, "ViewMatrix", view);
 
   Gloom::VertexFormat vertex_format(
-      {Gloom::Types::DataType::VECTOR3, Gloom::Types::DataType::VECTOR3});
+    {Gloom::Types::DataType::VECTOR3, Gloom::Types::DataType::VECTOR3});
   vao.AddVertexBufferAndFormat(vertex_buffer, vertex_format);
   vao.Bind();
 

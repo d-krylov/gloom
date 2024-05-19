@@ -1,7 +1,7 @@
 #ifndef IMGUI_RENDERER_H
 #define IMGUI_RENDERER_H
 
-#include "gloom.h"
+#include "graphics.h"
 #include "gui.h"
 #include <memory>
 

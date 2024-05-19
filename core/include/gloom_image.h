@@ -9,13 +9,11 @@ namespace Gloom {
 
 class Image {
 public:
-  Image(std::filesystem::path path);
+  Image(const std::filesystem::path &path);
 
   ~Image();
 
-  [[nodiscard]] std::span<const std::byte> GetData() const {
-    return image_data_;
-  }
+  [[nodiscard]] std::span<const std::byte> GetData() const { return image_data_; }
 
   [[nodiscard]] const Types::Vector2i &GetSize() const { return size_; }
   [[nodiscard]] int32_t GetWidth() const { return size_.x; }

@@ -1,18 +1,17 @@
-#include "GLFW_window.h"
-#include "gloom.h"
+#include "graphics.h"
+#include "window.h"
 #include <array>
 #include <iostream>
 
-using Gloom::operator""_KiB;
-using Gloom::operator""_MiB;
-
+using Gloom::Types::operator""_KiB;
+using Gloom::Types::operator""_MiB;
 int main() {
 
-  Gloom::GLFW_window window("Texture", 800, 600);
+  Gloom::Window window("Texture", 800, 600);
   Gloom::Debug::EnableDebug();
   auto root = Gloom::Tools::GetRoot();
-  Gloom::GraphicsPipeline pipeline(root / "gloom_shaders/gloom_2d.vert",
-                                   root / "gloom_shaders/gloom_2d.frag");
+  Gloom::GraphicsPipeline pipeline(root / "shaders/gloom_2d.vert",
+                                   root / "shaders/gloom_2d.frag");
   pipeline.Bind();
   Gloom::VertexArray vao;
 
