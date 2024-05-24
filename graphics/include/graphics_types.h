@@ -1,9 +1,11 @@
 #ifndef GLOOM_TYPES_H
 #define GLOOM_TYPES_H
 
+#include "core_assert.h"
+#include "core_macros.h"
 #include "core_types.h"
 #include "glad/glad.h"
-#include "gloom_macros.h"
+#include <array>
 
 namespace Gloom ::Types {
 
@@ -118,6 +120,25 @@ enum class TextureMinifyingFunction {
 
 enum class TextureMagnificationFunction { NEAREST = GL_NEAREST, LINEAR = GL_LINEAR };
 
+enum class TextureComparisonFunction {
+  NEVER = GL_NEVER,
+  LESS = GL_LESS,
+  EQUAL = GL_EQUAL,
+  LEQUAL = GL_LEQUAL,
+  GREATER = GL_GREATER,
+  NOTEQUAL = GL_NOTEQUAL,
+  GEQUAL = GL_GEQUAL,
+  ALWAYS = GL_ALWAYS
+};
+
+enum class TextureWrapMode {
+  CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+  CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER,
+  MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+  REPEAT = GL_REPEAT,
+  MIRROR_CLAMP_TO_EDGE = GL_MIRROR_CLAMP_TO_EDGE
+};
+
 enum class FramebufferKind {
   READ = GL_READ_FRAMEBUFFER,
   DRAW = GL_DRAW_FRAMEBUFFER,
@@ -154,7 +175,33 @@ enum class BlendFunctionSeparate {
   ONE_MINUS_SRC1_ALPHA = GL_ONE_MINUS_SRC1_ALPHA
 };
 
+enum class StencilFunction {
+  NEVER = GL_NEVER,
+  LESS = GL_LESS,
+  EQUAL = GL_EQUAL,
+  LEQUAL = GL_LEQUAL,
+  GREATER = GL_GREATER,
+  NOTEQUAL = GL_NOTEQUAL,
+  GEQUAL = GL_GEQUAL,
+  ALWAYS = GL_ALWAYS
+};
+
+enum class StencilOption {
+  KEEP = GL_KEEP,
+  ZERO = GL_ZERO,
+  REPLACE = GL_REPLACE,
+  INCREMENT = GL_INCR,
+  INCREMENT_WRAP = GL_INCR_WRAP,
+  DECREMENT = GL_DECR,
+  DECREMENT_WRAP = GL_DECR_WRAP,
+  INVERT = GL_INVERT
+};
+
+enum class PolygonMode { POINT = GL_POINT, LINE = GL_LINE, FILL = GL_FILL };
+
 using Handle = uint32_t;
+
+constexpr int64_t WHOLE_SIZE = 0;
 
 enum class CoreType {
   BYTE = GL_BYTE,
@@ -184,19 +231,15 @@ struct DrawElementsIndirectCommand {
   uint32_t base_instance_{0};
 };
 
+struct SamplerCreateInformation {
+  TextureMagnificationFunction magnification_filter_{TextureMagnificationFunction::LINEAR};
+  TextureMinifyingFunction minifying_filter_{TextureMinifyingFunction::LINEAR};
+  TextureComparisonFunction compare_function_{TextureComparisonFunction::NEVER};
+  std::array<TextureWrapMode, 3> wrap_mode_ = {TextureWrapMode::REPEAT};
+};
+
 constexpr auto ARRAYS_COMMAND_SIZE = sizeof(DrawArraysIndirectCommand);
 constexpr auto ELEMENTS_COMMAND_SIZE = sizeof(DrawElementsIndirectCommand);
-
-enum class DepthFunction {
-  NEVER = GL_NEVER,
-  LESS = GL_LESS,
-  EQUAL = GL_EQUAL,
-  LEQUAL = GL_LEQUAL,
-  GREATER = GL_GREATER,
-  NOTEQUAL = GL_NOTEQUAL,
-  GEQUAL = GL_GEQUAL,
-  ALWAYS = GL_ALWAYS
-};
 
 [[nodiscard]] float Radians(float degrees);
 [[nodiscard]] float Degrees(float radians);

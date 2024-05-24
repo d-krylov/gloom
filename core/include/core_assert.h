@@ -25,7 +25,7 @@ namespace Gloom {
     }                                                                                         \
   } while (0)
 
-#define GLOOM_UNREACHABLE() __builtin_unreachable()
+#define CORE_UNREACHABLE() __builtin_unreachable()
 
 } // namespace Gloom
 

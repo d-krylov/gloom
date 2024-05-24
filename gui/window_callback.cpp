@@ -3,19 +3,45 @@
 
 namespace Gloom {
 
-void KeyCallback(GLFWwindow *wnd, int key, int scancode, int action, int mod) {}
+WindowEventHandler *GetEventHandler(GLFWwindow *native) {
+  Window *window = reinterpret_cast<Window *>(glfwGetWindowUserPointer(native));
+  auto handler = window->GetEventHandler();
+  return handler;
+}
+
+void KeyCallback(GLFWwindow *wnd, int key, int scancode, int action, int mod) {
+  auto handler = GetEventHandler(wnd);
+  if (handler) {
+    handler->OnKey(key, scancode, action, mod);
+  }
+}
 
 void WindowSizeCallback(GLFWwindow *wnd, int width, int height) {}
 
 void WindowCloseCallback(GLFWwindow *wnd) {}
 
-void CursorPositionCallback(GLFWwindow *wnd, double xpos, double ypos) {}
+void CursorPositionCallback(GLFWwindow *wnd, double xpos, double ypos) {
+  auto handler = GetEventHandler(wnd);
+  if (handler) {
+    handler->OnCursorPos(xpos, ypos);
+  }
+}
 
-void MouseButtonCallback(GLFWwindow *wnd, int button, int action, int mods) {}
+void MouseButtonCallback(GLFWwindow *wnd, int button, int action, int mods) {
+  auto handler = GetEventHandler(wnd);
+  if (handler) {
+    handler->OnMouseButton(button, action, mods);
+  }
+}
 
 void WindowRefreshCallback(GLFWwindow *wnd) {}
 
-void ScrollCallback(GLFWwindow *wnd, double xoffset, double yoffset) {}
+void ScrollCallback(GLFWwindow *wnd, double xoffset, double yoffset) {
+  auto handler = GetEventHandler(wnd);
+  if (handler) {
+    handler->OnScroll(xoffset, yoffset);
+  }
+}
 
 void CursorEnterCallback(GLFWwindow *wnd, int entered) {}
 
@@ -23,13 +49,16 @@ void WindowFocusCallback(GLFWwindow *window, int focused) {}
 
 void MonitorCallback(GLFWmonitor *, int) {}
 
-void CharCallback(GLFWwindow *window, unsigned int c) {}
+void CharCallback(GLFWwindow *window, unsigned int c) {
+  auto handler = GetEventHandler(window);
+  if (handler) {
+    handler->OnChar(c);
+  }
+}
 
 void WindowPosCallback(GLFWwindow *window, int, int) {}
 
-void Window::SetUserPointer() {
-  // glfwSetWindowUserPointer(native_window_, game);
-}
+void Window::SetUserPointer() { glfwSetWindowUserPointer(native_window_, this); }
 
 void Window::SetCallbacks() {
   glfwSetWindowPosCallback(native_window_, WindowPosCallback);

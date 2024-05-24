@@ -4,23 +4,18 @@
 
 namespace Gloom {
 
-void OnWindowFocus(GLFWwindow *window, int focused) {
-  ImGuiIO &io = ImGui::GetIO();
+void ImGuiPlatform::OnWindowFocus(int focused) {
+  auto &io = ImGui::GetIO();
   io.AddFocusEvent(focused != 0);
 }
 
-void OnWindowSize(GLFWwindow *window, int, int) {
-  auto *viewport = ImGui::FindViewportByPlatformHandle(window);
-  if (viewport != nullptr) {
-    viewport->PlatformRequestResize = true;
-  }
-}
+void ImGuiPlatform::OnWindowSize(int, int) {}
 
-void OnWindowPos(GLFWwindow *window, int, int) {}
+void ImGuiPlatform::OnWindowPos(int, int) {}
 
 // clang-format off
 void UpdateKeyModifiers(GLFWwindow* window) {
-  ImGuiIO& io = ImGui::GetIO();
+  auto& io = ImGui::GetIO();
   io.AddKeyEvent(ImGuiMod_Ctrl,  (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS));
   io.AddKeyEvent(ImGuiMod_Shift, (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT)   == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT)   == GLFW_PRESS));
   io.AddKeyEvent(ImGuiMod_Alt,   (glfwGetKey(window, GLFW_KEY_LEFT_ALT)     == GLFW_PRESS) || (glfwGetKey(window, GLFW_KEY_RIGHT_ALT)     == GLFW_PRESS));
@@ -28,42 +23,38 @@ void UpdateKeyModifiers(GLFWwindow* window) {
 }
 // clang-format on
 
-void OnMouseButton(GLFWwindow *window, int button, int action, int m) {
-  UpdateKeyModifiers(window);
+void ImGuiPlatform::OnMouseButton(int button, int action, int m) {
+  UpdateKeyModifiers(window_.GetNativeWindow());
   auto &io = ImGui::GetIO();
   if (button >= 0 && button < ImGuiMouseButton_COUNT) {
     io.AddMouseButtonEvent(button, action == GLFW_PRESS);
   }
 }
 
-void OnScroll(GLFWwindow *window, double xoffset, double yoffset) {
+void ImGuiPlatform::OnScroll(double xoffset, double yoffset) {
   auto &io = ImGui::GetIO();
   io.AddMouseWheelEvent((float)xoffset, (float)yoffset);
 }
 
-void OnKey(GLFWwindow *window, int keycode, int scancode, int action, int m) {}
+void ImGuiPlatform::OnKey(int keycode, int scancode, int action, int m) {}
 
-void OnCursorPos(GLFWwindow *window, double x, double y) {
-  int window_x, window_y;
+void ImGuiPlatform::OnCursorPos(double x, double y) {
   auto &io = ImGui::GetIO();
-  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-    glfwGetWindowPos(window, &window_x, &window_y);
-    x += window_x;
-    y += window_y;
-  }
   io.AddMousePosEvent((float)x, (float)y);
 }
 
-void OnCursorEnter(GLFWwindow *window, int entered) { ImGuiIO &io = ImGui::GetIO(); }
+void ImGuiPlatform::OnCursorEnter(int entered) { ImGuiIO &io = ImGui::GetIO(); }
 
-void OnChar(GLFWwindow *window, unsigned int c) {
+void ImGuiPlatform::OnChar(unsigned int c) {
   auto &io = ImGui::GetIO();
   io.AddInputCharacter(c);
 }
 
-ImGuiPlatform::ImGuiPlatform() {
+ImGuiPlatform::ImGuiPlatform(std::string_view name, uint32_t width, uint32_t height)
+  : window_(name, width, height) {
   ImGui::CreateContext();
   auto &io = ImGui::GetIO();
+  window_.SetWindowEventHandler(this);
 }
 
 void ImGuiPlatform::UpdateMouseData() {
@@ -76,13 +67,14 @@ void ImGuiPlatform::UpdateMouseData() {
 void ImGuiPlatform::NewFrame() {
   auto &io = ImGui::GetIO();
 
-  Types::Vector2i size(window_.GetSize());
-  Types::Vector2f fb_size(window_.GetFramebufferSize());
+  auto window_size = window_.GetSize();
+  auto framebuffer_size = window_.GetFramebufferSize();
 
-  io.DisplaySize = ImVec2(float(size.x), float(size.y));
+  io.DisplaySize = ImVec2((float)window_size.x, (float)window_size.y);
 
-  if (size.x > 0 && size.y > 0) {
-    io.DisplayFramebufferScale = ImVec2(fb_size.x / float(size.x), fb_size.y / float(size.y));
+  if (window_size.x > 0 && window_size.y > 0) {
+    io.DisplayFramebufferScale = ImVec2((float)framebuffer_size.x / (float)window_size.x,
+                                        (float)framebuffer_size.y / (float)window_size.y);
   }
 
   UpdateMouseData();

@@ -1,14 +1,14 @@
 #ifndef SHADER_REFLECTION_H
 #define SHADER_REFLECTION_H
 
-#include "gloom_tools.h"
 #include "graphics_types.h"
+#include "tools.h"
 
 namespace Gloom {
 
 class ShaderInformation {
 public:
-  ShaderInformation(std::filesystem::path path);
+  ShaderInformation(const std::filesystem::path &path);
 
   Types::ShaderKind GetShaderKind() const { return kind_; }
 

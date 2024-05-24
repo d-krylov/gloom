@@ -23,7 +23,7 @@ private:
   VertexArray vertex_array_;
   VertexBuffer vertex_buffer_;
   Buffer index_buffer_;
-  uint32_t font_texture_;
+  std::unique_ptr<Texture> font_texture_;
 };
 
 } // namespace Gloom

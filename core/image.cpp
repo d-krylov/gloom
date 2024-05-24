@@ -1,5 +1,5 @@
-#include "gloom_image.h"
-#include "gloom_assert.h"
+#include "image.h"
+#include "core_assert.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 
@@ -23,7 +23,7 @@ Types::TextureInternalFormat Image::GetFormat() const {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 Image::~Image() { stbi_image_free(image_data_.data()); }

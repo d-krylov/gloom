@@ -1,7 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "gloom_macros.h"
+#include "core_macros.h"
 #include "material.h"
 #include <filesystem>
 #include <span>

@@ -1,5 +1,4 @@
 #include "vertex_array.h"
-#include "gloom_assert.h"
 
 namespace Gloom {
 
@@ -15,35 +14,25 @@ void VertexArray::SetIndexBuffer(const Buffer &buffer) {
 }
 
 void VertexArray::AddVertexBuffer(const VertexBuffer &vbo) {
-  AddVertexBufferAndFormat(vbo, vbo.GetFormat());
+  auto binding = vbo.GetBinding();
+  glVertexArrayVertexBuffer(vertex_array_, binding, vbo, 0, vbo.GetFormat().GetStride());
+  SetVertexFormat(vbo.GetFormat(), binding);
 }
 
-void VertexArray::AddVertexBufferAndFormat(const Buffer &buffer,
-                                           const VertexFormat &vertex_format) {
-  CORE_VERIFY(buffer.GetTarget() == Types::BufferTarget::ARRAY_BUFFER);
-  glVertexArrayVertexBuffer(vertex_array_, current_binding_, buffer, 0,
-                            vertex_format.GetStride());
-  SetVertexFormat(vertex_format);
-  UpdateBinding();
-}
-
-void VertexArray::SetVertexFormat(const VertexFormat &vertex_format) {
+void VertexArray::SetVertexFormat(const VertexFormat &vertex_format, uint32_t binding) {
   const auto &attributes = vertex_format.GetAttributes();
   for (uint32_t i = 0; i < attributes.size(); i++) {
     auto attribute = attributes[i];
-    auto binding = GetBinding();
-    if (attribute.IsFloat()) {
-      glVertexArrayAttribFormat(vertex_array_, i + binding, attribute.GetComponentCount(),
-                                static_cast<uint32_t>(attribute.GetComponentType()),
-                                attribute.Normalize(), attribute.GetOffset());
+    auto count = attribute.GetComponentCount();
+    auto type = static_cast<uint32_t>(attribute.GetComponentType());
+    auto offset = attribute.GetOffset();
+    if (attribute.IsFloat() || attribute.IsRGBA()) {
+      bool normalize = attribute.Normalize();
+      glVertexArrayAttribFormat(vertex_array_, i + binding, count, type, normalize, offset);
     } else if (attribute.IsDouble()) {
-      glVertexArrayAttribLFormat(vertex_array_, i + binding, attribute.GetComponentCount(),
-                                 static_cast<uint32_t>(attribute.GetComponentType()),
-                                 attribute.GetOffset());
+      glVertexArrayAttribLFormat(vertex_array_, i + binding, count, type, offset);
     } else {
-      glVertexArrayAttribIFormat(vertex_array_, i + binding, attribute.GetComponentCount(),
-                                 static_cast<uint32_t>(attribute.GetComponentType()),
-                                 attribute.GetOffset());
+      glVertexArrayAttribIFormat(vertex_array_, i + binding, count, type, offset);
     }
     glEnableVertexArrayAttrib(vertex_array_, i + binding);
     glVertexArrayAttribBinding(vertex_array_, i + binding, binding);

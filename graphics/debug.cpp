@@ -1,8 +1,7 @@
 #include "debug.h"
-#include "gloom_assert.h"
 #include <cstdio>
 
-namespace Gloom ::Debug {
+namespace Gloom {
 
 bool GetShaderLinkStatus(Types::Handle shader_handle) {
   int32_t compiled = 0;
@@ -10,12 +9,9 @@ bool GetShaderLinkStatus(Types::Handle shader_handle) {
   return compiled == GL_TRUE;
 }
 
-std::optional<std::string> GetShaderLog(Types::Handle shader_handle) {
+std::string GetShaderLog(Types::Handle shader_handle) {
   int message_size = 0;
   glGetProgramiv(shader_handle, GL_INFO_LOG_LENGTH, &message_size);
-  if (message_size == 0) {
-    return {};
-  }
   std::string message(message_size, ' ');
   glGetProgramInfoLog(shader_handle, message_size, nullptr, message.data());
   return message;
@@ -36,7 +32,7 @@ std::string_view GetSource(GLenum source) {
   case GL_DEBUG_SOURCE_OTHER:
     return "OTHER";
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 std::string_view GetType(GLenum type) {
@@ -56,7 +52,7 @@ std::string_view GetType(GLenum type) {
   case GL_DEBUG_TYPE_OTHER:
     return "OTHER";
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 std::string_view GetSeverity(GLenum severity) {
@@ -70,7 +66,7 @@ std::string_view GetSeverity(GLenum severity) {
   case GL_DEBUG_SEVERITY_HIGH:
     return "HIGH";
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 void MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
@@ -84,4 +80,4 @@ void EnableDebug() {
   glDebugMessageCallback(MessageCallback, nullptr);
 }
 
-} // namespace Gloom::Debug
+} // namespace Gloom

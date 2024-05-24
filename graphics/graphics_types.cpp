@@ -1,5 +1,4 @@
 #include "graphics_types.h"
-#include "gloom_assert.h"
 
 namespace Gloom ::Types {
 
@@ -20,7 +19,7 @@ ShaderKind GetShaderKind(ShaderIndex index) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 ShaderBit GetShaderBit(ShaderIndex index) {
@@ -40,7 +39,7 @@ ShaderBit GetShaderBit(ShaderIndex index) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 std::size_t GetTextureDimensions(TextureTarget target) {
@@ -52,7 +51,7 @@ std::size_t GetTextureDimensions(TextureTarget target) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 bool IsTextureLayered(TextureTarget target) {
@@ -64,7 +63,7 @@ bool IsTextureLayered(TextureTarget target) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 CoreType GetPixelDataType(TextureInternalFormat format) {
@@ -76,7 +75,7 @@ CoreType GetPixelDataType(TextureInternalFormat format) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 PixelFormat GetPixelDataFormat(TextureInternalFormat format) {
@@ -88,7 +87,7 @@ PixelFormat GetPixelDataFormat(TextureInternalFormat format) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 std::pair<PixelFormat, CoreType> GetPixelFormatAndType(TextureInternalFormat format) {
@@ -100,7 +99,7 @@ std::pair<PixelFormat, CoreType> GetPixelFormatAndType(TextureInternalFormat for
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 std::size_t GetComponentCount(DataType type) {
@@ -112,7 +111,7 @@ std::size_t GetComponentCount(DataType type) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 std::size_t GetComponentSize(DataType type) {
@@ -124,7 +123,7 @@ std::size_t GetComponentSize(DataType type) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 CoreType GetComponentType(DataType type) {
@@ -136,7 +135,7 @@ CoreType GetComponentType(DataType type) {
   default:
     break;
   }
-  GLOOM_UNREACHABLE();
+  CORE_UNREACHABLE();
 }
 
 std::size_t GetSize(DataType type) {

@@ -1,5 +1,5 @@
-#include "gloom_mesh_tools.h"
-#include "gloom_assert.h"
+#include "mesh_tools.h"
+#include "core_assert.h"
 
 namespace Gloom {
 

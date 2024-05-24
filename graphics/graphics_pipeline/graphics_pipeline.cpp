@@ -1,7 +1,6 @@
 #include "graphics_pipeline.h"
 #include "debug.h"
-#include "gloom_assert.h"
-#include "gloom_tools.h"
+#include "tools.h"
 
 namespace Gloom {
 
@@ -15,7 +14,7 @@ GraphicsPipeline::GraphicsPipeline(const std::string &vs, const std::string &fs)
 
 GraphicsPipeline::GraphicsPipeline(const std::filesystem::path &vs,
                                    const std::filesystem::path &fs)
-  : GraphicsPipeline(Tools::ReadFile(vs), Tools::ReadFile(fs)) {}
+  : GraphicsPipeline(ReadFile(vs), ReadFile(fs)) {}
 
 GraphicsPipeline::~GraphicsPipeline() {
   glDeleteProgramPipelines(1, &shader_pipeline_handle_);
@@ -25,7 +24,7 @@ void GraphicsPipeline::AddShader(Types::ShaderIndex index, const std::string &so
   auto source_cstr = source.c_str();
   auto kind = static_cast<uint16_t>(Types::GetShaderKind(index));
   shaders_[index] = glCreateShaderProgramv(kind, 1, &source_cstr);
-  bool status = Debug::GetShaderLinkStatus(shaders_[index]);
+  bool status = GetShaderLinkStatus(shaders_[index]);
   CORE_VERIFY(status);
   UseStage(index);
 }

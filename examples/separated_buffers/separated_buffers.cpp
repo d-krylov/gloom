@@ -2,23 +2,21 @@
 #include "window.h"
 #include <iostream>
 
-auto STORAGE = Gloom::Types::BufferStorage::DYNAMIC_STORAGE;
-
 using Gloom::Types::operator""_KiB;
 using Gloom::Types::operator""_MiB;
 
 int main() {
 
   Gloom::Window window("Texture", 800, 600);
-  Gloom::Debug::EnableDebug();
-  auto root = Gloom::Tools::GetRoot();
+  Gloom::EnableDebug();
+  auto root = Gloom::GetRoot();
   Gloom::GraphicsPipeline pipeline(root / "shaders/gloom_2d.vert",
                                    root / "shaders/gloom_2d.frag");
   pipeline.Bind();
   Gloom::VertexArray vao;
-  Gloom::VertexBuffer position_buffer(STORAGE, 4_KiB, Gloom::MakePosition3f());
-  Gloom::VertexBuffer color_buffer(STORAGE, 4_KiB, Gloom::MakeColor());
-  Gloom::VertexBuffer uv_buffer(STORAGE, 4_KiB, Gloom::MakeUV());
+  Gloom::VertexBuffer position_buffer(4_KiB, {Gloom::Types::DataType::VECTOR3}, 0);
+  Gloom::VertexBuffer color_buffer(4_KiB, {Gloom::Types::DataType::VECTOR3}, 1);
+  Gloom::VertexBuffer uv_buffer(4_KiB, {Gloom::Types::DataType::VECTOR2}, 2);
   Gloom::Image image(root / "assets/images/container.png");
   Gloom::Texture texture(Gloom::Types::TextureTarget::TEXTURE_2D, image);
   texture.SetData(image.GetData());

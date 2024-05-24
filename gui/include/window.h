@@ -27,7 +27,7 @@ constexpr uint32_t GLFW_CURSOR_COUNT = MouseCursor::CROSSHAIR + 1;
 
 class Window {
 public:
-  Window(std::string_view name, uint32_t width, uint32_t height, Window *share = nullptr);
+  Window(std::string_view name, uint32_t width, uint32_t height);
 
   [[nodiscard]] GLFWwindow *GetNativeWindow() const { return native_window_; }
   [[nodiscard]] uint32_t GetWidth() const;
@@ -38,8 +38,10 @@ public:
   [[nodiscard]] Types::Vector2u GetFramebufferSize() const;
   [[nodiscard]] bool ShouldClose() const;
   [[nodiscard]] float GetAspectRatio() const;
+  [[nodiscard]] WindowEventHandler *GetEventHandler() const { return window_event_handler_; }
 
   void SetCursorPosition(const Types::Vector2d &position);
+  void SetWindowEventHandler(WindowEventHandler *handler);
 
   void SetUserPointer();
   void PollEvents();
@@ -55,6 +57,7 @@ protected:
 private:
   GLFWwindow *native_window_;
   GLFWcursor *mouse_cursors_[GLFW_CURSOR_COUNT];
+  WindowEventHandler *window_event_handler_{nullptr};
 };
 
 } // namespace Gloom

@@ -10,7 +10,9 @@ Texture::Texture(Types::TextureTarget target, Types::TextureInternalFormat inter
   SetParameters();
 }
 
-Texture::~Texture() { glDeleteTextures(1, &texture_); }
+Texture::~Texture() { Destroy(); }
+
+void Texture::Destroy() { glDeleteTextures(1, &texture_); }
 
 void Texture::CreateStorage() {
   auto dimensions = Types::GetTextureDimensions(target_);

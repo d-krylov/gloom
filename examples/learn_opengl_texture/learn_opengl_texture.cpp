@@ -5,11 +5,12 @@
 
 using Gloom::Types::operator""_KiB;
 using Gloom::Types::operator""_MiB;
+
 int main() {
 
   Gloom::Window window("Texture", 800, 600);
-  Gloom::Debug::EnableDebug();
-  auto root = Gloom::Tools::GetRoot();
+  Gloom::EnableDebug();
+  auto root = Gloom::GetRoot();
   Gloom::GraphicsPipeline pipeline(root / "shaders/gloom_2d.vert",
                                    root / "shaders/gloom_2d.frag");
   pipeline.Bind();
@@ -32,8 +33,7 @@ int main() {
 
   std::array<uint32_t, 6> i = {0, 1, 2, 2, 3, 0};
 
-  Gloom::VertexBuffer vbo(Gloom::Types::BufferStorage::DYNAMIC_STORAGE, 4_KiB,
-                          Gloom::VertexPCT::GetFormat());
+  Gloom::VertexBuffer vbo(4_KiB, Gloom::VertexPCT::GetFormat());
 
   vbo.SetData(std::as_bytes(std::span(data)));
 

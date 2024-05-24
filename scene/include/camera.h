@@ -3,20 +3,23 @@
 
 #include "core_types.h"
 
-namespace Gloom ::Scene {
+namespace Gloom {
 
 class Camera {
 public:
   Camera();
 
-  Types::Vector3f GetUpDirection() const { return up_; }
-  Types::Vector3f GetRightDirection() const { return right_; }
-  Types::Vector3f GetFrontDirection() const { return front_; }
+  [[nodiscard]] const Types::Vector3f &GetUpDirection() const { return up_; }
+  [[nodiscard]] const Types::Vector3f &GetRightDirection() const { return right_; }
+  [[nodiscard]] const Types::Vector3f &GetFrontDirection() const { return front_; }
 
-  Types::Matrix4f GetPerspectiveMatrix() const;
-  Types::Matrix4f GetLookAtMatrix() const;
+  [[nodiscard]] Types::Matrix4f GetPerspectiveMatrix() const;
+  [[nodiscard]] Types::Matrix4f GetLookAtMatrix() const;
 
-  void MoveUp();
+  void MoveUp(float v);
+  void MoveRight(float v);
+
+  void SetPosition(Types::Vector3f position);
 
 protected:
   void UpdateVectors();
@@ -32,10 +35,10 @@ private:
   float far_{500.0f};
   float aspect_{1.0f};
   float pitch_{0.0f};
-  float yaw_{0.0f};
+  float yaw_{-Types::PI / 2.0f};
   float speed_{0.5f};
 };
 
-} // namespace Gloom::Scene
+} // namespace Gloom
 
 #endif // GLOOM_CAMERA_H

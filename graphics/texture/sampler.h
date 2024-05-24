@@ -7,12 +7,13 @@ namespace Gloom {
 
 class Sampler {
 public:
-  Sampler();
+  Sampler(const Types::SamplerCreateInformation &sampler_ci);
   ~Sampler();
 
   void Bind(uint32_t unit);
+  void Unbind(uint32_t unit);
 
-  void SetParameters();
+  void SetParameters(const Types::SamplerCreateInformation &sampler_ci);
 
 private:
   Types::Handle sampler_{0};

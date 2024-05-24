@@ -4,11 +4,12 @@
 #include <filesystem>
 #include <string>
 
-namespace Gloom ::Tools {
+namespace Gloom {
 
+[[nodiscard]] double GetTime();
 [[nodiscard]] std::filesystem::path GetRoot();
 [[nodiscard]] std::string ReadFile(const std::filesystem::path &path);
 
-} // namespace Gloom::Tools
+} // namespace Gloom
 
 #endif // FILE_TOOLS_H

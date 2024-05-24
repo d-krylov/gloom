@@ -8,15 +8,17 @@ namespace Gloom {
 
 class VertexBuffer : public Buffer {
 public:
-  VertexBuffer(Types::BufferStorage storage, std::size_t size,
-               const VertexFormat &vertex_format)
-    : Buffer(Types::BufferTarget::ARRAY_BUFFER, storage, size), vertex_format_(vertex_format) {
-  }
+  VertexBuffer(std::size_t size, const VertexFormat &vertex_format, uint32_t binding = 0,
+               Types::BufferStorage storage = Types::BufferStorage::DYNAMIC_STORAGE)
+    : Buffer(Types::BufferTarget::ARRAY_BUFFER, size, storage), vertex_format_(vertex_format),
+      binding_(binding) {}
 
-  const VertexFormat &GetFormat() const { return vertex_format_; }
+  [[nodiscard]] const VertexFormat &GetFormat() const { return vertex_format_; }
+  [[nodiscard]] uint32_t GetBinding() const { return binding_; }
 
 private:
   VertexFormat vertex_format_;
+  uint32_t binding_{0};
 };
 
 } // namespace Gloom

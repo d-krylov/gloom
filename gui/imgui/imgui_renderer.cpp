@@ -1,20 +1,9 @@
 #include "imgui_renderer.h"
-#include "gloom_tools.h"
+#include "tools.h"
 #include <GLFW/glfw3.h>
-
-Gloom::ImGuiRenderer *instance = nullptr;
 
 using Gloom::Types::operator""_KiB;
 using Gloom::Types::operator""_MiB;
-
-void RenderWindow(ImGuiViewport *viewport, void *) {
-  if ((viewport->Flags & ImGuiViewportFlags_NoRendererClear) == 0) {
-    ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-  }
-  instance->RenderDrawData(viewport->DrawData);
-}
 
 namespace Gloom {
 
@@ -23,24 +12,25 @@ VertexFormat GetImGuiVertexFormat() {
     Types::DataType::VECTOR2, Types::DataType::VECTOR2, {Types::DataType::BVECTOR4, true}};
 }
 
+// clang-format off
+Commands::BlendInformation GetBlendInformation() {
+  return Commands::BlendInformation{
+    Types::BlendEquation::ADD, 
+    Types::BlendFunctionSeparate::SRC_ALPHA,
+    Types::BlendFunctionSeparate::ONE_MINUS_SRC_ALPHA, 
+    Types::BlendFunctionSeparate::ONE,
+    Types::BlendFunctionSeparate::ONE_MINUS_SRC_ALPHA};
+}
+// clang-format on
+
 ImGuiRenderer::ImGuiRenderer()
-  : graphics_pipeline_(Tools::GetRoot() / "shaders/gui.vert",
-                       Tools::GetRoot() / "shaders/gui.frag"),
-    vertex_array_(),
-    vertex_buffer_(Types::BufferStorage::DYNAMIC_STORAGE, 4_MiB, GetImGuiVertexFormat()),
-    index_buffer_(Types::BufferTarget::ELEMENT_ARRAY_BUFFER,
-                  Types::BufferStorage::DYNAMIC_STORAGE, 4_MiB) {
+  : graphics_pipeline_(GetRoot() / "shaders/gui.vert", GetRoot() / "shaders/gui.frag"),
+    vertex_array_(), vertex_buffer_(4_MiB, GetImGuiVertexFormat()),
+    index_buffer_(Types::BufferTarget::ELEMENT_ARRAY_BUFFER, 4_MiB) {
 
   CreateFontsTexture();
   vertex_array_.AddVertexBuffer(vertex_buffer_);
   vertex_array_.SetIndexBuffer(index_buffer_);
-  vertex_array_.Bind();
-  graphics_pipeline_.Bind();
-
-  instance = this;
-
-  ImGuiPlatformIO &platform_io = ImGui::GetPlatformIO();
-  // platform_io.Renderer_RenderWindow = RenderWindow;
 }
 
 void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
@@ -49,15 +39,6 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
   if (fb_width <= 0 || fb_height <= 0) {
     return;
   }
-  GLuint last_texture;
-  glGetIntegerv(GL_TEXTURE_BINDING_2D, (GLint *)&last_texture);
-  GLenum last_active_texture;
-  glGetIntegerv(GL_ACTIVE_TEXTURE, (GLint *)&last_active_texture);
-  GLint last_scissor_box[4];
-  glGetIntegerv(GL_SCISSOR_BOX, last_scissor_box);
-  GLint last_viewport[4];
-  glGetIntegerv(GL_VIEWPORT, last_viewport);
-  glActiveTexture(GL_TEXTURE0);
 
   auto clip_off = draw_data->DisplayPos;
   auto clip_scale = draw_data->FramebufferScale;
@@ -90,8 +71,9 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
           continue;
         }
 
-        glScissor((int)clip_min.x, (int)((float)fb_height - clip_max.y),
-                  (int)(clip_max.x - clip_min.x), (int)(clip_max.y - clip_min.y));
+        Types::Vector4i scissor{int(clip_min.x), int(float(fb_height) - clip_max.y),
+                                int(clip_max.x - clip_min.x), int(clip_max.y - clip_min.y)};
+        Commands::SetScissor(true, scissor);
 
         glBindTextureUnit(0, (GLuint)(intptr_t)pcmd->GetTexID());
 
@@ -101,26 +83,18 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
       }
     }
   }
-  glBindTexture(GL_TEXTURE_2D, last_texture);
-  glActiveTexture(last_active_texture);
-  glViewport(last_viewport[0], last_viewport[1], (GLsizei)last_viewport[2],
-             (GLsizei)last_viewport[3]);
+
   glDisable(GL_SCISSOR_TEST);
-  glDisable(GL_BLEND);
+  Commands::SetBlending(false);
 }
 
 void ImGuiRenderer::SetupRenderState(ImDrawData *draw_data, int fb_width, int fb_height) {
-  Commands::SetBlending(
-    true, Types::BlendEquation::ADD, Types::BlendFunctionSeparate::SRC_ALPHA,
-    Types::BlendFunctionSeparate::ONE_MINUS_SRC_ALPHA, Types::BlendFunctionSeparate::ONE,
-    Types::BlendFunctionSeparate::ONE_MINUS_SRC_ALPHA);
-
+  Commands::SetBlending(true, GetBlendInformation());
   Commands::SetFaceCulling(false);
   Commands::SetDepthTesting(false);
-  glDisable(GL_STENCIL_TEST);
-  glEnable(GL_SCISSOR_TEST);
-  glDisable(GL_PRIMITIVE_RESTART);
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  Commands::SetStencilTesting(false);
+  Commands::SetPrimitiveRestart(false);
+  Commands::SetPolygonMode();
 
   bool clip_origin_lower_left = true;
 
@@ -145,12 +119,10 @@ void ImGuiRenderer::SetupRenderState(ImDrawData *draw_data, int fb_width, int fb
   float PM30 = (R + L) / (L - R);
   float PM31 = (T + B) / (B - T);
 
-  auto projection_matrix = Types::Matrix4f{
-    {PM00, 0.0f, +0.0f, 0.0f},
-    {0.0f, PM11, +0.0f, 0.0f},
-    {0.0f, 0.0f, -1.0f, 0.0f},
-    {PM30, PM31, +0.0f, 1.0f},
-  };
+  auto projection_matrix = Types::Matrix4f{{PM00, 0.0f, +0.0f, 0.0f},
+                                           {0.0f, PM11, +0.0f, 0.0f},
+                                           {0.0f, 0.0f, -1.0f, 0.0f},
+                                           {PM30, PM31, +0.0f, 1.0f}};
 
   graphics_pipeline_.SetUniform(Types::ShaderIndex::VERTEX, "u_projection_matrix",
                                 projection_matrix, false);
@@ -159,39 +131,29 @@ void ImGuiRenderer::SetupRenderState(ImDrawData *draw_data, int fb_width, int fb
 
 void ImGuiRenderer::CreateFontsTexture() {
   auto &io = ImGui::GetIO();
-  unsigned char *pixels;
+  unsigned char *pixels{nullptr};
   int w, h;
   io.Fonts->GetTexDataAsRGBA32(&pixels, &w, &h);
-  glCreateTextures(GL_TEXTURE_2D, 1, &font_texture_);
-  glTextureParameteri(font_texture_, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTextureParameteri(font_texture_, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  font_texture_ = std::make_unique<Texture>(Types::TextureTarget::TEXTURE_2D,
+                                            Types::TextureInternalFormat::RGBA8, w, h);
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-  glTextureStorage2D(font_texture_, 1, GL_RGBA8, w, h);
-  glTextureSubImage2D(font_texture_, 0, 0, 0, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-  io.Fonts->SetTexID((ImTextureID)(intptr_t)font_texture_);
+  std::byte *byte_pixels = reinterpret_cast<std::byte *>(pixels);
+  std::span<const std::byte> span_pixels(byte_pixels, w * h * 4);
+  font_texture_->SetData(span_pixels);
+  io.Fonts->SetTexID((ImTextureID)(intptr_t)(*font_texture_));
 }
 
 void ImGuiRenderer::Begin() {
-  ImGui_ImplGlfw_NewFrame();
   ImGui::NewFrame();
+  vertex_array_.Bind();
+  graphics_pipeline_.Bind();
 }
 
 void ImGuiRenderer::End() {
   ImGuiIO &io = ImGui::GetIO();
-
   ImGui::Render();
-
-  glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-  glClear(GL_COLOR_BUFFER_BIT);
-
+  Commands::SetViewport(0, 0, int(io.DisplaySize.x), int(io.DisplaySize.y));
   RenderDrawData(ImGui::GetDrawData());
-
-  if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-    GLFWwindow *backup_current_context = glfwGetCurrentContext();
-    ImGui::UpdatePlatformWindows();
-    ImGui::RenderPlatformWindowsDefault();
-    glfwMakeContextCurrent(backup_current_context);
-  }
 }
 
 } // namespace Gloom

@@ -13,16 +13,19 @@ void GLFWInitialize() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 }
 
-Window::Window(std::string_view name, uint32_t w, uint32_t h, Window *share)
-  : width_(w), height_(h) {
+Window::Window(std::string_view name, uint32_t w, uint32_t h) {
 
   GLFWInitialize();
 
-  native_window_ = glfwCreateWindow(w, h, name.data(), nullptr, share->GetNativeWindow());
+  native_window_ = glfwCreateWindow(w, h, name.data(), nullptr, nullptr);
 
   glfwMakeContextCurrent(native_window_);
 
   auto status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+
+  SetCursors();
+  SetUserPointer();
+  SetCallbacks();
 }
 
 bool Window::ShouldClose() const { return glfwWindowShouldClose(native_window_); }
@@ -45,6 +48,10 @@ void Window::SetCursor(int32_t index) {
 
 void Window::SetCursorPosition(const Types::Vector2d &position) {
   glfwSetCursorPos(native_window_, position.x, position.y);
+}
+
+void Window::SetWindowEventHandler(WindowEventHandler *handler) {
+  window_event_handler_ = handler;
 }
 
 Types::Vector2u Window::GetFramebufferSize() const {
@@ -88,10 +95,17 @@ void Window::SetCursors() {
   mouse_cursors_[MouseCursor::RESIZE_NS] = glfwCreateStandardCursor(GLFW_VRESIZE_CURSOR);
   mouse_cursors_[MouseCursor::RESIZE_EW] = glfwCreateStandardCursor(GLFW_HRESIZE_CURSOR);
   mouse_cursors_[MouseCursor::HAND] = glfwCreateStandardCursor(GLFW_HAND_CURSOR);
+#if GLFW_HAS_NEW_CURSORS
+  mouse_cursors_[MouseCursor::RESIZE_ALL] = glfwCreateStandardCursor(GLFW_RESIZE_ALL_CURSOR);
+  mouse_cursors_[MouseCursor::RESIZE_NESW] = glfwCreateStandardCursor(GLFW_RESIZE_NESW_CURSOR);
+  mouse_cursors_[MouseCursor::RESIZE_NWSE] = glfwCreateStandardCursor(GLFW_RESIZE_NWSE_CURSOR);
+  mouse_cursors_[MouseCursor::NOT_ALLOWED] = glfwCreateStandardCursor(GLFW_NOT_ALLOWED_CURSOR);
+#else
   mouse_cursors_[MouseCursor::RESIZE_ALL] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
   mouse_cursors_[MouseCursor::RESIZE_NESW] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
   mouse_cursors_[MouseCursor::RESIZE_NWSE] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
   mouse_cursors_[MouseCursor::NOT_ALLOWED] = glfwCreateStandardCursor(GLFW_ARROW_CURSOR);
+#endif
 }
 // clang-format on
 

@@ -1,6 +1,6 @@
 #include "camera.h"
 
-namespace Gloom ::Scene {
+namespace Gloom {
 
 Camera::Camera() { UpdateVectors(); }
 
@@ -22,4 +22,8 @@ void Camera::UpdateVectors() {
   up_ = linalg::normalize(linalg::cross(right_, front_));
 }
 
-} // namespace Gloom::Scene
+void Camera::SetPosition(Types::Vector3f position) { position_ = position; }
+
+void Camera::MoveRight(float v) {}
+
+} // namespace Gloom

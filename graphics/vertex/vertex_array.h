@@ -16,17 +16,13 @@ public:
   void SetIndexBuffer(const Buffer &buffer);
   void AddVertexBuffer(const VertexBuffer &vbo);
 
-  void AddVertexBufferAndFormat(const Buffer &buffer, const VertexFormat &vertex_format);
   void Bind();
 
 protected:
-  void SetVertexFormat(const VertexFormat &vertex_format);
-  void UpdateBinding() { current_binding_++; }
-  std::size_t GetBinding() const { return current_binding_; }
+  void SetVertexFormat(const VertexFormat &vertex_format, uint32_t binding);
 
 private:
   Types::Handle vertex_array_{0};
-  std::size_t current_binding_{0};
 };
 
 } // namespace Gloom

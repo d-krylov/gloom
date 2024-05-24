@@ -1,20 +1,11 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "gloom_image.h"
 #include "graphics_types.h"
+#include "image.h"
 #include <span>
 
 namespace Gloom {
-
-struct TextureInformation {
-  int32_t width_;
-  int32_t height_;
-  Types::TextureTarget target;
-  Types::TextureInternalFormat internal_format_;
-  Types::TextureMagnificationFunction mag_filter_;
-  Types::TextureMinifyingFunction min_filter_;
-};
 
 class Texture {
 public:
@@ -41,6 +32,7 @@ public:
 
   void Bind(std::size_t unit);
   void SetData(std::span<const std::byte> data);
+  void Destroy();
 
 protected:
   void CreateStorage();

@@ -1,11 +1,12 @@
 #ifndef PRIMITIVES_H
 #define PRIMITIVES_H
 
-#include "mesh.h"
+#include "core_types.h"
+#include "vertex.h"
 
 namespace Gloom {
 
-void MakeBox(Mesh &mesh);
+std::array<VertexPNT, 36> MakeBox();
 
 } // namespace Gloom
 

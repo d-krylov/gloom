@@ -14,7 +14,7 @@ find_package(glfw3  REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set(MESH_SOURCES
-  ${PROJECT_SOURCE_DIR}/mesh/gloom_mesh_tools.cpp
+  ${PROJECT_SOURCE_DIR}/mesh/mesh_tools.cpp
   ${PROJECT_SOURCE_DIR}/mesh/mesh_loader.cpp
   ${PROJECT_SOURCE_DIR}/mesh/mesh.cpp
   ${PROJECT_SOURCE_DIR}/mesh/primitives.cpp
@@ -44,7 +44,7 @@ set(GUI_SOURCES
 set(GRAPHICS_SOURCES
   ${PROJECT_SOURCE_DIR}/graphics/buffer/buffer.cpp
   ${PROJECT_SOURCE_DIR}/graphics/graphics_pipeline/graphics_pipeline.cpp
-  ${PROJECT_SOURCE_DIR}/graphics/graphics_pipeline/shader_reflection.cpp
+  ${PROJECT_SOURCE_DIR}/graphics/graphics_pipeline/shader_information.cpp
   ${PROJECT_SOURCE_DIR}/graphics/texture/texture.cpp
   ${PROJECT_SOURCE_DIR}/graphics/texture/sampler.cpp
   ${PROJECT_SOURCE_DIR}/graphics/texture/renderbuffer.cpp
@@ -60,19 +60,21 @@ set(RENDERER_SOURCES
   ${PROJECT_SOURCE_DIR}/renderer/renderer.cpp
 )
 
+set(SCENE_SOURCES
+  ${PROJECT_SOURCE_DIR}/scene/camera.cpp
+  ${PROJECT_SOURCE_DIR}/scene/material.cpp
+)
+
 set(GLOOM_SOURCES
   ${MESH_SOURCES}
   ${IMGUI_SOURCES}
   ${GUI_SOURCES}
   ${RENDERER_SOURCES}
   ${GRAPHICS_SOURCES}
+  ${SCENE_SOURCES}
   ${PROJECT_SOURCE_DIR}/external/glad/glad.c
-
-  ${PROJECT_SOURCE_DIR}/scene/camera.cpp
-  ${PROJECT_SOURCE_DIR}/scene/material.cpp
-
-  ${PROJECT_SOURCE_DIR}/core/gloom_tools.cpp
-  ${PROJECT_SOURCE_DIR}/core/gloom_image.cpp
+  ${PROJECT_SOURCE_DIR}/core/tools.cpp
+  ${PROJECT_SOURCE_DIR}/core/image.cpp
 )
 
 include(cmake/ClangFormat.cmake)

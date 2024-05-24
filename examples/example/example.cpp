@@ -1,32 +1,31 @@
+#include "camera.h"
+#include "imgui_platform.h"
 #include "imgui_renderer.h"
 #include "window.h"
 
 int main() {
-  Gloom::Window window("hello", 800, 600);
 
-  ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
+  Gloom::ImGuiPlatform imgui_platform("example", 800, 600);
+  Gloom::ImGuiRenderer imgui_renderer;
 
-  // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+  Gloom::Types::Vector3f camera_position(0.0f, 0.0f, 0.0f);
 
-  ImGui_ImplGlfw_InitForOpenGL(window.GetNativeWindow(), true);
-  // ImGui_ImplOpenGL3_Init("#version 410");
+  while (imgui_platform.GetWindow().ShouldClose() == false) {
+    imgui_platform.GetWindow().PollEvents();
 
-  Gloom::ImGuiRenderer renderer;
-
-  while (window.ShouldClose() == false) {
-    window.PollEvents();
-
-    renderer.Begin();
+    imgui_platform.NewFrame();
+    imgui_renderer.Begin();
 
     ImGui::Begin("window");
 
+    ImGui::SliderFloat3("position", reinterpret_cast<float *>(&camera_position), -100.0f,
+                        100.0f);
+
     ImGui::End();
 
-    renderer.End();
+    imgui_renderer.End();
 
-    window.Update();
+    imgui_platform.GetWindow().Update();
   }
 
   return 0;
