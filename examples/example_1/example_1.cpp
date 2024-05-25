@@ -18,7 +18,7 @@ int main() {
 
   auto root = Gloom::GetRoot();
   Gloom::GraphicsPipeline pipeline(root / "shaders/instance_pnt.vert",
-                                   root / "shaders/blinn_phong.frag");
+                                   root / "shaders/pbr.frag");
 
   pipeline.Bind();
   Gloom::VertexArray vao;
@@ -43,16 +43,17 @@ int main() {
   ssbo.SetData(std::span<Gloom::Types::Matrix4f>(positions));
   ssbo.BindRange(0);
 
-  Gloom::VertexBuffer vbo(4_KiB, Gloom::VertexPNT::GetFormat());
+  Gloom::VertexBuffer vbo(4_KiB, Gloom::Vertex::GetFormat());
 
-  vbo.SetData(std::span<Gloom::VertexPNT>(vertices));
+  vbo.SetData(std::span<Gloom::Vertex>(vertices));
 
   vao.AddVertexBuffer(vbo);
   vao.Bind();
 
   Gloom::Camera camera;
 
-  camera.SetPosition(Gloom::Types::Vector3f(0.0f, 0.0f, 5.0f));
+  Gloom::Types::Vector3f position(0.0f, 0.0f, 5.0f);
+  camera.SetPosition(position);
 
   auto projection = camera.GetPerspectiveMatrix();
   auto look = camera.GetLookAtMatrix();
@@ -76,6 +77,7 @@ int main() {
     pipeline.SetUniform(Gloom::Types::ShaderIndex::FRAGMENT, "u_light_position",
                         light_position);
     pipeline.SetUniform(Gloom::Types::ShaderIndex::FRAGMENT, "u_light_color", light_color);
+    pipeline.SetUniform(Gloom::Types::ShaderIndex::FRAGMENT, "u_view_position", position);
 
     Gloom::Commands::DrawArraysInstanced(Gloom::Types::PrimitiveKind::TRIANGLES, 0,
                                          vertices.size(), 100);
@@ -85,7 +87,7 @@ int main() {
 
     ImGui::Begin("window");
     ImGui::SliderFloat3("light position", Gloom::Types::Cast(light_position), 0.0f, 20.0f);
-    ImGui::SliderFloat3("light color", Gloom::Types::Cast(light_color), 0.0f, 1.0f);
+    ImGui::SliderFloat3("light color", Gloom::Types::Cast(light_color), 0.0f, 5.0f);
 
     ImGui::End();
     imgui_renderer.End();

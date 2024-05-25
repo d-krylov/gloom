@@ -1,5 +1,5 @@
-#ifndef GLOOM_ASSERT_H
-#define GLOOM_ASSERT_H
+#ifndef CORE_ASSERT_H
+#define CORE_ASSERT_H
 
 #include <cstdio>
 #include <cstdlib>
@@ -29,4 +29,4 @@ namespace Gloom {
 
 } // namespace Gloom
 
-#endif // GLOOM_ASSERT_H
+#endif // CORE_ASSERT_H

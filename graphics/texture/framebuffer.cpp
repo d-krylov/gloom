@@ -9,14 +9,7 @@ bool Framebuffer::Verify() {
   return status = GL_FRAMEBUFFER_COMPLETE;
 }
 
-void Framebuffer::Attach(const Texture &texture) {
-  if (texture.IsLayered()) {
-    // glNamedFramebufferTextureLayer(framebuffer_, );
-  } else {
-    glNamedFramebufferTexture(framebuffer_, GL_COLOR_ATTACHMENT0, texture, 0);
-  }
-  Verify();
-}
+void Framebuffer::Attach(const FramebufferAttachment &attachment) {}
 
 void Framebuffer::Bind() { glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_); }
 

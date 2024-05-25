@@ -1,5 +1,5 @@
-#ifndef GLOOM_IMAGE_H
-#define GLOOM_IMAGE_H
+#ifndef IMAGE_H
+#define IMAGE_H
 
 #include "graphics_types.h"
 #include <filesystem>
@@ -17,7 +17,7 @@ public:
 
   [[nodiscard]] const Types::Vector2i &GetSize() const { return size_; }
   [[nodiscard]] int32_t GetWidth() const { return size_.x; }
-  [[nodiscard]] int32_t GetHeigth() const { return size_.y; }
+  [[nodiscard]] int32_t GetHeight() const { return size_.y; }
   [[nodiscard]] int32_t GetChannels() const { return channels_; }
 
   Types::TextureInternalFormat GetFormat() const;
@@ -30,4 +30,4 @@ private:
 
 } // namespace Gloom
 
-#endif // GLOOM_IMAGE_H
+#endif // IMAGE_H

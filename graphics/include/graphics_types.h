@@ -97,6 +97,13 @@ enum class PrimitiveKind {
   PATCHES = GL_PATCHES,
 };
 
+enum class FramebufferAttachmentType {
+  COLOR = GL_COLOR_ATTACHMENT0,
+  DEPTH = GL_DEPTH_ATTACHMENT,
+  STENCIL = GL_STENCIL_ATTACHMENT,
+  DEPTH_STENCIL = GL_DEPTH_STENCIL_ATTACHMENT
+};
+
 enum class TextureTarget {
 #define TEXTURE_TARGET(X, D, L) X = GL_##X,
 #include "graphics_types.def"
@@ -240,9 +247,6 @@ struct SamplerCreateInformation {
 
 constexpr auto ARRAYS_COMMAND_SIZE = sizeof(DrawArraysIndirectCommand);
 constexpr auto ELEMENTS_COMMAND_SIZE = sizeof(DrawElementsIndirectCommand);
-
-[[nodiscard]] float Radians(float degrees);
-[[nodiscard]] float Degrees(float radians);
 
 [[nodiscard]] CoreType GetComponentType(DataType type);
 [[nodiscard]] std::size_t GetComponentCount(DataType type);

@@ -24,12 +24,22 @@ constexpr auto Z = Vector3f(0.0f, 1.0f, 1.0f);
 constexpr float PI = 3.1415926535897f;
 
 // clang-format off
-template <typename T, int N>        T *Cast(linalg::vec<T, N> &v)    { return linalg::begin(v); }
-template <typename T, int M, int N> T *Cast(linalg::mat<T, M, N> &m) { return linalg::begin(m.x); }
-
+template <typename T, int N>              T *Cast(      linalg::vec<T, N> &v)    { return linalg::begin(v); }
+template <typename T, int M, int N>       T *Cast(      linalg::mat<T, M, N> &m) { return linalg::begin(m.x); }
 template <typename T, int N>        const T *Cast(const linalg::vec<T, N> &v)    { return linalg::begin(v); }
 template <typename T, int M, int N> const T *Cast(const linalg::mat<T, M, N> &m) { return linalg::begin(m.x); }
 // clang-format on
+
+template <typename T> std::byte *ToBytePointer(T *data) {
+  return reinterpret_cast<std::byte *>(data);
+}
+
+[[nodiscard]] float Radians(float degrees);
+[[nodiscard]] float Degrees(float radians);
+[[nodiscard]] Matrix4f Translate(const Vector3f &v);
+[[nodiscard]] Matrix4f RotateX(float degrees);
+[[nodiscard]] Matrix4f RotateY(float degrees);
+[[nodiscard]] Matrix4f RotateZ(float degrees);
 
 // clang-format off
 constexpr inline std::size_t operator""_KiB(unsigned long long int x) { return 1024ULL * x; }

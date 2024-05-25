@@ -6,7 +6,7 @@
 #include "debug.h"
 #include "graphics_pipeline.h"
 #include "image.h"
-#include "mesh_loader.h"
+#include "mesh.h"
 #include "primitives.h"
 #include "sampler.h"
 #include "texture.h"

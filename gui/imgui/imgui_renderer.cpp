@@ -46,26 +46,26 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
   SetupRenderState(draw_data, fb_width, fb_height);
 
   for (uint32_t n = 0; n < draw_data->CmdListsCount; n++) {
-    const auto *cmd_list = draw_data->CmdLists[n];
+    const auto *commands = draw_data->CmdLists[n];
 
-    std::span<ImDrawVert> vertices(cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size);
-    std::span<ImDrawIdx> indices(cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size);
+    std::span<ImDrawVert> vertices(commands->VtxBuffer.Data, commands->VtxBuffer.Size);
+    std::span<ImDrawIdx> indices(commands->IdxBuffer.Data, commands->IdxBuffer.Size);
     vertex_buffer_.SetData(vertices);
     index_buffer_.SetData(indices);
 
-    for (uint32_t cmd_i = 0; cmd_i < cmd_list->CmdBuffer.Size; cmd_i++) {
-      const auto *pcmd = &cmd_list->CmdBuffer[cmd_i];
-      if (pcmd->UserCallback != nullptr) {
-        if (pcmd->UserCallback == ImDrawCallback_ResetRenderState) {
+    for (uint32_t i = 0; i < commands->CmdBuffer.Size; i++) {
+      const auto *command = &commands->CmdBuffer[i];
+      if (command->UserCallback != nullptr) {
+        if (command->UserCallback == ImDrawCallback_ResetRenderState) {
           SetupRenderState(draw_data, fb_width, fb_height);
         } else {
-          pcmd->UserCallback(cmd_list, pcmd);
+          command->UserCallback(commands, command);
         }
       } else {
-        Types::Vector2f clip_min((pcmd->ClipRect.x - clip_off.x) * clip_scale.x,
-                                 (pcmd->ClipRect.y - clip_off.y) * clip_scale.y);
-        Types::Vector2f clip_max((pcmd->ClipRect.z - clip_off.x) * clip_scale.x,
-                                 (pcmd->ClipRect.w - clip_off.y) * clip_scale.y);
+        Types::Vector2f clip_min((command->ClipRect.x - clip_off.x) * clip_scale.x,
+                                 (command->ClipRect.y - clip_off.y) * clip_scale.y);
+        Types::Vector2f clip_max((command->ClipRect.z - clip_off.x) * clip_scale.x,
+                                 (command->ClipRect.w - clip_off.y) * clip_scale.y);
 
         if (clip_max.x <= clip_min.x || clip_max.y <= clip_min.y) {
           continue;
@@ -75,16 +75,16 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
                                 int(clip_max.x - clip_min.x), int(clip_max.y - clip_min.y)};
         Commands::SetScissor(true, scissor);
 
-        glBindTextureUnit(0, (GLuint)(intptr_t)pcmd->GetTexID());
+        glBindTextureUnit(0, (GLuint)(intptr_t)command->GetTexID());
 
-        Commands::DrawElementsBaseVertex(Types::PrimitiveKind::TRIANGLES, pcmd->ElemCount,
-                                         Types::CoreType::UNSIGNED_SHORT,
-                                         pcmd->IdxOffset * sizeof(ImDrawIdx), pcmd->VtxOffset);
+        Commands::DrawElementsBaseVertex(
+          Types::PrimitiveKind::TRIANGLES, command->ElemCount, Types::CoreType::UNSIGNED_SHORT,
+          command->IdxOffset * sizeof(ImDrawIdx), command->VtxOffset);
       }
     }
   }
 
-  glDisable(GL_SCISSOR_TEST);
+  Commands::SetScissor(false);
   Commands::SetBlending(false);
 }
 

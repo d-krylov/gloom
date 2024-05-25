@@ -75,6 +75,7 @@ set(GLOOM_SOURCES
   ${PROJECT_SOURCE_DIR}/external/glad/glad.c
   ${PROJECT_SOURCE_DIR}/core/tools.cpp
   ${PROJECT_SOURCE_DIR}/core/image.cpp
+  ${PROJECT_SOURCE_DIR}/core/core_types.cpp
 )
 
 include(cmake/ClangFormat.cmake)

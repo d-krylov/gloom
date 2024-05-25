@@ -3,6 +3,7 @@
 #include "imgui_renderer.h"
 #include "window.h"
 #include <array>
+#include <iostream>
 
 using Gloom::Types::operator""_KiB;
 using Gloom::Types::operator""_MiB;
@@ -14,24 +15,35 @@ int main() {
 
   Gloom::EnableDebug();
 
-  auto vertices = Gloom::MakeBox();
+  Gloom::Mesh mesh;
 
   auto root = Gloom::GetRoot();
+  mesh.Load(root / "assets/wavefront/monkey/monkey.obj");
+
   Gloom::GraphicsPipeline pipeline(root / "shaders/vertex_pnt.vert",
-                                   root / "shaders/blinn_phong.frag");
+                                   root / "shaders/texture_pbr.frag");
 
   pipeline.Bind();
   Gloom::VertexArray vao;
 
-  Gloom::Image image(root / "assets/images/container.png");
-  Gloom::Texture texture(Gloom::Types::TextureTarget::TEXTURE_2D, image);
+  Gloom::Image color(root / "assets/wavefront/monkey/color.png");
+  Gloom::Image metallic(root / "assets/wavefront/monkey/metallic.png");
+  Gloom::Image normal(root / "assets/wavefront/monkey/normal.png");
+  Gloom::Image roughness(root / "assets/wavefront/monkey/roughness.png");
 
-  texture.SetData(image.GetData());
-  texture.Bind(0);
+  Gloom::Texture tcolor(Gloom::Types::TextureTarget::TEXTURE_2D, color);
+  Gloom::Texture tmetallic(Gloom::Types::TextureTarget::TEXTURE_2D, metallic);
+  Gloom::Texture tnormal(Gloom::Types::TextureTarget::TEXTURE_2D, normal);
+  Gloom::Texture troughness(Gloom::Types::TextureTarget::TEXTURE_2D, roughness);
 
-  Gloom::VertexBuffer vbo(4_KiB, Gloom::Vertex::GetFormat());
+  tcolor.Bind(0);
+  tnormal.Bind(1);
+  tmetallic.Bind(2);
+  troughness.Bind(3);
 
-  vbo.SetData(std::span<Gloom::Vertex>(vertices));
+  Gloom::VertexBuffer vbo(10_MiB, Gloom::Vertex::GetFormat());
+
+  vbo.SetData(std::span<Gloom::Vertex>(mesh.vertices_));
 
   vao.AddVertexBuffer(vbo);
   vao.Bind();
@@ -55,7 +67,6 @@ int main() {
     Gloom::Commands::Clear();
     pipeline.Bind();
     vao.Bind();
-    texture.Bind(0);
 
     Gloom::Commands::SetDepthTesting(true);
     auto rot =
@@ -67,7 +78,8 @@ int main() {
                         light_position);
     pipeline.SetUniform(Gloom::Types::ShaderIndex::FRAGMENT, "u_light_color", light_color);
 
-    Gloom::Commands::DrawArrays(Gloom::Types::PrimitiveKind::TRIANGLES, 0, vertices.size());
+    Gloom::Commands::DrawArrays(Gloom::Types::PrimitiveKind::TRIANGLES, 0,
+                                mesh.vertices_.size());
 
     imgui_platform.NewFrame();
     imgui_renderer.Begin();
@@ -75,8 +87,6 @@ int main() {
     ImGui::Begin("window");
     ImGui::SliderFloat3("light position", Gloom::Types::Cast(light_position), 0.0f, 20.0f);
     ImGui::SliderFloat3("light color", Gloom::Types::Cast(light_color), 0.0f, 1.0f);
-    // auto size = ImGui::GetContentRegionAvail();
-    // ImGui::Image((void *)(intptr_t)texture, size);
     ImGui::End();
     imgui_renderer.End();
 

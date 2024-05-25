@@ -16,13 +16,6 @@ int main() {
     imgui_platform.NewFrame();
     imgui_renderer.Begin();
 
-    ImGui::Begin("window");
-
-    ImGui::SliderFloat3("position", reinterpret_cast<float *>(&camera_position), -100.0f,
-                        100.0f);
-
-    ImGui::End();
-
     imgui_renderer.End();
 
     imgui_platform.GetWindow().Update();

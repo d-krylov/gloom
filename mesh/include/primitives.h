@@ -6,7 +6,7 @@
 
 namespace Gloom {
 
-std::array<VertexPNT, 36> MakeBox();
+std::array<Vertex, 36> MakeBox();
 
 } // namespace Gloom
 

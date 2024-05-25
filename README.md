@@ -6,6 +6,13 @@ GLM is a small utility library for OpenGL designed to support the development of
 
 * Linux
 
+### Features
+
+* Obj file 
+* Blinn-Phong 
+* PBR
+* Dear ImGui interface
+
 ### How to build:
 
 ```bash

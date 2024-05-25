@@ -12,14 +12,12 @@ public:
   Texture(Types::TextureTarget target, Types::TextureInternalFormat internal_format,
           int32_t width, int32_t height);
 
-  Texture(Types::TextureTarget target, Types::TextureInternalFormat internal_format,
-          Types::Vector2i size)
-    : Texture(target, internal_format, size.x, size.y) {}
-
   Texture(Types::TextureTarget target, const Image &image)
-    : Texture(target, image.GetFormat(), image.GetSize()) {}
+    : Texture(target, image.GetFormat(), image.GetWidth(), image.GetHeight()) {}
 
   ~Texture();
+
+  NO_COPY_SEMANTIC(Texture);
 
   operator Types::Handle() const { return texture_; }
 

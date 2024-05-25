@@ -22,7 +22,12 @@ float getSpecular(vec3 light_direction) {
 }
 
 void main() {
-  vec3 color = texture(u_texture, in_uv).xyz;
+  vec3 color = vec3(0.0);
+  if (textureQueryLevels(u_texture) != 0) {
+    color = texture(u_texture, in_uv).xyz;
+  } else {
+    color = vec3(1.0, 1.0, 1.0);
+  }
   float ambient = 0.1;
   vec3 light_direction = normalize(u_light_position - in_fragment_position);
   float diffuse = getDiffuse(light_direction);
