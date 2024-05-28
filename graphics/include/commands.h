@@ -31,13 +31,13 @@ void SetScissor(bool b, const Types::Vector4i &scissor = Types::Vector4i{});
 void SetPrimitiveRestart(bool b);
 void DrawArrays(Types::PrimitiveKind kind, int32_t first, uint32_t count);
 void DrawArraysInstanced(Types::PrimitiveKind kind, int32_t first, uint32_t count, uint32_t instance_count);
+void DrawArraysIndirect(uint32_t count, Types::PrimitiveKind kind = Types::PrimitiveKind::TRIANGLES, uint32_t stride = 0);
 
 void Clear();
 void SetFaceCulling(bool b);
 void SetDepthTesting(bool b);
 void SetViewport(int32_t x, int32_t y, uint32_t width, uint32_t height);
 
-void DrawElements(Types::PrimitiveKind kind, std::span<uint32_t> i);
 void DrawElements(Types::PrimitiveKind kind, uint32_t count);
 
  

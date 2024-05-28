@@ -144,4 +144,9 @@ std::size_t GetSize(DataType type) {
   return component_count * component_size;
 }
 
+int32_t GetLevelCount(int32_t width, int32_t height, int32_t depth) {
+  auto max_dimension = std::max(depth, std::max(width, height));
+  return GetLog(max_dimension) + (max_dimension > 0);
+}
+
 } // namespace Gloom::Types

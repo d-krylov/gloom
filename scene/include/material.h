@@ -4,7 +4,7 @@
 #include "texture.h"
 #include <memory>
 
-namespace Gloom ::Scene {
+namespace Gloom {
 
 class Material {
 public:
@@ -35,6 +35,6 @@ public:
   std::shared_ptr<Texture> normal_texture_;
 };
 
-} // namespace Gloom::Scene
+} // namespace Gloom
 
 #endif // GLOOM_MATERIAL_H

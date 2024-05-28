@@ -114,7 +114,15 @@ enum class TextureInternalFormat {
 #include "graphics_types.def"
 };
 
-enum class PixelFormat { RED = GL_RED, RG = GL_RG, RGB = GL_RGB, RGBA = GL_RGBA };
+enum class PixelFormat {
+  RED = GL_RED,
+  RG = GL_RG,
+  RGB = GL_RGB,
+  RGBA = GL_RGBA,
+  DEPTH_COMPONENT = GL_DEPTH_COMPONENT,
+  DEPTH_STENCIL = GL_DEPTH_STENCIL,
+  STENCIL_INDEX = GL_STENCIL_INDEX
+};
 
 enum class TextureMinifyingFunction {
   NEAREST = GL_NEAREST,
@@ -218,7 +226,9 @@ enum class CoreType {
   INTEGER = GL_INT,
   UNSIGNED_INTEGER = GL_UNSIGNED_INT,
   FLOAT = GL_FLOAT,
-  DOUBLE = GL_DOUBLE
+  DOUBLE = GL_DOUBLE,
+  UNSIGNED_INT_24_8,
+  FLOAT_32_UNSIGNED_INT_24_8_REV
 };
 
 constexpr uint16_t Index = static_cast<uint16_t>(CoreType::UNSIGNED_INTEGER);
@@ -239,15 +249,20 @@ struct DrawElementsIndirectCommand {
 };
 
 struct SamplerCreateInformation {
+
+  SamplerCreateInformation() = default;
+
   TextureMagnificationFunction magnification_filter_{TextureMagnificationFunction::LINEAR};
   TextureMinifyingFunction minifying_filter_{TextureMinifyingFunction::LINEAR};
   TextureComparisonFunction compare_function_{TextureComparisonFunction::NEVER};
-  std::array<TextureWrapMode, 3> wrap_mode_ = {TextureWrapMode::REPEAT};
+  std::array<TextureWrapMode, 3> wrap_mode_ = {
+    TextureWrapMode::REPEAT, TextureWrapMode::REPEAT, TextureWrapMode::REPEAT};
 };
 
 constexpr auto ARRAYS_COMMAND_SIZE = sizeof(DrawArraysIndirectCommand);
 constexpr auto ELEMENTS_COMMAND_SIZE = sizeof(DrawElementsIndirectCommand);
 
+[[nodiscard]] int32_t GetLevelCount(int32_t width, int32_t height, int32_t depth);
 [[nodiscard]] CoreType GetComponentType(DataType type);
 [[nodiscard]] std::size_t GetComponentCount(DataType type);
 [[nodiscard]] std::size_t GetComponentSize(DataType type);

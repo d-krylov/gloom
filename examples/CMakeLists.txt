@@ -7,5 +7,5 @@ target_link_libraries(example_2 PRIVATE gloom)
 add_executable(example_3 ${CMAKE_CURRENT_SOURCE_DIR}/example_3/example_3.cpp)
 target_link_libraries(example_3 PRIVATE gloom)
 
-add_executable(example ${CMAKE_CURRENT_SOURCE_DIR}/example/example.cpp)
-target_link_libraries(example PRIVATE gloom)
+add_executable(example_4 ${CMAKE_CURRENT_SOURCE_DIR}/example_4/example_4.cpp)
+target_link_libraries(example_4 PRIVATE gloom)

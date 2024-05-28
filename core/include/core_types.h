@@ -41,6 +41,11 @@ template <typename T> std::byte *ToBytePointer(T *data) {
 [[nodiscard]] Matrix4f RotateY(float degrees);
 [[nodiscard]] Matrix4f RotateZ(float degrees);
 
+[[nodiscard]] int32_t GetLog(int32_t value);
+
+[[nodiscard]] Vector3f GetNormal(const Vector3f &a, const Vector3f &b, const Vector3f &c);
+[[nodiscard]] Matrix4f GetOrthographic(float L, float R, float B, float T, float N, float F);
+
 // clang-format off
 constexpr inline std::size_t operator""_KiB(unsigned long long int x) { return 1024ULL * x; }
 constexpr inline std::size_t operator""_MiB(unsigned long long int x) { return 1024_KiB * x; }

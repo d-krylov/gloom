@@ -1,13 +1,13 @@
 #ifndef GLOOM_LIGHT_H
 #define GLOOM_LIGHT_H
 
-namespace Gloom ::Scene {
+namespace Gloom {
 
 class Light {
 public:
 private:
 };
 
-} // namespace Gloom::Scene
+} // namespace Gloom
 
 #endif // GLOOM_LIGHT_H

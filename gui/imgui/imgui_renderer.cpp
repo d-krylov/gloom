@@ -47,11 +47,8 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
 
   for (uint32_t n = 0; n < draw_data->CmdListsCount; n++) {
     const auto *commands = draw_data->CmdLists[n];
-
-    std::span<ImDrawVert> vertices(commands->VtxBuffer.Data, commands->VtxBuffer.Size);
-    std::span<ImDrawIdx> indices(commands->IdxBuffer.Data, commands->IdxBuffer.Size);
-    vertex_buffer_.SetData(vertices);
-    index_buffer_.SetData(indices);
+    vertex_buffer_.SetData(std::span(commands->VtxBuffer.Data, commands->VtxBuffer.Size));
+    index_buffer_.SetData(std::span(commands->IdxBuffer.Data, commands->IdxBuffer.Size));
 
     for (uint32_t i = 0; i < commands->CmdBuffer.Size; i++) {
       const auto *command = &commands->CmdBuffer[i];
@@ -114,30 +111,21 @@ void ImGuiRenderer::SetupRenderState(ImDrawData *draw_data, int fb_width, int fb
     std::swap(T, B);
   }
 
-  float PM00 = 2.0f / (R - L);
-  float PM11 = 2.0f / (T - B);
-  float PM30 = (R + L) / (L - R);
-  float PM31 = (T + B) / (B - T);
-
-  auto projection_matrix = Types::Matrix4f{{PM00, 0.0f, +0.0f, 0.0f},
-                                           {0.0f, PM11, +0.0f, 0.0f},
-                                           {0.0f, 0.0f, -1.0f, 0.0f},
-                                           {PM30, PM31, +0.0f, 1.0f}};
-
+  auto orthographic = Types::GetOrthographic(L, R, B, T, -1.0f, 1.0f);
   graphics_pipeline_.SetUniform(Types::ShaderIndex::VERTEX, "u_projection_matrix",
-                                projection_matrix, false);
+                                orthographic);
   graphics_pipeline_.SetUniform(Types::ShaderIndex::FRAGMENT, "u_texture", 0);
 }
 
 void ImGuiRenderer::CreateFontsTexture() {
   auto &io = ImGui::GetIO();
-  unsigned char *pixels{nullptr};
-  int w, h;
+  uint8_t *pixels{nullptr};
+  int32_t w, h;
   io.Fonts->GetTexDataAsRGBA32(&pixels, &w, &h);
   font_texture_ = std::make_unique<Texture>(Types::TextureTarget::TEXTURE_2D,
                                             Types::TextureInternalFormat::RGBA8, w, h);
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-  std::byte *byte_pixels = reinterpret_cast<std::byte *>(pixels);
+  auto *byte_pixels = Types::ToBytePointer(pixels);
   std::span<const std::byte> span_pixels(byte_pixels, w * h * 4);
   font_texture_->SetData(span_pixels);
   io.Fonts->SetTexID((ImTextureID)(intptr_t)(*font_texture_));

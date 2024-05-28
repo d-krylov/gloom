@@ -7,6 +7,7 @@
 namespace Gloom {
 
 std::array<Vertex, 36> MakeBox();
+std::array<Vertex, 24> MakeOctahedron();
 
 } // namespace Gloom
 

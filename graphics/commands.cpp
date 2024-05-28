@@ -8,10 +8,6 @@ void SetViewport(int32_t x, int32_t y, uint32_t width, uint32_t height) {
   glViewport(x, y, width, height);
 }
 
-void DrawElements(Types::PrimitiveKind kind, std::span<uint32_t> i) {
-  glDrawElements(static_cast<uint16_t>(kind), i.size(), Types::Index, i.data());
-}
-
 void DrawElements(Types::PrimitiveKind kind, uint32_t count) {
   glDrawElements(static_cast<uint16_t>(kind), count, Types::Index, nullptr);
 }
@@ -36,6 +32,10 @@ void DrawArrays(Types::PrimitiveKind kind, int32_t first, uint32_t count) {
 void DrawArraysInstanced(Types::PrimitiveKind kind, int32_t first, uint32_t count,
                          uint32_t instance_count) {
   glDrawArraysInstanced(static_cast<uint16_t>(kind), first, count, instance_count);
+}
+
+void DrawArraysIndirect(uint32_t count, Types::PrimitiveKind kind, uint32_t stride) {
+  glMultiDrawArraysIndirect(static_cast<uint16_t>(kind), nullptr, count, stride);
 }
 
 void SetPrimitiveRestart(bool b) {

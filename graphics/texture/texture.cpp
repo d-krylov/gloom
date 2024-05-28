@@ -3,11 +3,18 @@
 namespace Gloom {
 
 Texture::Texture(Types::TextureTarget target, Types::TextureInternalFormat internal_format,
-                 int32_t width, int32_t height)
+                 int32_t width, int32_t height,
+                 const Types::SamplerCreateInformation &sampler_ci)
   : target_(target), internal_format_(internal_format), size_(width, height) {
   glCreateTextures(static_cast<uint16_t>(target), 1, &texture_);
   CreateStorage();
-  SetParameters();
+  SetParameters(sampler_ci);
+}
+
+Texture::Texture(const Image &image)
+  : Texture(Types::TextureTarget::TEXTURE_2D, image.GetFormat(), image.GetWidth(),
+            image.GetHeight()) {
+  SetData(image.GetData());
 }
 
 Texture::~Texture() { Destroy(); }
@@ -20,24 +27,29 @@ void Texture::CreateStorage() {
   switch (dimensions) {
   case 1:
     glTextureStorage1D(texture_, 1, format, size_.x);
+    break;
   case 2:
     glTextureStorage2D(texture_, 1, format, size_.x, size_.y);
+    break;
   case 3:
-
-  case 4:
-
+    glTextureStorage3D(texture_, 0, format, size_.x, size_.y, depth_);
+    break;
   default:
     break;
   }
 }
 
-void Texture::SetParameters() {
-  glTextureParameteri(texture_, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTextureParameteri(texture_, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_R, GL_REPEAT);
+// clang-format off
+void Texture::SetParameters(const Types::SamplerCreateInformation &sampler_ci) {
+  glTextureParameteri(texture_, GL_TEXTURE_MIN_FILTER, static_cast<uint16_t>(sampler_ci.minifying_filter_));
+  glTextureParameteri(texture_, GL_TEXTURE_MAG_FILTER, static_cast<uint16_t>(sampler_ci.magnification_filter_));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_S, static_cast<uint16_t>(sampler_ci.wrap_mode_[0]));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_T, static_cast<uint16_t>(sampler_ci.wrap_mode_[1]));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_R, static_cast<uint16_t>(sampler_ci.wrap_mode_[2]));
+
+  glGenerateTextureMipmap(texture_);
 }
+// clang-format on
 
 void Texture::SetData(std::span<const std::byte> data) {
   auto format_type = Types::GetPixelFormatAndType(internal_format_);

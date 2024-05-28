@@ -2,6 +2,7 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #define TINYOBJLOADER_USE_MAPBOX_EARCUT
 #include "tinyobjloader/tiny_obj_loader.h"
+#include <iostream>
 
 namespace Gloom {
 
@@ -17,8 +18,11 @@ void Mesh::Load(const std::filesystem::path &path) {
 
   for (const auto &shape : shapes) {
     std::size_t index_offset = 0;
+    offsets_.emplace_back(vertices_.size());
+    material_indices_.emplace_back(shape.mesh.material_ids[0]);
     for (auto i = 0; i < shape.mesh.num_face_vertices.size(); i++) {
       auto vertices_in_face = shape.mesh.num_face_vertices[i];
+
       for (auto v = 0; v < vertices_in_face; v++) {
         auto index = shape.mesh.indices[index_offset + v];
         Vertex vertex;
@@ -45,6 +49,14 @@ void Mesh::Load(const std::filesystem::path &path) {
         vertices_.emplace_back(vertex);
       }
       index_offset += vertices_in_face;
+    }
+  }
+
+  for (uint32_t i = 0; i < materials.size(); i++) {
+    if (materials[i].ambient_texname.empty() == false) {
+      auto image_path = path.parent_path() / materials[i].ambient_texname;
+      Image image(image_path);
+      materials_.emplace_back(std::make_shared<Texture>(image));
     }
   }
 }

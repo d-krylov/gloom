@@ -9,11 +9,12 @@ namespace Gloom {
 
 class Texture {
 public:
-  Texture(Types::TextureTarget target, Types::TextureInternalFormat internal_format,
-          int32_t width, int32_t height);
+  Texture(
+    Types::TextureTarget target, Types::TextureInternalFormat internal_format, int32_t width,
+    int32_t height,
+    const Types::SamplerCreateInformation &sampler_ci = Types::SamplerCreateInformation());
 
-  Texture(Types::TextureTarget target, const Image &image)
-    : Texture(target, image.GetFormat(), image.GetWidth(), image.GetHeight()) {}
+  Texture(const Image &image);
 
   ~Texture();
 
@@ -34,13 +35,14 @@ public:
 
 protected:
   void CreateStorage();
-  void SetParameters();
+  void SetParameters(const Types::SamplerCreateInformation &sampler_ci);
 
 private:
   Types::Handle texture_{0};
   Types::TextureTarget target_;
   Types::TextureInternalFormat internal_format_;
   Types::Vector2i size_;
+  int32_t depth_{0};
 };
 
 } // namespace Gloom

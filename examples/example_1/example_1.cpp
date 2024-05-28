@@ -24,9 +24,8 @@ int main() {
   Gloom::VertexArray vao;
 
   Gloom::Image image(root / "assets/images/container.png");
-  Gloom::Texture texture(Gloom::Types::TextureTarget::TEXTURE_2D, image);
+  Gloom::Texture texture(image);
 
-  texture.SetData(image.GetData());
   texture.Bind(0);
 
   std::vector<Gloom::Types::Matrix4f> positions;

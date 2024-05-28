@@ -14,7 +14,6 @@ find_package(glfw3  REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set(MESH_SOURCES
-  ${PROJECT_SOURCE_DIR}/mesh/mesh_tools.cpp
   ${PROJECT_SOURCE_DIR}/mesh/mesh_loader.cpp
   ${PROJECT_SOURCE_DIR}/mesh/mesh.cpp
   ${PROJECT_SOURCE_DIR}/mesh/primitives.cpp
@@ -76,6 +75,7 @@ set(GLOOM_SOURCES
   ${PROJECT_SOURCE_DIR}/core/tools.cpp
   ${PROJECT_SOURCE_DIR}/core/image.cpp
   ${PROJECT_SOURCE_DIR}/core/core_types.cpp
+  ${PROJECT_SOURCE_DIR}/gloom/application.cpp
 )
 
 include(cmake/ClangFormat.cmake)
@@ -102,6 +102,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}/gui/include
   ${PROJECT_SOURCE_DIR}/gui/imgui
   ${PROJECT_SOURCE_DIR}/include
+  ${PROJECT_SOURCE_DIR}/gloom/include
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
