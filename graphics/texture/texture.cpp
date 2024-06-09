@@ -2,18 +2,18 @@
 
 namespace Gloom {
 
-Texture::Texture(Types::TextureTarget target, Types::TextureInternalFormat internal_format,
-                 int32_t width, int32_t height,
-                 const Types::SamplerCreateInformation &sampler_ci)
-  : target_(target), internal_format_(internal_format), size_(width, height) {
-  glCreateTextures(static_cast<uint16_t>(target), 1, &texture_);
+Texture::Texture(const TextureDescription &description)
+  : target_(description.target_), internal_format_(description.format_),
+    size_(description.size_.xy()) {
+  glCreateTextures(static_cast<uint16_t>(target_), 1, &texture_);
   CreateStorage();
-  SetParameters(sampler_ci);
+  SetParameters(description.sampler_ci_);
 }
 
 Texture::Texture(const Image &image)
-  : Texture(Types::TextureTarget::TEXTURE_2D, image.GetFormat(), image.GetWidth(),
-            image.GetHeight()) {
+  : Texture{TextureDescription{.size_ = Vector3i(image.GetSize(), 0),
+                               .target_ = TextureTarget::TEXTURE_2D,
+                               .format_ = image.GetFormat()}} {
   SetData(image.GetData());
 }
 
@@ -22,7 +22,7 @@ Texture::~Texture() { Destroy(); }
 void Texture::Destroy() { glDeleteTextures(1, &texture_); }
 
 void Texture::CreateStorage() {
-  auto dimensions = Types::GetTextureDimensions(target_);
+  auto dimensions = GetTextureDimensions(target_);
   auto format = static_cast<uint16_t>(internal_format_);
   switch (dimensions) {
   case 1:
@@ -39,8 +39,10 @@ void Texture::CreateStorage() {
   }
 }
 
+uint64_t Texture::GetHandleARB() const { return glGetTextureHandleARB(texture_); }
+
 // clang-format off
-void Texture::SetParameters(const Types::SamplerCreateInformation &sampler_ci) {
+void Texture::SetParameters(const SamplerCreateInformation &sampler_ci) {
   glTextureParameteri(texture_, GL_TEXTURE_MIN_FILTER, static_cast<uint16_t>(sampler_ci.minifying_filter_));
   glTextureParameteri(texture_, GL_TEXTURE_MAG_FILTER, static_cast<uint16_t>(sampler_ci.magnification_filter_));
   glTextureParameteri(texture_, GL_TEXTURE_WRAP_S, static_cast<uint16_t>(sampler_ci.wrap_mode_[0]));
@@ -52,8 +54,8 @@ void Texture::SetParameters(const Types::SamplerCreateInformation &sampler_ci) {
 // clang-format on
 
 void Texture::SetData(std::span<const std::byte> data) {
-  auto format_type = Types::GetPixelFormatAndType(internal_format_);
-  auto dimensions = Types::GetTextureDimensions(target_);
+  auto format_type = GetPixelFormatAndType(internal_format_);
+  auto dimensions = GetTextureDimensions(target_);
 
   switch (dimensions) {
   case 1:

@@ -2,31 +2,30 @@
 #include "tools.h"
 #include <GLFW/glfw3.h>
 
-using Gloom::Types::operator""_KiB;
-using Gloom::Types::operator""_MiB;
+using Gloom::operator""_KiB;
+using Gloom::operator""_MiB;
 
 namespace Gloom {
 
 VertexFormat GetImGuiVertexFormat() {
-  return VertexFormat{
-    Types::DataType::VECTOR2, Types::DataType::VECTOR2, {Types::DataType::BVECTOR4, true}};
+  return VertexFormat{DataType::VECTOR2, DataType::VECTOR2, {DataType::BVECTOR4, true}};
 }
 
 // clang-format off
 Commands::BlendInformation GetBlendInformation() {
   return Commands::BlendInformation{
-    Types::BlendEquation::ADD, 
-    Types::BlendFunctionSeparate::SRC_ALPHA,
-    Types::BlendFunctionSeparate::ONE_MINUS_SRC_ALPHA, 
-    Types::BlendFunctionSeparate::ONE,
-    Types::BlendFunctionSeparate::ONE_MINUS_SRC_ALPHA};
+    BlendEquation::ADD, 
+    BlendFunctionSeparate::SRC_ALPHA,
+    BlendFunctionSeparate::ONE_MINUS_SRC_ALPHA, 
+    BlendFunctionSeparate::ONE,
+    BlendFunctionSeparate::ONE_MINUS_SRC_ALPHA};
 }
 // clang-format on
 
 ImGuiRenderer::ImGuiRenderer()
-  : graphics_pipeline_(GetRoot() / "shaders/gui.vert", GetRoot() / "shaders/gui.frag"),
+  : graphics_pipeline_{GetRoot() / "shaders/gui.vert", GetRoot() / "shaders/gui.frag"},
     vertex_array_(), vertex_buffer_(4_MiB, GetImGuiVertexFormat()),
-    index_buffer_(Types::BufferTarget::ELEMENT_ARRAY_BUFFER, 4_MiB) {
+    index_buffer_(BufferTarget::ELEMENT_ARRAY_BUFFER, 4_MiB) {
 
   CreateFontsTexture();
   vertex_array_.AddVertexBuffer(vertex_buffer_);
@@ -59,23 +58,23 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
           command->UserCallback(commands, command);
         }
       } else {
-        Types::Vector2f clip_min((command->ClipRect.x - clip_off.x) * clip_scale.x,
-                                 (command->ClipRect.y - clip_off.y) * clip_scale.y);
-        Types::Vector2f clip_max((command->ClipRect.z - clip_off.x) * clip_scale.x,
-                                 (command->ClipRect.w - clip_off.y) * clip_scale.y);
+        Vector2f clip_min((command->ClipRect.x - clip_off.x) * clip_scale.x,
+                          (command->ClipRect.y - clip_off.y) * clip_scale.y);
+        Vector2f clip_max((command->ClipRect.z - clip_off.x) * clip_scale.x,
+                          (command->ClipRect.w - clip_off.y) * clip_scale.y);
 
         if (clip_max.x <= clip_min.x || clip_max.y <= clip_min.y) {
           continue;
         }
 
-        Types::Vector4i scissor{int(clip_min.x), int(float(fb_height) - clip_max.y),
-                                int(clip_max.x - clip_min.x), int(clip_max.y - clip_min.y)};
+        Vector4i scissor{int(clip_min.x), int(float(fb_height) - clip_max.y),
+                         int(clip_max.x - clip_min.x), int(clip_max.y - clip_min.y)};
         Commands::SetScissor(true, scissor);
 
         glBindTextureUnit(0, (GLuint)(intptr_t)command->GetTexID());
 
         Commands::DrawElementsBaseVertex(
-          Types::PrimitiveKind::TRIANGLES, command->ElemCount, Types::CoreType::UNSIGNED_SHORT,
+          PrimitiveKind::TRIANGLES, command->ElemCount, CoreType::UNSIGNED_SHORT,
           command->IdxOffset * sizeof(ImDrawIdx), command->VtxOffset);
       }
     }
@@ -111,10 +110,9 @@ void ImGuiRenderer::SetupRenderState(ImDrawData *draw_data, int fb_width, int fb
     std::swap(T, B);
   }
 
-  auto orthographic = Types::GetOrthographic(L, R, B, T, -1.0f, 1.0f);
-  graphics_pipeline_.SetUniform(Types::ShaderIndex::VERTEX, "u_projection_matrix",
-                                orthographic);
-  graphics_pipeline_.SetUniform(Types::ShaderIndex::FRAGMENT, "u_texture", 0);
+  auto orthographic = GetOrthographic(L, R, B, T, -1.0f, 1.0f);
+  graphics_pipeline_.SetUniform(ShaderIndex::VERTEX, "u_projection_matrix", orthographic);
+  graphics_pipeline_.SetUniform(ShaderIndex::FRAGMENT, "u_texture", 0);
 }
 
 void ImGuiRenderer::CreateFontsTexture() {
@@ -122,10 +120,16 @@ void ImGuiRenderer::CreateFontsTexture() {
   uint8_t *pixels{nullptr};
   int32_t w, h;
   io.Fonts->GetTexDataAsRGBA32(&pixels, &w, &h);
-  font_texture_ = std::make_unique<Texture>(Types::TextureTarget::TEXTURE_2D,
-                                            Types::TextureInternalFormat::RGBA8, w, h);
+  TextureDescription texture_description{};
+  {
+    texture_description.target_ = TextureTarget::TEXTURE_2D;
+    texture_description.format_ = TextureInternalFormat::RGBA8;
+    texture_description.sampler_ci_ = SamplerCreateInformation();
+    texture_description.size_ = Vector3i(w, h, 0);
+  }
+  font_texture_ = std::make_unique<Texture>(texture_description);
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-  auto *byte_pixels = Types::ToBytePointer(pixels);
+  auto *byte_pixels = ToBytePointer(pixels);
   std::span<const std::byte> span_pixels(byte_pixels, w * h * 4);
   font_texture_->SetData(span_pixels);
   io.Fonts->SetTexID((ImTextureID)(intptr_t)(*font_texture_));

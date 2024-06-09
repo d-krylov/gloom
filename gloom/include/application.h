@@ -14,8 +14,10 @@ public:
   ~Application();
 
   void OnInitialize();
-
   void Run();
+
+  virtual void OnUpdate() {}
+  virtual void OnImGui() {}
 
 private:
   ImGuiPlatform imgui_platform_;

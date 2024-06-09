@@ -5,8 +5,8 @@
 #include <array>
 #include <iostream>
 
-using Gloom::Types::operator""_KiB;
-using Gloom::Types::operator""_MiB;
+using Gloom::operator""_KiB;
+using Gloom::operator""_MiB;
 
 int main() {
 
@@ -17,6 +17,27 @@ int main() {
 
   Gloom::Renderer renderer;
 
+  Gloom::TextureDescription texture_description{.size_ = Gloom::Vector3i(800, 600, 0),
+                                                .target_ = Gloom::TextureTarget::TEXTURE_2D,
+                                                .format_ = Gloom::TextureInternalFormat::RGB8};
+
+  Gloom::Texture fb_texture(texture_description);
+
+  Gloom::Renderbuffer fb_renderbuffer(Gloom::TextureInternalFormat::DEPTH24_STENCIL8, 800,
+                                      600);
+
+  fb_renderbuffer.Bind();
+
+  Gloom::FramebufferAttachment attachment_0(Gloom::FramebufferAttachmentType::COLOR0,
+                                            &fb_texture);
+
+  Gloom::FramebufferAttachment attachment_1(Gloom::FramebufferAttachmentType::DEPTH_STENCIL,
+                                            &fb_renderbuffer);
+
+  Gloom::Framebuffer framebuffer;
+  framebuffer.Attach(attachment_0);
+  framebuffer.Attach(attachment_1);
+
   Gloom::Mesh mesh;
 
   auto root = Gloom::GetRoot();
@@ -25,58 +46,75 @@ int main() {
 
   renderer.ProcessMesh(mesh);
 
-  Gloom::GraphicsPipeline pipeline(root / "shaders/vertex_pnt.vert",
-                                   root / "shaders/blinn_phong_indirect.frag");
+  Gloom::GraphicsPipeline pipeline{root / "shaders/vertex_pnt.vert",
+                                   root / "shaders/blinn_phong_indirect.frag"};
+
+  Gloom::GraphicsPipeline canvas{root / "shaders" / "canvas.vert",
+                                 root / "shaders" / "canvas.frag"};
+  Gloom::VertexArray vao;
 
   pipeline.Bind();
 
   Gloom::Camera camera;
 
-  Gloom::Types::Vector3f camera_position;
+  Gloom::Vector3f camera_position;
   float camera_rotation{0.0f};
 
   auto projection = camera.GetPerspectiveMatrix();
 
-  pipeline.SetUniform(Gloom::Types::ShaderIndex::VERTEX, "u_projection_matrix", projection);
+  pipeline.SetUniform(Gloom::ShaderIndex::VERTEX, "u_projection_matrix", projection);
 
-  Gloom::Types::Vector3f light_position(0.0f, 0.0f, 0.0f);
-  Gloom::Types::Vector3f light_color(0.0f, 0.0f, 0.0f);
+  Gloom::Vector3f light_position(0.0f, 0.0f, 0.0f);
+  Gloom::Vector3f light_color(0.0f, 0.0f, 0.0f);
+
+  glEnable(GL_MULTISAMPLE);
 
   while (imgui_platform.GetWindow().ShouldClose() == false) {
     imgui_platform.GetWindow().PollEvents();
 
-    Gloom::Commands::Clear();
     pipeline.Bind();
 
+    // framebuffer.Bind();
     Gloom::Commands::SetDepthTesting(true);
-    auto rot =
-      linalg::rotation_quat(Gloom::Types::Vector3f(0.0f, 1.0f, 0.0f), camera_rotation);
+    Gloom::Commands::Clear(true);
+    auto rot = linalg::rotation_quat(Gloom::Vector3f(0.0f, 1.0f, 0.0f), camera_rotation);
     auto model = linalg::rotation_matrix(rot);
 
     camera.SetPosition(camera_position);
     auto look = camera.GetLookAtMatrix();
-    pipeline.SetUniform(Gloom::Types::ShaderIndex::VERTEX, "u_view_matrix", look);
+    pipeline.SetUniform(Gloom::ShaderIndex::VERTEX, "u_view_matrix", look);
 
-    pipeline.SetUniform(Gloom::Types::ShaderIndex::VERTEX, "u_model_matrix", model);
-    pipeline.SetUniform(Gloom::Types::ShaderIndex::FRAGMENT, "u_light_position",
-                        light_position);
-    pipeline.SetUniform(Gloom::Types::ShaderIndex::FRAGMENT, "u_light_color", light_color);
+    pipeline.SetUniform(Gloom::ShaderIndex::VERTEX, "u_model_matrix", model);
+    pipeline.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_position", light_position);
+    pipeline.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_color", light_color);
 
     for (uint32_t i = 0; i < mesh.materials_.size(); i++) {
       mesh.materials_[i]->Bind(i);
     }
 
     renderer.Draw();
+    // framebuffer.Unbind();
+    // Gloom::Commands::Clear();
+    Gloom::Commands::SetDepthTesting(false);
+
+#if 0 
+    vao.Bind();
+    canvas.Bind();
+    canvas.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_texture", 0);
+    fb_texture.Bind(0);
+    Gloom::Commands::DrawArrays(0, 3);
+#endif
 
     imgui_platform.NewFrame();
     imgui_renderer.Begin();
 
     ImGui::Begin("window");
-    ImGui::SliderFloat3("light position", Gloom::Types::Cast(light_position), 0.0f, 40.0f);
-    ImGui::SliderFloat3("light color", Gloom::Types::Cast(light_color), 0.0f, 10.0f);
-    ImGui::SliderFloat3("camera position", Gloom::Types::Cast(camera_position), -30.0f, 40.0f);
+    ImGui::InputFloat3("light position", Gloom::Cast(light_position));
+    ImGui::InputFloat3("light color", Gloom::Cast(light_color));
+    ImGui::InputFloat3("camera position", Gloom::Cast(camera_position));
     ImGui::SliderFloat("obj rotation", &camera_rotation, 0.0f, 6.28f);
     ImGui::End();
+
     imgui_renderer.End();
 
     imgui_platform.GetWindow().Update();

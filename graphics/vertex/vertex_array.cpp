@@ -9,7 +9,7 @@ VertexArray::~VertexArray() { glDeleteVertexArrays(1, &vertex_array_); }
 void VertexArray::Bind() { glBindVertexArray(vertex_array_); }
 
 void VertexArray::SetIndexBuffer(const Buffer &buffer) {
-  CORE_VERIFY(buffer.GetTarget() == Types::BufferTarget::ELEMENT_ARRAY_BUFFER);
+  CORE_VERIFY(buffer.GetTarget() == BufferTarget::ELEMENT_ARRAY_BUFFER);
   glVertexArrayElementBuffer(vertex_array_, buffer);
 }
 

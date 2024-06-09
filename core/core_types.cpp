@@ -1,6 +1,6 @@
 #include "core_types.h"
 
-namespace Gloom ::Types {
+namespace Gloom {
 
 float Radians(float degrees) { return PI * degrees / 180.0f; }
 float Degrees(float radians) { return radians * 180.0f / PI; }
@@ -45,4 +45,4 @@ int32_t GetLog(int32_t value) {
   return ret;
 }
 
-} // namespace Gloom::Types
+} // namespace Gloom

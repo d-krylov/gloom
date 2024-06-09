@@ -32,15 +32,15 @@ public:
   [[nodiscard]] GLFWwindow *GetNativeWindow() const { return native_window_; }
   [[nodiscard]] uint32_t GetWidth() const;
   [[nodiscard]] uint32_t GetHeight() const;
-  [[nodiscard]] Types::Vector2u GetSize() const;
-  [[nodiscard]] Types::Vector2i GetPosition() const;
-  [[nodiscard]] Types::Vector2f GetCursorPosition() const;
-  [[nodiscard]] Types::Vector2u GetFramebufferSize() const;
+  [[nodiscard]] Vector2u GetSize() const;
+  [[nodiscard]] Vector2i GetPosition() const;
+  [[nodiscard]] Vector2f GetCursorPosition() const;
+  [[nodiscard]] Vector2u GetFramebufferSize() const;
   [[nodiscard]] bool ShouldClose() const;
   [[nodiscard]] float GetAspectRatio() const;
   [[nodiscard]] WindowEventHandler *GetEventHandler() const { return window_event_handler_; }
 
-  void SetCursorPosition(const Types::Vector2d &position);
+  void SetCursorPosition(const Vector2d &position);
   void SetWindowEventHandler(WindowEventHandler *handler);
 
   void SetUserPointer();

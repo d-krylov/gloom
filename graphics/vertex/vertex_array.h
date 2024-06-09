@@ -11,7 +11,7 @@ public:
   VertexArray();
   ~VertexArray();
 
-  operator Types::Handle() const { return vertex_array_; }
+  operator Handle() const { return vertex_array_; }
 
   void SetIndexBuffer(const Buffer &buffer);
   void AddVertexBuffer(const VertexBuffer &vbo);
@@ -22,7 +22,7 @@ protected:
   void SetVertexFormat(const VertexFormat &vertex_format, uint32_t binding);
 
 private:
-  Types::Handle vertex_array_{0};
+  Handle vertex_array_{0};
 };
 
 } // namespace Gloom

@@ -2,7 +2,7 @@
 
 namespace Gloom {
 
-Buffer::Buffer(Types::BufferTarget target, std::size_t size, Types::BufferStorage storage)
+Buffer::Buffer(BufferTarget target, std::size_t size, BufferStorage storage)
   : target_(target), buffer_size_(size), storage_(storage) {
   glCreateBuffers(1, &buffer_);
   glNamedBufferStorage(buffer_, buffer_size_, nullptr, static_cast<uint16_t>(storage_));
@@ -34,7 +34,7 @@ void Buffer::FlushRange(std::size_t offset, std::size_t size) {
 }
 
 void Buffer::SetData(std::span<const std::byte> raw) {
-  CORE_VERIFY(storage_ == Types::BufferStorage::DYNAMIC_STORAGE);
+  CORE_VERIFY(storage_ == BufferStorage::DYNAMIC_STORAGE);
   CORE_VERIFY(buffer_offset_ + raw.size() <= buffer_size_);
   glNamedBufferSubData(buffer_, buffer_offset_, raw.size(), raw.data());
 }
@@ -42,7 +42,7 @@ void Buffer::SetData(std::span<const std::byte> raw) {
 void Buffer::Bind() { glBindBuffer(static_cast<uint16_t>(target_), buffer_); }
 
 void Buffer::BindRange(uint32_t index, int64_t offset, uint64_t size) {
-  size = (size == Types::WHOLE_SIZE) ? buffer_size_ : size;
+  size = (size == WHOLE_SIZE) ? buffer_size_ : size;
   glBindBufferRange(static_cast<uint16_t>(target_), index, buffer_, offset, size);
 }
 

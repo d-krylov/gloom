@@ -2,7 +2,7 @@
 
 namespace Gloom {
 
-Sampler::Sampler(const Types::SamplerCreateInformation &sampler_ci) {
+Sampler::Sampler(const SamplerCreateInformation &sampler_ci) {
   glCreateSamplers(1, &sampler_);
 }
 
@@ -12,7 +12,7 @@ void Sampler::Bind(uint32_t unit) { glBindSampler(unit, sampler_); }
 void Sampler::Unbind(uint32_t unit) { glBindSampler(unit, 0); }
 
 // clang-format off
-void Sampler::SetParameters(const Types::SamplerCreateInformation &sampler_ci) {
+void Sampler::SetParameters(const SamplerCreateInformation &sampler_ci) {
   glSamplerParameterf(sampler_, GL_TEXTURE_MIN_FILTER, static_cast<uint16_t>(sampler_ci.minifying_filter_));
   glSamplerParameterf(sampler_, GL_TEXTURE_MAG_FILTER, static_cast<uint16_t>(sampler_ci.magnification_filter_));
   glSamplerParameterf(sampler_, GL_TEXTURE_WRAP_S, static_cast<uint16_t>(sampler_ci.wrap_mode_[0]));

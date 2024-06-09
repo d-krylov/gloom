@@ -15,16 +15,16 @@ public:
 
   [[nodiscard]] std::span<const std::byte> GetData() const { return image_data_; }
 
-  [[nodiscard]] const Types::Vector2i &GetSize() const { return size_; }
+  [[nodiscard]] const Vector2i &GetSize() const { return size_; }
   [[nodiscard]] int32_t GetWidth() const { return size_.x; }
   [[nodiscard]] int32_t GetHeight() const { return size_.y; }
   [[nodiscard]] int32_t GetChannels() const { return channels_; }
 
-  Types::TextureInternalFormat GetFormat() const;
+  TextureInternalFormat GetFormat() const;
 
 private:
   int32_t channels_;
-  Types::Vector2i size_;
+  Vector2i size_;
   std::span<std::byte> image_data_;
 };
 

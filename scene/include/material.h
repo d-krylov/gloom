@@ -9,11 +9,11 @@ namespace Gloom {
 class Material {
 public:
 public:
-  Types::Vector3f ambient_;
-  Types::Vector3f diffuse_;
-  Types::Vector3f specular_;
-  Types::Vector3f transmittance_;
-  Types::Vector3f emission_;
+  Vector3f ambient_;
+  Vector3f diffuse_;
+  Vector3f specular_;
+  Vector3f transmittance_;
+  Vector3f emission_;
   float shininess_;
   float ior_;
   float dissolve_;

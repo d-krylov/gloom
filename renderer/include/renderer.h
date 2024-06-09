@@ -18,7 +18,7 @@ private:
   VertexBuffer vertex_buffer_;
   Buffer command_buffer_;
 
-  std::vector<Types::DrawArraysIndirectCommand> commands_;
+  std::vector<DrawArraysIndirectCommand> commands_;
 };
 
 } // namespace Gloom

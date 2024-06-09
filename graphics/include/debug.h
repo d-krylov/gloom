@@ -6,9 +6,9 @@
 
 namespace Gloom {
 
-std::string GetShaderLog(Types::Handle shader_handle);
+std::string GetShaderLog(Handle shader_handle);
 
-bool GetShaderLinkStatus(Types::Handle shader_handle);
+bool GetShaderLinkStatus(Handle shader_handle);
 
 void EnableDebug();
 

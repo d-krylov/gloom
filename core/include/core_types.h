@@ -3,7 +3,7 @@
 
 #include "linalg/linalg.h"
 
-namespace Gloom ::Types {
+namespace Gloom {
 
 using Vector2f = linalg::aliases::float2;
 using Vector3f = linalg::aliases::float3;
@@ -19,7 +19,7 @@ using Matrix4f = linalg::aliases::float4x4;
 
 constexpr auto X = Vector3f(1.0f, 0.0f, 0.0f);
 constexpr auto Y = Vector3f(0.0f, 1.0f, 0.0f);
-constexpr auto Z = Vector3f(0.0f, 1.0f, 1.0f);
+constexpr auto Z = Vector3f(0.0f, 1.0f, 0.0f);
 
 constexpr float PI = 3.1415926535897f;
 
@@ -51,6 +51,6 @@ constexpr inline std::size_t operator""_KiB(unsigned long long int x) { return 1
 constexpr inline std::size_t operator""_MiB(unsigned long long int x) { return 1024_KiB * x; }
 // clang-format on
 
-} // namespace Gloom::Types
+} // namespace Gloom
 
 #endif // CORE_TYPES_H

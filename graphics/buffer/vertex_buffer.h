@@ -9,8 +9,8 @@ namespace Gloom {
 class VertexBuffer : public Buffer {
 public:
   VertexBuffer(std::size_t size, const VertexFormat &vertex_format, uint32_t binding = 0,
-               Types::BufferStorage storage = Types::BufferStorage::DYNAMIC_STORAGE)
-    : Buffer(Types::BufferTarget::ARRAY_BUFFER, size, storage), vertex_format_(vertex_format),
+               BufferStorage storage = BufferStorage::DYNAMIC_STORAGE)
+    : Buffer(BufferTarget::ARRAY_BUFFER, size, storage), vertex_format_(vertex_format),
       binding_(binding) {}
 
   [[nodiscard]] const VertexFormat &GetFormat() const { return vertex_format_; }

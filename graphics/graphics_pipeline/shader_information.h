@@ -10,10 +10,10 @@ class ShaderInformation {
 public:
   ShaderInformation(const std::filesystem::path &path);
 
-  Types::ShaderKind GetShaderKind() const { return kind_; }
+  ShaderKind GetShaderKind() const { return kind_; }
 
 private:
-  Types::ShaderKind kind_;
+  ShaderKind kind_;
   std::string source_;
 };
 

@@ -17,10 +17,10 @@ public:
   void GetNormal();
 
 public:
-  std::vector<Types::Vector3f> positions_;
-  std::vector<Types::Vector3i> indices_;
-  std::vector<Types::Vector3f> normals_;
-  std::vector<Types::Vector2f> uv_;
+  std::vector<Vector3f> positions_;
+  std::vector<Vector3i> indices_;
+  std::vector<Vector3f> normals_;
+  std::vector<Vector2f> uv_;
   std::vector<Vertex> vertices_;
   std::vector<std::size_t> offsets_;
   std::vector<std::shared_ptr<Texture>> materials_;

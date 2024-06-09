@@ -3,13 +3,13 @@
 
 namespace Gloom {
 
-bool GetShaderLinkStatus(Types::Handle shader_handle) {
+bool GetShaderLinkStatus(Handle shader_handle) {
   int32_t compiled = 0;
   glGetProgramiv(shader_handle, GL_LINK_STATUS, &compiled);
   return compiled == GL_TRUE;
 }
 
-std::string GetShaderLog(Types::Handle shader_handle) {
+std::string GetShaderLog(Handle shader_handle) {
   int message_size = 0;
   glGetProgramiv(shader_handle, GL_INFO_LOG_LENGTH, &message_size);
   std::string message(message_size, ' ');

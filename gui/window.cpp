@@ -8,6 +8,7 @@ namespace Gloom {
 
 void GLFWInitialize() {
   glfwInit();
+  glfwWindowHint(GLFW_SAMPLES, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -34,7 +35,7 @@ void Window::PollEvents() { glfwPollEvents(); }
 void Window::Update() const { glfwSwapBuffers(native_window_); }
 
 float Window::GetAspectRatio() const {
-  Types::Vector2f size(GetSize());
+  Vector2f size(GetSize());
   return size.x / size.y;
 }
 
@@ -46,7 +47,7 @@ void Window::SetCursor(int32_t index) {
                                   : mouse_cursors_[MouseCursor::ARROW]);
 }
 
-void Window::SetCursorPosition(const Types::Vector2d &position) {
+void Window::SetCursorPosition(const Vector2d &position) {
   glfwSetCursorPos(native_window_, position.x, position.y);
 }
 
@@ -54,16 +55,16 @@ void Window::SetWindowEventHandler(WindowEventHandler *handler) {
   window_event_handler_ = handler;
 }
 
-Types::Vector2u Window::GetFramebufferSize() const {
-  Types::Vector2i size;
+Vector2u Window::GetFramebufferSize() const {
+  Vector2i size;
   glfwGetFramebufferSize(native_window_, &size.x, &size.y);
-  return Types::Vector2u(size);
+  return Vector2u(size);
 }
 
-Types::Vector2u Window::GetSize() const {
-  Types::Vector2i size;
+Vector2u Window::GetSize() const {
+  Vector2i size;
   glfwGetWindowSize(native_window_, &size.x, &size.y);
-  return Types::Vector2u(size);
+  return Vector2u(size);
 }
 
 uint32_t Window::GetWidth() const {
@@ -76,16 +77,16 @@ uint32_t Window::GetHeight() const {
   return size.y;
 }
 
-Types::Vector2i Window::GetPosition() const {
-  Types::Vector2i position;
+Vector2i Window::GetPosition() const {
+  Vector2i position;
   glfwGetWindowPos(native_window_, &position.x, &position.y);
   return position;
 }
 
-Types::Vector2f Window::GetCursorPosition() const {
-  Types::Vector2d position;
+Vector2f Window::GetCursorPosition() const {
+  Vector2d position;
   glfwGetCursorPos(native_window_, &position.x, &position.y);
-  return Types::Vector2f(position);
+  return Vector2f(position);
 }
 
 // clang-format off

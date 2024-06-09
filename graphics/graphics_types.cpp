@@ -1,6 +1,6 @@
 #include "graphics_types.h"
 
-namespace Gloom ::Types {
+namespace Gloom {
 
 ShaderKind GetShaderKind(ShaderIndex index) {
   switch (index) {
@@ -149,4 +149,17 @@ int32_t GetLevelCount(int32_t width, int32_t height, int32_t depth) {
   return GetLog(max_dimension) + (max_dimension > 0);
 }
 
-} // namespace Gloom::Types
+// clang-format off
+std::optional<ShaderIndex> GetShaderIndex(const std::filesystem::path &path) {
+  auto extension = path.extension().string();
+  if (extension == ".vert") { return ShaderIndex::VERTEX; }
+  if (extension == ".geom") { return ShaderIndex::GEOMETRY; }
+  if (extension == ".tesc") { return ShaderIndex::TESSELATION_CONTROL; }
+  if (extension == ".tese") { return ShaderIndex::TESSELATION_EVALUATION; }
+  if (extension == ".frag") { return ShaderIndex::FRAGMENT; }
+  if (extension == ".comp") { return ShaderIndex::COMPUTE; }
+  return {};
+}
+// clang-format on
+
+} // namespace Gloom

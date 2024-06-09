@@ -8,8 +8,15 @@
 namespace Gloom {
 
 struct FramebufferAttachment {
-  Types::FramebufferAttachmentType attachment_type_;
-  uint32_t attachment_index_{0};
+  FramebufferAttachment(FramebufferAttachmentType attachment_type, Texture *texture,
+                        uint32_t texture_level = 0, uint32_t texture_layer = 0)
+    : attachment_type_{attachment_type}, texture_level_{texture_level},
+      texture_layer_{texture_layer}, texture_{texture} {}
+
+  FramebufferAttachment(FramebufferAttachmentType attachment_type, Renderbuffer *renderbuffer)
+    : attachment_type_{attachment_type}, renderbuffer_{renderbuffer} {}
+
+  FramebufferAttachmentType attachment_type_;
   uint32_t texture_level_{0};
   uint32_t texture_layer_{0};
   Texture *texture_{nullptr};
@@ -24,18 +31,19 @@ public:
 
   NO_COPY_SEMANTIC(Framebuffer);
 
-  operator Types::Handle() const { return framebuffer_; }
+  operator Handle() const { return framebuffer_; }
 
   void Bind();
   void Unbind();
-
   void Attach(const FramebufferAttachment &attachment);
+
+  uint16_t GetStatus() const;
 
 protected:
   bool Verify();
 
 private:
-  Types::Handle framebuffer_{0};
+  Handle framebuffer_{0};
 };
 
 } // namespace Gloom

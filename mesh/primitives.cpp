@@ -85,7 +85,7 @@ std::array<Vertex, 24> MakeOctahedron() {
     Vertex{{-0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}}};
 
   for (uint32_t i = 0; i < vertices.size() - 2; i += 3) {
-    auto normal = Types::GetNormal(vertices[i + 0].position_, 
+    auto normal = GetNormal(vertices[i + 0].position_, 
                                    vertices[i + 1].position_,
                                    vertices[i + 2].position_);
     vertices[i + 0].normal_ = normal;

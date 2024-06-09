@@ -2,12 +2,9 @@
 
 namespace Gloom {
 
-using Types::operator""_KiB;
-using Types::operator""_MiB;
-
 Renderer::Renderer()
   : vertex_array_(), vertex_buffer_(10_MiB, Vertex::GetFormat()),
-    command_buffer_(Types::BufferTarget::DRAW_INDIRECT_BUFFER, 4_MiB) {
+    command_buffer_(BufferTarget::DRAW_INDIRECT_BUFFER, 4_MiB) {
   vertex_array_.AddVertexBuffer(vertex_buffer_);
   vertex_array_.Bind();
   command_buffer_.Bind();
@@ -17,7 +14,7 @@ void Renderer::ProcessMesh(const Mesh &mesh) {
   for (uint32_t i = 0; i < mesh.offsets_.size(); i++) {
     auto count = (i < mesh.offsets_.size() - 1) ? (mesh.offsets_[i + 1] - mesh.offsets_[i])
                                                 : (mesh.vertices_.size() - mesh.offsets_[i]);
-    Types::DrawArraysIndirectCommand command{};
+    DrawArraysIndirectCommand command{};
     {
       command.first_vertex_ = mesh.offsets_[i];
       command.count_ = count;

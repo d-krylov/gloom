@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "commands.h"
 #include "debug.h"
+#include "framebuffer.h"
 #include "graphics_pipeline.h"
 #include "image.h"
 #include "mesh.h"

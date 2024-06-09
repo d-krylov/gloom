@@ -1,5 +1,6 @@
 #include "imgui_platform.h"
 #include "gui.h"
+#include "imgui_helpers.h"
 #include <GLFW/glfw3.h>
 
 namespace Gloom {
@@ -36,7 +37,17 @@ void ImGuiPlatform::OnScroll(double xoffset, double yoffset) {
   io.AddMouseWheelEvent((float)xoffset, (float)yoffset);
 }
 
-void ImGuiPlatform::OnKey(int keycode, int scancode, int action, int m) {}
+void ImGuiPlatform::OnKey(int keycode, int scancode, int action, int m) {
+  if (action != GLFW_PRESS && action != GLFW_RELEASE) {
+    return;
+  }
+
+  UpdateKeyModifiers(window_.GetNativeWindow());
+  auto &io = ImGui::GetIO();
+  ImGuiKey imgui_key = GLFWKeyToImGuiKey(keycode);
+  io.AddKeyEvent(imgui_key, (action == GLFW_PRESS));
+  io.SetKeyEventNativeData(imgui_key, keycode, scancode);
+}
 
 void ImGuiPlatform::OnCursorPos(double x, double y) {
   auto &io = ImGui::GetIO();
@@ -61,7 +72,7 @@ void ImGuiPlatform::UpdateMouseData() {
   auto &io = ImGui::GetIO();
   auto &platform_io = ImGui::GetPlatformIO();
   uint32_t mouse_viewport_id = 0;
-  Types::Vector2f previous_mouse_position{io.MousePos.x, io.MousePos.y};
+  Vector2f previous_mouse_position{io.MousePos.x, io.MousePos.y};
 }
 
 void ImGuiPlatform::NewFrame() {

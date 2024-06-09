@@ -7,12 +7,17 @@
 
 namespace Gloom {
 
+struct TextureDescription {
+  Vector3i size_;
+  uint32_t samples_{0};
+  TextureTarget target_;
+  TextureInternalFormat format_;
+  SamplerCreateInformation sampler_ci_;
+};
+
 class Texture {
 public:
-  Texture(
-    Types::TextureTarget target, Types::TextureInternalFormat internal_format, int32_t width,
-    int32_t height,
-    const Types::SamplerCreateInformation &sampler_ci = Types::SamplerCreateInformation());
+  Texture(const TextureDescription &description);
 
   Texture(const Image &image);
 
@@ -20,14 +25,16 @@ public:
 
   NO_COPY_SEMANTIC(Texture);
 
-  operator Types::Handle() const { return texture_; }
+  operator Handle() const { return texture_; }
 
-  [[nodiscard]] Types::TextureInternalFormat GetFormat() const { return internal_format_; }
+  [[nodiscard]] TextureInternalFormat GetFormat() const { return internal_format_; }
 
   [[nodiscard]] bool IsLayered() const { return IsTextureLayered(target_); }
   [[nodiscard]] int32_t GetWidth() const { return size_.x; }
   [[nodiscard]] int32_t GetHeight() const { return size_.y; }
-  [[nodiscard]] const Types::Vector2i &GetSize() const { return size_; }
+  [[nodiscard]] const Vector2i &GetSize() const { return size_; }
+
+  [[nodiscard]] uint64_t GetHandleARB() const;
 
   void Bind(std::size_t unit);
   void SetData(std::span<const std::byte> data);
@@ -35,13 +42,13 @@ public:
 
 protected:
   void CreateStorage();
-  void SetParameters(const Types::SamplerCreateInformation &sampler_ci);
+  void SetParameters(const SamplerCreateInformation &sampler_ci);
 
 private:
-  Types::Handle texture_{0};
-  Types::TextureTarget target_;
-  Types::TextureInternalFormat internal_format_;
-  Types::Vector2i size_;
+  Handle texture_{0};
+  TextureTarget target_;
+  TextureInternalFormat internal_format_;
+  Vector2i size_;
   int32_t depth_{0};
 };
 
