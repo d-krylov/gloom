@@ -38,10 +38,10 @@ int main() {
   framebuffer.Attach(attachment_0);
   framebuffer.Attach(attachment_1);
 
-  Gloom::Mesh mesh;
-
   auto root = Gloom::GetRoot();
-  mesh.Load(root / "assets/wavefront/sibenik/sibenik.obj");
+
+  Gloom::Mesh mesh(root / "assets/wavefront/sibenik/sibenik.obj");
+
   mesh.GetNormal();
 
   renderer.ProcessMesh(mesh);
@@ -88,9 +88,9 @@ int main() {
     pipeline.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_position", light_position);
     pipeline.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_color", light_color);
 
-    for (uint32_t i = 0; i < mesh.materials_.size(); i++) {
-      mesh.materials_[i]->Bind(i);
-    }
+    //    for (uint32_t i = 0; i < mesh.materials_.size(); i++) {
+    //      mesh.materials_[i]->Bind(i);
+    //    }
 
     renderer.Draw();
     // framebuffer.Unbind();

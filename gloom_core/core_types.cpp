@@ -1,4 +1,4 @@
-#include "core_types.h"
+#include "gloom_core/include/core_types.h"
 
 namespace Gloom {
 

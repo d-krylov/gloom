@@ -1,5 +1,5 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#ifndef GLOOM_APPLICATION_H
+#define GLOOM_APPLICATION_H
 
 #include "imgui_platform.h"
 #include "imgui_renderer.h"
@@ -9,13 +9,14 @@ namespace Gloom {
 
 class Application {
 public:
-  Application(std::string_view name, uint32_t width, uint32_t height);
+  Application(std::string_view name = "Application", uint32_t width = 1920,
+              uint32_t height = 1080);
 
-  ~Application();
+  virtual ~Application() = default;
 
-  void OnInitialize();
   void Run();
 
+  virtual void OnInitialize() {}
   virtual void OnUpdate() {}
   virtual void OnImGui() {}
 
@@ -26,4 +27,4 @@ private:
 
 } // namespace Gloom
 
-#endif // APPLICATION_H
+#endif // GLOOM_APPLICATION_H

@@ -6,9 +6,7 @@
 
 namespace Gloom {
 
-class Material {
-public:
-public:
+struct MaterialProperties {
   Vector3f ambient_;
   Vector3f diffuse_;
   Vector3f specular_;
@@ -17,7 +15,18 @@ public:
   float shininess_;
   float ior_;
   float dissolve_;
+};
 
+class Material {
+public:
+public:
+  std::shared_ptr<MaterialProperties> properties_;
+  std::shared_ptr<Texture> ambient_texture_;
+  std::shared_ptr<Texture> diffuse_texture_;
+  std::shared_ptr<Texture> specular_texture_;
+};
+
+struct PBRMaterialProperties {
   float roughness_;
   float metallic_;
   float sheen_;
@@ -25,11 +34,10 @@ public:
   float clearcoat_roughness_;
   float anisotropy_;
   float anisotropy_rotation_;
+};
 
-  std::shared_ptr<Texture> ambient_texture_;
-  std::shared_ptr<Texture> diffuse_texture_;
-  std::shared_ptr<Texture> specular_texture_;
-
+class PBRMaterial {
+public:
   std::shared_ptr<Texture> roughness_texture_;
   std::shared_ptr<Texture> metallic_texture_;
   std::shared_ptr<Texture> normal_texture_;

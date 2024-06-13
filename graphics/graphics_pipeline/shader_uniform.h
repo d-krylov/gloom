@@ -1,7 +1,6 @@
-#ifndef SHADER_UNIFORM_H
-#define SHADER_UNIFORM_H
+#ifndef GLOOM_SHADER_UNIFORM_H
+#define GLOOM_SHADER_UNIFORM_H
 
-#include "core_assert.h"
 #include "graphics_types.h"
 #include <type_traits>
 
@@ -33,4 +32,4 @@ inline void SetUniformInternal(uint32_t shader, int32_t location, T const &value
 
 } // namespace Gloom
 
-#endif // SHADER_UNIFORM_H
+#endif // GLOOM_SHADER_UNIFORM_H

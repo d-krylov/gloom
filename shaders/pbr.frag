@@ -1,18 +1,21 @@
 #version 460
 
-layout (location = 0) out vec4 FragColor;
-
+// IN
 layout (location = 0) in vec3 in_normal;
 layout (location = 1) in vec2 in_uv;
 layout (location = 2) in vec3 in_fragment_position;
 
-uniform vec3 u_light_color = vec3(1.0);
-uniform vec3 u_light_position = vec3(0.0, 3.0, 4.0);
-uniform vec3 u_view_position = vec3(0.0, 0.0, 0.0);
+// OUT
+layout (location = 0) out vec4 out_color;
 
-uniform vec3 u_albedo = vec3(0.5, 0.5, 0.5);
-uniform float u_metallic = 0.3;
-uniform float u_roughness = 0.8;
+// UNIFORM
+uniform vec3 u_light_color    = vec3(0.5, 0.5, 0.05);
+uniform vec3 u_light_position = vec3(0.0, 0.0, 0.0);
+uniform vec3 u_view_position  = vec3(0.0, 0.0, 0.0);
+
+uniform vec3  u_albedo = vec3(0.5, 0.5, 0.5);
+uniform float u_metallic = 0.5;
+uniform float u_roughness = 0.5;
 
 const float PI = 3.141592653589793;
 
@@ -64,11 +67,9 @@ vec3 BRDF(vec3 normal) {
   return (Fd * kD + Fr) * u_light_color * NdotL; 
 }
 
-layout (location = 0) out vec4 fragColor;
-
 void main() {
 
   vec3 color = BRDF(in_normal);
 
-  fragColor = vec4(color, 1.0);
+  out_color = vec4(color, 1.0);
 }

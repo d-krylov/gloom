@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "core_types.h"
+#include "gloom_core/include/core_types.h"
 #include "window_event_handler.h"
 #include <string_view>
 

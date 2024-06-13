@@ -1,5 +1,4 @@
 #include "imgui_renderer.h"
-#include "tools.h"
 #include <GLFW/glfw3.h>
 
 using Gloom::operator""_KiB;

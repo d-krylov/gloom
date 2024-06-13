@@ -1,8 +1,8 @@
 #ifndef SHADER_REFLECTION_H
 #define SHADER_REFLECTION_H
 
+#include "gloom_core/include/tools.h"
 #include "graphics_types.h"
-#include "tools.h"
 
 namespace Gloom {
 

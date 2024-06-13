@@ -1,6 +1,18 @@
-#include "primitives.h"
+#include "gloom_mesh/include/primitives.h"
 
 namespace Gloom {
+
+// clang-format off
+std::array<Vertex, 6> MakeSquare() {
+  return std::array<Vertex, 6>{
+    Vertex{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+    Vertex{{+0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+    Vertex{{+0.5f, +0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+    Vertex{{+0.5f, +0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
+    Vertex{{-0.5f, +0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+    Vertex{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}};
+}
+// clang-format on
 
 std::array<Vertex, 36> MakeBox() {
   return std::array<Vertex, 36>{
@@ -86,8 +98,8 @@ std::array<Vertex, 24> MakeOctahedron() {
 
   for (uint32_t i = 0; i < vertices.size() - 2; i += 3) {
     auto normal = GetNormal(vertices[i + 0].position_, 
-                                   vertices[i + 1].position_,
-                                   vertices[i + 2].position_);
+                            vertices[i + 1].position_,
+                            vertices[i + 2].position_);
     vertices[i + 0].normal_ = normal;
     vertices[i + 1].normal_ = normal;
     vertices[i + 2].normal_ = normal;

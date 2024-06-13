@@ -1,8 +1,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include "gloom_core/include/image.h"
 #include "graphics_types.h"
-#include "image.h"
 #include <span>
 
 namespace Gloom {

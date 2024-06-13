@@ -1,0 +1,1 @@
+#include "gloom_widgets/include/camera_widget.h"

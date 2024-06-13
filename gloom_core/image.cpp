@@ -1,4 +1,4 @@
-#include "image.h"
+#include "gloom_core/include/image.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb/stb_image.h"
 

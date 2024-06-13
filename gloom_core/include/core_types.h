@@ -1,5 +1,5 @@
-#ifndef CORE_TYPES_H
-#define CORE_TYPES_H
+#ifndef GLOOM_CORE_TYPES_H
+#define GLOOM_CORE_TYPES_H
 
 #include "linalg/linalg.h"
 
@@ -53,4 +53,4 @@ constexpr inline std::size_t operator""_MiB(unsigned long long int x) { return 1
 
 } // namespace Gloom
 
-#endif // CORE_TYPES_H
+#endif // GLOOM_CORE_TYPES_H

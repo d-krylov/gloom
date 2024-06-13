@@ -15,6 +15,11 @@ public:
 
   NO_COPY_SEMANTIC(Buffer);
 
+  template <typename T> void SetData(const std::vector<T> &data) {
+    std::span<const T> span_data(data.data(), data.size());
+    SetData(std::as_bytes(span_data));
+  }
+
   template <typename T> void SetData(std::span<T> data) { SetData(std::as_bytes(data)); }
 
   void SetData(std::span<const std::byte> data);

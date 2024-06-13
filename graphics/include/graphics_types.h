@@ -1,10 +1,10 @@
 #ifndef GLOOM_TYPES_H
 #define GLOOM_TYPES_H
 
-#include "core_assert.h"
-#include "core_macros.h"
-#include "core_types.h"
 #include "glad/glad.h"
+#include "gloom_core/include/core_assert.h"
+#include "gloom_core/include/core_macros.h"
+#include "gloom_core/include/core_types.h"
 #include <array>
 
 namespace Gloom {

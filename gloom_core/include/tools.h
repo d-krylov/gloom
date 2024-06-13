@@ -1,5 +1,5 @@
-#ifndef TOOLS_H
-#define TOOLS_H
+#ifndef GLOOM_TOOLS_H
+#define GLOOM_TOOLS_H
 
 #include <filesystem>
 #include <string>
@@ -12,4 +12,4 @@ namespace Gloom {
 
 } // namespace Gloom
 
-#endif // TOOLS_H
+#endif // GLOOM_TOOLS_H

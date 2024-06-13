@@ -1,5 +1,5 @@
-#ifndef CORE_MACROS_H
-#define CORE_MACROS_H
+#ifndef GLOOM_CORE_MACROS_H
+#define GLOOM_CORE_MACROS_H
 
 namespace Gloom {
 
@@ -19,4 +19,4 @@ namespace Gloom {
 
 } // namespace Gloom
 
-#endif // CORE_MACROS_H
+#endif // GLOOM_CORE_MACROS_H

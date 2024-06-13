@@ -15,10 +15,8 @@ int main() {
 
   Gloom::EnableDebug();
 
-  Gloom::Mesh mesh;
-
   auto root = Gloom::GetRoot();
-  mesh.Load(root / "assets/wavefront/monkey/monkey.obj");
+  Gloom::Mesh mesh(root / "assets/wavefront/monkey/monkey.obj");
 
   Gloom::GraphicsPipeline pipeline{root / "shaders/vertex_pnt.vert",
                                    root / "shaders/texture_pbr.frag"};

@@ -1,6 +1,7 @@
 #include "graphics_pipeline.h"
 #include "debug.h"
-#include "tools.h"
+#include "gloom_core/include/tools.h"
+#include <iostream>
 
 namespace Gloom {
 

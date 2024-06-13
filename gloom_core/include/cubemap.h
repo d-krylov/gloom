@@ -1,33 +1,30 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef GLOOM_CUBEMAP_H
+#define GLOOM_CUBEMAP_H
 
 #include "graphics_types.h"
-#include <filesystem>
 #include <span>
 
 namespace Gloom {
 
-class Image {
+class CubeMap {
 public:
-  Image(const std::filesystem::path &path);
+  CubeMap(const std::initializer_list<std::filesystem::path> &pathes);
 
-  ~Image();
+  ~CubeMap();
 
-  [[nodiscard]] std::span<const std::byte> GetData() const { return image_data_; }
+  [[nodiscard]] std::span<const std::byte> GetData(uint32_t i) const;
 
   [[nodiscard]] const Vector2i &GetSize() const { return size_; }
   [[nodiscard]] int32_t GetWidth() const { return size_.x; }
   [[nodiscard]] int32_t GetHeight() const { return size_.y; }
   [[nodiscard]] int32_t GetChannels() const { return channels_; }
 
-  TextureInternalFormat GetFormat() const;
-
 private:
   int32_t channels_;
   Vector2i size_;
-  std::span<std::byte> image_data_;
+  std::array<std::byte *, 6> data_;
 };
 
 } // namespace Gloom
 
-#endif // IMAGE_H
+#endif // GLOOM_CUBEMAP_H

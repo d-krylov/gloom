@@ -14,9 +14,9 @@ find_package(glfw3  REQUIRED)
 find_package(OpenGL REQUIRED)
 
 set(MESH_SOURCES
-  ${PROJECT_SOURCE_DIR}/mesh/mesh_loader.cpp
-  ${PROJECT_SOURCE_DIR}/mesh/mesh.cpp
-  ${PROJECT_SOURCE_DIR}/mesh/primitives.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_mesh/mesh_loader.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_mesh/mesh.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_mesh/primitives.cpp
 )
 
 set(IMGUI_BACKEND_SOURCES
@@ -32,7 +32,7 @@ set(IMGUI_SOURCES
   ${IMGUI_BACKEND_SOURCES}
 )
 
-set(GUI_SOURCES
+set(GLOOM_GUI_SOURCES
   ${PROJECT_SOURCE_DIR}/gui/imgui/imgui_renderer.cpp
   ${PROJECT_SOURCE_DIR}/gui/imgui/imgui_platform.cpp
   ${PROJECT_SOURCE_DIR}/gui/imgui/imgui_helpers.cpp
@@ -67,26 +67,33 @@ set(SCENE_SOURCES
 set(GLOOM_SOURCES
   ${MESH_SOURCES}
   ${IMGUI_SOURCES}
-  ${GUI_SOURCES}
+  ${GLOOM_GUI_SOURCES}
   ${RENDERER_SOURCES}
   ${GRAPHICS_SOURCES}
   ${SCENE_SOURCES}
   ${PROJECT_SOURCE_DIR}/external/glad/glad.c
-  ${PROJECT_SOURCE_DIR}/core/tools.cpp
-  ${PROJECT_SOURCE_DIR}/core/image.cpp
-  ${PROJECT_SOURCE_DIR}/core/core_types.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_core/tools.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_core/image.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_core/core_types.cpp
   ${PROJECT_SOURCE_DIR}/gloom/application.cpp
 )
 
-include(cmake/ClangFormat.cmake)
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+  
+  include(cmake/ClangFormat.cmake)
 
-add_clang_format_target(format)
+  add_clang_format_target(format)
+
+  add_subdirectory(examples)
+
+endif()
 
 add_library(${PROJECT_NAME} SHARED 
   ${GLOOM_SOURCES}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
+  ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/external/
   ${PROJECT_SOURCE_DIR}/graphics/texture
   ${PROJECT_SOURCE_DIR}/graphics/buffer
@@ -95,19 +102,13 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}/graphics/graphics_pipeline
   ${PROJECT_SOURCE_DIR}/external/imgui/include
   ${PROJECT_SOURCE_DIR}/external/imgui/backend
-  ${PROJECT_SOURCE_DIR}/core/include
   ${PROJECT_SOURCE_DIR}/scene/include
   ${PROJECT_SOURCE_DIR}/renderer/include
-  ${PROJECT_SOURCE_DIR}/mesh/include
   ${PROJECT_SOURCE_DIR}/gui/include
   ${PROJECT_SOURCE_DIR}/gui/imgui
-  ${PROJECT_SOURCE_DIR}/include
-  ${PROJECT_SOURCE_DIR}/gloom/include
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
   OpenGL::GL
   glfw
 )
-
-add_subdirectory(examples)

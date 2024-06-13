@@ -22,7 +22,8 @@ void Camera::UpdateVectors() {
   up_ = linalg::normalize(linalg::cross(right_, front_));
 }
 
-void Camera::SetPosition(Vector3f position) { position_ = position; }
+void Camera::SetPosition(const Vector3f &position) { position_ = position; }
+void Camera::SetAspect(float aspect) { aspect_ = aspect; }
 
 void Camera::MoveRight(float v) {}
 

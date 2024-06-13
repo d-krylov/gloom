@@ -1,97 +1,88 @@
+#include "gloom/include/application.h"
 #include "graphics.h"
-#include "imgui_platform.h"
-#include "imgui_renderer.h"
 #include "window.h"
 #include <iostream>
 
 using Gloom::operator""_KiB;
 using Gloom::operator""_MiB;
 
-int main() {
-
-  Gloom::ImGuiPlatform imgui_platform("Learn OpenGL: Camera", 800, 600);
-  Gloom::ImGuiRenderer imgui_renderer;
-
-  Gloom::EnableDebug();
-
-  auto vertices = Gloom::MakeBox();
-
-  auto root = Gloom::GetRoot();
-  Gloom::GraphicsPipeline pipeline{root / "shaders/instance_pnt.vert",
-                                   root / "shaders/pbr.frag"};
-
-  pipeline.Bind();
-  Gloom::VertexArray vao;
-
-  Gloom::Image image(root / "assets/images/container.png");
-  Gloom::Texture texture(image);
-
-  texture.Bind(0);
-
-  std::vector<Gloom::Matrix4f> positions;
-
-  for (int32_t i = -10; i <= 10; i += 2) {
-    for (int32_t j = -10; j <= 10; j += 2) {
-      Gloom::Vector3f position(float(i), -2.0f, float(j));
-      positions.emplace_back(linalg::translation_matrix(position));
-    }
+class MyApp : public Gloom::Application {
+public:
+  MyApp()
+    : Application(), vao_(), vbo_(4_MiB, Gloom::Vertex::GetFormat()),
+      graphics_pipeline_{Gloom::GetRoot() / "shaders" / "vertex_pnt.vert",
+                         Gloom::GetRoot() / "shaders" / "pbr.frag"} {
+    Gloom::EnableDebug();
   }
 
-  Gloom::Buffer ssbo(Gloom::BufferTarget::SHADER_STORAGE_BUFFER, 16_KiB);
+  void OnImGui() override {
+    auto position = camera_.GetPosition();
 
-  ssbo.SetData(std::span<Gloom::Matrix4f>(positions));
-  ssbo.BindRange(0);
-
-  Gloom::VertexBuffer vbo(4_KiB, Gloom::Vertex::GetFormat());
-
-  vbo.SetData(std::span<Gloom::Vertex>(vertices));
-
-  vao.AddVertexBuffer(vbo);
-  vao.Bind();
-
-  Gloom::Camera camera;
-
-  Gloom::Vector3f position(0.0f, 0.0f, 5.0f);
-  camera.SetPosition(position);
-
-  auto projection = camera.GetPerspectiveMatrix();
-  auto look = camera.GetLookAtMatrix();
-
-  pipeline.SetUniform(Gloom::ShaderIndex::VERTEX, "u_projection_matrix", projection);
-  pipeline.SetUniform(Gloom::ShaderIndex::VERTEX, "u_view_matrix", look);
-
-  Gloom::Vector3f light_position(0.0f, 0.0f, 0.0f);
-  Gloom::Vector3f light_color(0.0f, 0.0f, 0.0f);
-
-  while (imgui_platform.GetWindow().ShouldClose() == false) {
-    imgui_platform.GetWindow().PollEvents();
-
-    Gloom::Commands::Clear();
-    pipeline.Bind();
-    vao.Bind();
-    texture.Bind(0);
-
-    Gloom::Commands::SetDepthTesting(true);
-
-    pipeline.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_position", light_position);
-    pipeline.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_color", light_color);
-    pipeline.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_view_position", position);
-
-    Gloom::Commands::DrawArraysInstanced(Gloom::PrimitiveKind::TRIANGLES, 0, vertices.size(),
-                                         100);
-
-    imgui_platform.NewFrame();
-    imgui_renderer.Begin();
-
-    ImGui::Begin("window");
-    ImGui::SliderFloat3("light position", Gloom::Cast(light_position), 0.0f, 20.0f);
-    ImGui::SliderFloat3("light color", Gloom::Cast(light_color), 0.0f, 5.0f);
-
+    ImGui::Begin("Window");
+    ImGui::InputFloat3("light position", Gloom::Cast(light_position_));
+    ImGui::InputFloat3("light color", Gloom::Cast(light_color_));
+    ImGui::InputFloat3("camera position", Gloom::Cast(position));
+    ImGui::SliderFloat3("Rotation", Gloom::Cast(rotation_), 0.0f, 2.0f * Gloom::PI);
+    ImGui::SliderFloat("Metallic", &metallic_, 0.0f, 1.0f);
+    ImGui::SliderFloat("Roughness", &roughness_, 0.0f, 1.0f);
     ImGui::End();
-    imgui_renderer.End();
 
-    imgui_platform.GetWindow().Update();
+    camera_.SetPosition(position);
   }
+
+  void OnUpdate() override {
+    Gloom::Commands::SetDepthTesting(true);
+    Gloom::Commands::Clear(true);
+
+    vao_.Bind();
+    graphics_pipeline_.Bind();
+
+    auto projection = camera_.GetPerspectiveMatrix();
+    auto look = camera_.GetLookAtMatrix();
+
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_view_matrix", look);
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_projection_matrix",
+                                  projection);
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_position",
+                                  light_position_);
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_color", light_color_);
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_view_position",
+                                  camera_.GetPosition());
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_metallic", metallic_);
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_roughness", roughness_);
+
+    auto rotate = Gloom::RotateX(Gloom::Degrees(rotation_.x));
+    rotate = linalg::mul(rotate, Gloom::RotateY(Gloom::Degrees(rotation_.y)));
+    rotate = linalg::mul(rotate, Gloom::RotateZ(Gloom::Degrees(rotation_.z)));
+
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_model_matrix", rotate);
+
+    Gloom::Commands::DrawArrays(0, 24);
+  }
+
+  void OnInitialize() override {
+    camera_.SetPosition(Gloom::Vector3f(0.0f, 0.0f, 5.0f));
+    auto cube = Gloom::MakeOctahedron();
+    vbo_.SetData(std::span<Gloom::Vertex>(cube));
+    vao_.AddVertexBuffer(vbo_);
+  }
+
+private:
+  float metallic_{0.0f};
+  float roughness_{0.0f};
+  Gloom::Vector3f light_color_;
+  Gloom::Vector3f light_position_;
+  Gloom::Vector3f rotation_;
+  Gloom::Camera camera_;
+  Gloom::VertexBuffer vbo_;
+  Gloom::VertexArray vao_;
+  Gloom::GraphicsPipeline graphics_pipeline_;
+};
+
+int main() {
+  MyApp app;
+
+  app.Run();
 
   return 0;
 }
