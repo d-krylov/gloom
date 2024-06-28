@@ -20,7 +20,9 @@ public:
   [[nodiscard]] int32_t GetHeight() const { return size_.y; }
   [[nodiscard]] int32_t GetChannels() const { return channels_; }
 
-  TextureInternalFormat GetFormat() const;
+  [[nodiscard]] TextureInternalFormat GetFormat() const {
+    return GetFormatFromChannels(channels_);
+  }
 
 private:
   int32_t channels_;

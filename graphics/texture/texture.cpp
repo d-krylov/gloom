@@ -4,7 +4,7 @@ namespace Gloom {
 
 Texture::Texture(const TextureDescription &description)
   : target_(description.target_), internal_format_(description.format_),
-    size_(description.size_.xy()) {
+    size_(description.size_), depth_(description.size_.z) {
   glCreateTextures(static_cast<uint16_t>(target_), 1, &texture_);
   CreateStorage();
   SetParameters(description.sampler_ci_);
@@ -15,6 +15,16 @@ Texture::Texture(const Image &image)
                                .target_ = TextureTarget::TEXTURE_2D,
                                .format_ = image.GetFormat()}} {
   SetData(image.GetData());
+}
+
+Texture::Texture(const CubeMap &cubemap)
+  : Texture{TextureDescription{.size_ = Vector3i(cubemap.GetSize(), 0),
+                               .target_ = TextureTarget::TEXTURE_CUBE_MAP,
+                               .format_ = cubemap.GetFormat()}} {
+  for (int32_t i = 0; i < 6; ++i) {
+    auto data = cubemap.GetData(i);
+    SetData(data, 0, 0, i);
+  }
 }
 
 Texture::~Texture() { Destroy(); }
@@ -53,9 +63,11 @@ void Texture::SetParameters(const SamplerCreateInformation &sampler_ci) {
 }
 // clang-format on
 
-void Texture::SetData(std::span<const std::byte> data) {
+void Texture::SetData(std::span<const std::byte> data, int32_t xoffset, int32_t yoffset,
+                      int32_t zoffset) {
   auto format_type = GetPixelFormatAndType(internal_format_);
-  auto dimensions = GetTextureDimensions(target_);
+  auto dimensions =
+    (target_ == TextureTarget::TEXTURE_CUBE_MAP) ? 3 : GetTextureDimensions(target_);
 
   switch (dimensions) {
   case 1:
@@ -63,11 +75,14 @@ void Texture::SetData(std::span<const std::byte> data) {
                         static_cast<uint16_t>(format_type.second), data.data());
     break;
   case 2:
-    glTextureSubImage2D(texture_, 0, 0, 0, size_.x, size_.y,
+    glTextureSubImage2D(texture_, 0, xoffset, yoffset, size_.x, size_.y,
                         static_cast<uint16_t>(format_type.first),
                         static_cast<uint16_t>(format_type.second), data.data());
     break;
   case 3:
+    glTextureSubImage3D(texture_, 0, xoffset, yoffset, zoffset, size_.x, size_.y, 1,
+                        static_cast<uint16_t>(format_type.first),
+                        static_cast<uint16_t>(format_type.second), data.data());
     break;
   default:
     break;

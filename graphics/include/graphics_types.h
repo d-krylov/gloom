@@ -41,6 +41,17 @@ enum ShaderIndex : std::size_t {
   COMPUTE = 5,
 };
 
+enum class DepthFunction {
+  NEVER = GL_NEVER,
+  LESS = GL_LESS,
+  EQUAL = GL_EQUAL,
+  LEQUAL = GL_LEQUAL,
+  GREATER = GL_GREATER,
+  NOTEQUAL = GL_NOTEQUAL,
+  GEQUAL = GL_GEQUAL,
+  ALWAYS = GL_ALWAYS
+};
+
 constexpr std::size_t SHADER_STAGES_COUNT = ShaderIndex::COMPUTE + 1;
 
 enum class AttributeUsage {
@@ -280,14 +291,20 @@ struct DrawElementsIndirectCommand {
 };
 
 struct SamplerCreateInformation {
+  SamplerCreateInformation(
+    TextureMagnificationFunction mag = TextureMagnificationFunction::LINEAR,
+    TextureMinifyingFunction min = TextureMinifyingFunction::LINEAR,
+    TextureComparisonFunction comp = TextureComparisonFunction::NEVER,
+    TextureWrapMode ws = TextureWrapMode::CLAMP_TO_EDGE,
+    TextureWrapMode wt = TextureWrapMode::CLAMP_TO_EDGE,
+    TextureWrapMode wr = TextureWrapMode::CLAMP_TO_EDGE)
+    : magnification_filter_(mag), minifying_filter_(min),
+      compare_function_(comp), wrap_mode_{ws, wr, wt} {}
 
-  SamplerCreateInformation() = default;
-
-  TextureMagnificationFunction magnification_filter_{TextureMagnificationFunction::LINEAR};
-  TextureMinifyingFunction minifying_filter_{TextureMinifyingFunction::LINEAR};
-  TextureComparisonFunction compare_function_{TextureComparisonFunction::NEVER};
-  std::array<TextureWrapMode, 3> wrap_mode_ = {
-    TextureWrapMode::REPEAT, TextureWrapMode::REPEAT, TextureWrapMode::REPEAT};
+  TextureMagnificationFunction magnification_filter_;
+  TextureMinifyingFunction minifying_filter_;
+  TextureComparisonFunction compare_function_;
+  std::array<TextureWrapMode, 3> wrap_mode_;
 };
 
 constexpr auto ARRAYS_COMMAND_SIZE = sizeof(DrawArraysIndirectCommand);
@@ -307,6 +324,7 @@ constexpr auto ELEMENTS_COMMAND_SIZE = sizeof(DrawElementsIndirectCommand);
 [[nodiscard]] std::pair<PixelFormat, CoreType>
 GetPixelFormatAndType(TextureInternalFormat format);
 [[nodiscard]] std::optional<ShaderIndex> GetShaderIndex(const std::filesystem::path &path);
+[[nodiscard]] TextureInternalFormat GetFormatFromChannels(uint32_t channels);
 
 } // namespace Gloom
 

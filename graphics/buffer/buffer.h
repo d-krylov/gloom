@@ -3,6 +3,7 @@
 
 #include "graphics_types.h"
 #include <span>
+#include <vector>
 
 namespace Gloom {
 

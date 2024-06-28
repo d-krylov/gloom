@@ -15,10 +15,10 @@ void Mesh::LoadVertices(const tinyobj::ObjReader &reader) {
     offsets_.emplace_back(vertices_.size());
     material_indices_.emplace_back(shape.mesh.material_ids[0]);
 
-    for (auto i = 0; i < shape.mesh.num_face_vertices.size(); i++) {
+    for (std::size_t i = 0; i < shape.mesh.num_face_vertices.size(); i++) {
       auto vertices_in_face = shape.mesh.num_face_vertices[i];
 
-      for (auto v = 0; v < vertices_in_face; v++) {
+      for (std::size_t v = 0; v < vertices_in_face; v++) {
         auto index = shape.mesh.indices[index_offset + v];
         Vertex vertex;
         auto vx = attributes.vertices[3 * index.vertex_index + 0];

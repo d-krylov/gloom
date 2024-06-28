@@ -146,7 +146,7 @@ std::size_t GetSize(DataType type) {
 
 int32_t GetLevelCount(int32_t width, int32_t height, int32_t depth) {
   auto max_dimension = std::max(depth, std::max(width, height));
-  return GetLog(max_dimension) + (max_dimension > 0);
+  return GetBinaryLogarithm(max_dimension) + (max_dimension > 0);
 }
 
 // clang-format off
@@ -161,5 +161,18 @@ std::optional<ShaderIndex> GetShaderIndex(const std::filesystem::path &path) {
   return {};
 }
 // clang-format on
+
+TextureInternalFormat GetFormatFromChannels(uint32_t channels) {
+  switch (channels) {
+  case 3:
+    return TextureInternalFormat::RGB8;
+    break;
+  case 4:
+    return TextureInternalFormat::RGBA8;
+  default:
+    break;
+  }
+  CORE_UNREACHABLE();
+}
 
 } // namespace Gloom

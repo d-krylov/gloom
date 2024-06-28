@@ -19,10 +19,10 @@ public:
     auto position = camera_.GetPosition();
 
     ImGui::Begin("Window");
-    ImGui::InputFloat3("light position", Gloom::Cast(light_position_));
-    ImGui::InputFloat3("light color", Gloom::Cast(light_color_));
-    ImGui::InputFloat3("camera position", Gloom::Cast(position));
-    ImGui::SliderFloat3("Rotation", Gloom::Cast(rotation_), 0.0f, 2.0f * Gloom::PI);
+    ImGui::InputFloat3("light position", glm::value_ptr(light_position_));
+    ImGui::InputFloat3("light color", glm::value_ptr(light_color_));
+    ImGui::InputFloat3("camera position", glm::value_ptr(position));
+    ImGui::SliderFloat3("Rotation", glm::value_ptr(rotation_), 0.0f, 2.0f * Gloom::PI);
     ImGui::SliderFloat("Metallic", &metallic_, 0.0f, 1.0f);
     ImGui::SliderFloat("Roughness", &roughness_, 0.0f, 1.0f);
     ImGui::End();
@@ -51,9 +51,9 @@ public:
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_metallic", metallic_);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_roughness", roughness_);
 
-    auto rotate = Gloom::RotateX(Gloom::Degrees(rotation_.x));
-    rotate = linalg::mul(rotate, Gloom::RotateY(Gloom::Degrees(rotation_.y)));
-    rotate = linalg::mul(rotate, Gloom::RotateZ(Gloom::Degrees(rotation_.z)));
+    auto rotate = glm::rotate(Gloom::Matrix4f(1.0f), rotation_.x, Gloom::X);
+    rotate = glm::rotate(rotate, rotation_.y, Gloom::Y);
+    rotate = glm::rotate(rotate, rotation_.z, Gloom::Z);
 
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_model_matrix", rotate);
 

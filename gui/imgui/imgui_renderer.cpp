@@ -109,7 +109,7 @@ void ImGuiRenderer::SetupRenderState(ImDrawData *draw_data, int fb_width, int fb
     std::swap(T, B);
   }
 
-  auto orthographic = GetOrthographic(L, R, B, T, -1.0f, 1.0f);
+  auto orthographic = glm::ortho(L, R, B, T);
   graphics_pipeline_.SetUniform(ShaderIndex::VERTEX, "u_projection_matrix", orthographic);
   graphics_pipeline_.SetUniform(ShaderIndex::FRAGMENT, "u_texture", 0);
 }

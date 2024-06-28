@@ -9,7 +9,7 @@ using Gloom::operator""_MiB;
 class MyApp : public Gloom::Application {
 public:
   MyApp()
-    : Application(), vao_(), vbo_(128_MiB, Gloom::Vertex::GetFormat()),
+    : Application(), vao_(), vbo_(512_MiB, Gloom::Vertex::GetFormat()),
       graphics_pipeline_{Gloom::GetRoot() / "shaders" / "vertex_pnt.vert",
                          Gloom::GetRoot() / "shaders" / "blinn_phong.frag"} {
     Gloom::EnableDebug();
@@ -19,12 +19,12 @@ public:
     auto position = camera_.GetPosition();
 
     ImGui::Begin("Window");
-    ImGui::InputFloat3("light position", Gloom::Cast(light_.position_));
-    ImGui::InputFloat3("light ambient", Gloom::Cast(light_.ambient_));
-    ImGui::InputFloat3("light diffuse", Gloom::Cast(light_.diffuse_));
-    ImGui::InputFloat3("light specular", Gloom::Cast(light_.specular_));
-    ImGui::InputFloat3("camera position", Gloom::Cast(position));
-    ImGui::SliderFloat3("Rotation", Gloom::Cast(rotation_), 0.0f, 2.0f * Gloom::PI);
+    ImGui::InputFloat3("light position", glm::value_ptr(light_.position_));
+    ImGui::InputFloat3("light ambient", glm::value_ptr(light_.ambient_));
+    ImGui::InputFloat3("light diffuse", glm::value_ptr(light_.diffuse_));
+    ImGui::InputFloat3("light specular", glm::value_ptr(light_.specular_));
+    ImGui::InputFloat3("camera position", glm::value_ptr(position));
+    ImGui::SliderFloat3("Rotation", glm::value_ptr(rotation_), 0.0f, 2.0f * Gloom::PI);
     ImGui::End();
 
     camera_.SetPosition(position);
@@ -52,11 +52,9 @@ public:
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_material.diffuse_map", 1);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_material.specular_map", 2);
 
-    auto rotate = Gloom::RotateX(Gloom::Degrees(rotation_.x));
-    rotate = linalg::mul(rotate, Gloom::RotateY(Gloom::Degrees(rotation_.y)));
-    rotate = linalg::mul(rotate, Gloom::RotateZ(Gloom::Degrees(rotation_.z)));
-
-    rotate = linalg::mul(rotate, linalg::scaling_matrix(Gloom::Vector3f(0.01, 0.01, 0.01)));
+    auto rotate = glm::rotate(Gloom::Matrix4f(1.0f), rotation_.x, Gloom::X);
+    rotate = glm::rotate(rotate, rotation_.y, Gloom::Y);
+    rotate = glm::rotate(rotate, rotation_.z, Gloom::Z);
 
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_model_matrix", rotate);
   }
@@ -116,8 +114,7 @@ public:
 
   void OnInitialize() {
     auto root = Gloom::GetRoot();
-    mesh_ = std::make_shared<Gloom::Mesh>(root / "assets" / "wavefront" / "Sponza-master" /
-                                          "sponza.obj");
+    mesh_ = std::make_shared<Gloom::Mesh>(root / "assets" / "wavefront" / "tree" / "tree.obj");
 
     mesh_->GetNormal();
     vbo_.SetData(mesh_->GetVertices());

@@ -1,1 +1,7 @@
-#include "gloom_widgets/include/camera_widget.h"
+#include "gloom_widgets/include/light_widget.h"
+
+namespace Gloom {
+
+void LightWidget::OnImGui() {}
+
+} // namespace Gloom

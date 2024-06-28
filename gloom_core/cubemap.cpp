@@ -1,6 +1,6 @@
 #include "gloom_core/include/cubemap.h"
+#include "gloom_core/include/tools.h"
 #include "stb/stb_image.h"
-#include "tools.h"
 
 namespace Gloom {
 

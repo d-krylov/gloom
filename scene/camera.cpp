@@ -5,25 +5,35 @@ namespace Gloom {
 Camera::Camera() { UpdateVectors(); }
 
 Matrix4f Camera::GetPerspectiveMatrix() const {
-  return linalg::perspective_matrix(fov_, aspect_, near_, far_);
+  return glm::perspective(fov_, aspect_, near_, far_);
 }
 
 Matrix4f Camera::GetLookAtMatrix() const {
-  return linalg::lookat_matrix(position_, position_ + front_, up_);
+  return glm::lookAt(position_, position_ + front_, up_);
 }
 
 void Camera::UpdateVectors() {
   Vector3f front;
-  front.x = linalg::cos(yaw_) * linalg::cos(pitch_);
-  front.y = linalg::sin(pitch_);
-  front.z = linalg::sin(yaw_) * linalg::cos(pitch_);
-  front_ = linalg::normalize(front);
-  right_ = linalg::normalize(linalg::cross(front_, world_up_));
-  up_ = linalg::normalize(linalg::cross(right_, front_));
+  front.x = glm::cos(yaw_) * glm::cos(pitch_);
+  front.y = glm::sin(pitch_);
+  front.z = glm::sin(yaw_) * glm::cos(pitch_);
+  front_ = glm::normalize(front);
+  right_ = glm::normalize(glm::cross(front_, world_up_));
+  up_ = glm::normalize(glm::cross(right_, front_));
 }
 
 void Camera::SetPosition(const Vector3f &position) { position_ = position; }
 void Camera::SetAspect(float aspect) { aspect_ = aspect; }
+
+void Camera::SetYaw(float value) {
+  yaw_ = value;
+  UpdateVectors();
+}
+
+void Camera::SetPitch(float value) {
+  pitch_ = value;
+  UpdateVectors();
+}
 
 void Camera::MoveRight(float v) {}
 

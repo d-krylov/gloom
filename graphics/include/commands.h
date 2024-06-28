@@ -29,7 +29,7 @@ void SetBlending(bool b, const BlendInformation &blend_information = BlendInform
 void SetPolygonMode(PolygonMode = PolygonMode::FILL);
 void SetScissor(bool b, const Vector4i &scissor = Vector4i{});
 void SetPrimitiveRestart(bool b);
-void DrawArrays(int32_t first, uint32_t count, PrimitiveKind kind = PrimitiveKind::TRIANGLES);
+void DrawArrays(int32_t first, uint32_t vertices_count, PrimitiveKind kind = PrimitiveKind::TRIANGLES);
 void DrawArraysInstanced(PrimitiveKind kind, int32_t first, uint32_t count, uint32_t instance_count);
 void DrawArraysIndirect(uint32_t count, PrimitiveKind kind = PrimitiveKind::TRIANGLES, uint32_t stride = 0);
 

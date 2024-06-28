@@ -42,6 +42,7 @@ void Buffer::SetData(std::span<const std::byte> raw) {
 void Buffer::Bind() { glBindBuffer(static_cast<uint16_t>(target_), buffer_); }
 
 void Buffer::BindRange(uint32_t index, int64_t offset, uint64_t size) {
+  CORE_VERIFY(target_ == BufferTarget::SHADER_STORAGE_BUFFER);
   size = (size == WHOLE_SIZE) ? buffer_size_ : size;
   glBindBufferRange(static_cast<uint16_t>(target_), index, buffer_, offset, size);
 }

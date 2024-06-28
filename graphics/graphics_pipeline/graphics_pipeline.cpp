@@ -26,6 +26,11 @@ void GraphicsPipeline::AddShader(ShaderIndex index, const std::string &source) {
   auto kind = static_cast<uint16_t>(GetShaderKind(index));
   shaders_[index] = glCreateShaderProgramv(kind, 1, &source_cstr);
   bool status = GetShaderLinkStatus(shaders_[index]);
+
+  if (status == false) {
+    std::cout << GetShaderLog(shaders_[index]) << std::endl;
+  }
+
   CORE_VERIFY(status);
   UseStage(index);
 }

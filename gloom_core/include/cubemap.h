@@ -8,7 +8,7 @@ namespace Gloom {
 
 class CubeMap {
 public:
-  CubeMap(const std::initializer_list<std::filesystem::path> &pathes);
+  CubeMap(const std::initializer_list<std::filesystem::path> &pathes_RL_TB_BF);
 
   ~CubeMap();
 
@@ -18,6 +18,10 @@ public:
   [[nodiscard]] int32_t GetWidth() const { return size_.x; }
   [[nodiscard]] int32_t GetHeight() const { return size_.y; }
   [[nodiscard]] int32_t GetChannels() const { return channels_; }
+
+  [[nodiscard]] TextureInternalFormat GetFormat() const {
+    return GetFormatFromChannels(channels_);
+  }
 
 private:
   int32_t channels_;

@@ -1,4 +1,7 @@
 #include "gloom/include/application.h"
+#include "easyloggingpp/easylogging++.h"
+
+INITIALIZE_EASYLOGGINGPP
 
 namespace Gloom {
 

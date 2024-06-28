@@ -1,6 +1,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
+#include "gloom_core/include/cubemap.h"
 #include "gloom_core/include/image.h"
 #include "graphics_types.h"
 #include <span>
@@ -21,14 +22,15 @@ public:
 
   Texture(const Image &image);
 
+  Texture(const CubeMap &cubemap);
+
   ~Texture();
 
   NO_COPY_SEMANTIC(Texture);
 
   operator Handle() const { return texture_; }
-
+  [[nodiscard]] Handle GetHandle() const { return texture_; }
   [[nodiscard]] TextureInternalFormat GetFormat() const { return internal_format_; }
-
   [[nodiscard]] bool IsLayered() const { return IsTextureLayered(target_); }
   [[nodiscard]] int32_t GetWidth() const { return size_.x; }
   [[nodiscard]] int32_t GetHeight() const { return size_.y; }
@@ -37,7 +39,8 @@ public:
   [[nodiscard]] uint64_t GetHandleARB() const;
 
   void Bind(std::size_t unit);
-  void SetData(std::span<const std::byte> data);
+  void SetData(std::span<const std::byte> data, int32_t xoffset = 0, int32_t yoffset = 0,
+               int32_t zoffset = 0);
   void Destroy();
 
 protected:
