@@ -109,6 +109,4 @@ std::array<Vertex, 24> MakeOctahedron() {
 }
 // clang-format on
 
-std::vector<Vertex> MakeTerrain() {}
-
 } // namespace Gloom

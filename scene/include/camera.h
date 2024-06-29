@@ -40,7 +40,7 @@ private:
   Vector3f world_up_{Y};
   float fov_{PI / 3.0f};
   float near_{0.1f};
-  float far_{100.0f};
+  float far_{1000.0f};
   float aspect_{1.7f};
   float pitch_{0.0f};
   float yaw_{-PI / 2.0f};

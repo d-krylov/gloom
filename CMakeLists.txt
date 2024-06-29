@@ -26,6 +26,7 @@ set(MESH_SOURCES
   ${PROJECT_SOURCE_DIR}/gloom_mesh/mesh.cpp
   ${PROJECT_SOURCE_DIR}/gloom_mesh/primitives.cpp
   ${PROJECT_SOURCE_DIR}/gloom_mesh/khronos_loader.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_mesh/terrain.cpp
 )
 
 set(IMGUI_BACKEND_SOURCES
