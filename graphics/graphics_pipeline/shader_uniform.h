@@ -1,7 +1,7 @@
 #ifndef GLOOM_SHADER_UNIFORM_H
 #define GLOOM_SHADER_UNIFORM_H
 
-#include "graphics_types.h"
+#include "graphics/include/graphics_types.h"
 #include <type_traits>
 
 namespace Gloom {

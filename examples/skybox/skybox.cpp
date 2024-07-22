@@ -55,12 +55,13 @@ public:
     vbo_.SetData(std::span<Gloom::Vertex>(data));
     vao_.AddVertexBuffer(vbo_);
 
-    Gloom::CubeMap cubemap({Gloom::GetRoot() / "assets" / "cubemap" / "right.jpg",
-                            Gloom::GetRoot() / "assets" / "cubemap" / "left.jpg",
-                            Gloom::GetRoot() / "assets" / "cubemap" / "top.jpg",
-                            Gloom::GetRoot() / "assets" / "cubemap" / "bottom.jpg",
-                            Gloom::GetRoot() / "assets" / "cubemap" / "front.jpg",
-                            Gloom::GetRoot() / "assets" / "cubemap" / "back.jpg"});
+    Gloom::CubeMap cubemap(
+      {Gloom::GetRoot() / "assets" / "cubemap" / "cubemap_2" / "miramar_ft.tga",
+       Gloom::GetRoot() / "assets" / "cubemap" / "cubemap_2" / "miramar_bk.tga",
+       Gloom::GetRoot() / "assets" / "cubemap" / "cubemap_2" / "miramar_up.tga",
+       Gloom::GetRoot() / "assets" / "cubemap" / "cubemap_2" / "miramar_dn.tga",
+       Gloom::GetRoot() / "assets" / "cubemap" / "cubemap_2" / "miramar_rt.tga",
+       Gloom::GetRoot() / "assets" / "cubemap" / "cubemap_2" / "miramar_lf.tga"});
 
     texture_ = std::make_unique<Gloom::Texture>(cubemap);
   }

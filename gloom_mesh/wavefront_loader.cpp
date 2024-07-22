@@ -1,6 +1,5 @@
+#include "easyloggingpp/easylogging++.h"
 #include "gloom_mesh/include/mesh.h"
-#define TINYOBJLOADER_IMPLEMENTATION
-#define TINYOBJLOADER_USE_MAPBOX_EARCUT
 #include "tinyobjloader/tiny_obj_loader.h"
 #include <iostream>
 #include <set>
@@ -50,34 +49,33 @@ void Mesh::LoadVertices(const tinyobj::ObjReader &reader) {
 
 void Mesh::LoadMaterials(const tinyobj::ObjReader &reader) {
   auto &materials = reader.GetMaterials();
-
   for (auto &m : materials) {
-    materials_.emplace_back();
-    auto &material = materials_.back();
 
-    MaterialProperties material_properties{
-      .ambient_ = Vector3f(m.ambient[0], m.ambient[1], m.ambient[2]),
-      .diffuse_ = Vector3f(m.diffuse[0], m.diffuse[1], m.diffuse[2]),
-      .specular_ = Vector3f(m.specular[0], m.specular[1], m.specular[2]),
-      .transmittance_ = Vector3f(m.transmittance[0], m.transmittance[1], m.transmittance[2]),
-      .emission_ = Vector3f(m.emission[0], m.emission[1], m.emission[2]),
-      .shininess_ = m.shininess,
-      .ior_ = m.ior,
-      .dissolve_ = m.dissolve};
+    auto &material = materials_.emplace_back();
 
-    material.properties_ = std::make_shared<MaterialProperties>(material_properties);
+    MaterialProperties mp;
+    mp.ambient_ = Vector3f(m.ambient[0], m.ambient[1], m.ambient[2]);
+    mp.diffuse_ = Vector3f(m.diffuse[0], m.diffuse[1], m.diffuse[2]);
+    mp.specular_ = Vector3f(m.specular[0], m.specular[1], m.specular[2]);
+    mp.emission_ = Vector3f(m.emission[0], m.emission[1], m.emission[2]);
+    mp.transmittance_ = Vector3f(m.transmittance[0], m.transmittance[1], m.transmittance[2]);
+    mp.shininess_ = m.shininess;
+    mp.ior_ = m.ior;
+    mp.dissolve_ = m.dissolve;
 
-    if (m.ambient_texname.empty() == false) {
+    material.properties_ = std::make_shared<MaterialProperties>(mp);
+
+    if (m.ambient_texname.size() > 0) {
       auto image_path = path_.parent_path() / m.ambient_texname;
       material.ambient_texture_ = std::make_shared<Texture>(image_path);
     }
 
-    if (m.diffuse_texname.empty() == false) {
+    if (m.diffuse_texname.size() > 0) {
       auto image_path = path_.parent_path() / m.diffuse_texname;
       material.diffuse_texture_ = std::make_shared<Texture>(image_path);
     }
 
-    if (m.specular_texname.empty() == false) {
+    if (m.specular_texname.size() > 0) {
       auto image_path = path_.parent_path() / m.specular_texname;
       material.specular_texture_ = std::make_shared<Texture>(image_path);
     }
@@ -91,6 +89,7 @@ void Mesh::Load(const std::filesystem::path &path) {
   auto status = reader.ParseFromFile(path.string(), reader_config);
 
   LoadVertices(reader);
+
   LoadMaterials(reader);
 }
 

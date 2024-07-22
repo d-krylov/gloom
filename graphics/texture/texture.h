@@ -8,17 +8,17 @@
 
 namespace Gloom {
 
-struct TextureDescription {
-  Vector3i size_;
-  uint32_t samples_{0};
-  TextureTarget target_;
-  TextureInternalFormat format_;
-  SamplerCreateInformation sampler_ci_;
-};
-
 class Texture {
 public:
-  Texture(const TextureDescription &description);
+  Texture(TextureTarget target, TextureInternalFormat format, int32_t w, int32_t h,
+          int32_t depth = 1, uint32_t samples = 0,
+          TextureMagnificationFunction mag = TextureMagnificationFunction::LINEAR,
+          TextureMinifyingFunction min = TextureMinifyingFunction::LINEAR,
+          TextureWrapMode s = TextureWrapMode::CLAMP_TO_EDGE,
+          TextureWrapMode t = TextureWrapMode::CLAMP_TO_EDGE,
+          TextureWrapMode r = TextureWrapMode::CLAMP_TO_EDGE);
+
+  void BindImage(uint32_t unit, int32_t level, bool layered, uint32_t layer, Access access);
 
   Texture(const Image &image);
 
@@ -45,7 +45,8 @@ public:
 
 protected:
   void CreateStorage();
-  void SetParameters(const SamplerCreateInformation &sampler_ci);
+  void SetParameters(TextureMagnificationFunction mag, TextureMinifyingFunction min,
+                     TextureWrapMode s, TextureWrapMode t, TextureWrapMode r);
 
 private:
   Handle texture_{0};

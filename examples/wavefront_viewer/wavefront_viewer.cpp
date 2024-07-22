@@ -114,7 +114,8 @@ public:
 
   void OnInitialize() {
     auto root = Gloom::GetRoot();
-    mesh_ = std::make_shared<Gloom::Mesh>(root / "assets" / "wavefront" / "tree" / "tree.obj");
+    mesh_ = std::make_shared<Gloom::Mesh>(root / "assets" / "wavefront" / "Sponza-master" /
+                                          "sponza.obj");
 
     mesh_->GetNormal();
     vbo_.SetData(mesh_->GetVertices());

@@ -1,7 +1,6 @@
 #ifndef GLOOM_SHADER_PIPELINE_H
 #define GLOOM_SHADER_PIPELINE_H
 
-#include "graphics_types.h"
 #include "shader_uniform.h"
 #include <array>
 #include <filesystem>
@@ -11,7 +10,6 @@ namespace Gloom {
 
 class GraphicsPipeline {
 public:
-  GraphicsPipeline();
   GraphicsPipeline(const std::initializer_list<std::filesystem::path> &paths);
 
   ~GraphicsPipeline();

@@ -119,14 +119,8 @@ void ImGuiRenderer::CreateFontsTexture() {
   uint8_t *pixels{nullptr};
   int32_t w, h;
   io.Fonts->GetTexDataAsRGBA32(&pixels, &w, &h);
-  TextureDescription texture_description{};
-  {
-    texture_description.target_ = TextureTarget::TEXTURE_2D;
-    texture_description.format_ = TextureInternalFormat::RGBA8;
-    texture_description.sampler_ci_ = SamplerCreateInformation();
-    texture_description.size_ = Vector3i(w, h, 0);
-  }
-  font_texture_ = std::make_unique<Texture>(texture_description);
+  font_texture_ =
+    std::make_unique<Texture>(TextureTarget::TEXTURE_2D, TextureInternalFormat::RGBA8, w, h);
   glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
   auto *byte_pixels = ToBytePointer(pixels);
   std::span<const std::byte> span_pixels(byte_pixels, w * h * 4);

@@ -7,13 +7,15 @@ namespace Gloom {
 
 class Sampler {
 public:
-  Sampler(const SamplerCreateInformation &sampler_ci);
+  Sampler(TextureMagnificationFunction mag, TextureMinifyingFunction min, TextureWrapMode s,
+          TextureWrapMode t, TextureWrapMode r);
   ~Sampler();
 
   void Bind(uint32_t unit);
   void Unbind(uint32_t unit);
 
-  void SetParameters(const SamplerCreateInformation &sampler_ci);
+  void SetParameters(TextureMagnificationFunction mag, TextureMinifyingFunction min,
+                     TextureWrapMode s, TextureWrapMode t, TextureWrapMode r);
 
 private:
   Handle sampler_{0};

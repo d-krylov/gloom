@@ -5,10 +5,8 @@
 
 namespace Gloom {
 
-GraphicsPipeline::GraphicsPipeline() { glCreateProgramPipelines(1, &shader_pipeline_handle_); }
-
-GraphicsPipeline::GraphicsPipeline(const std::initializer_list<std::filesystem::path> &paths)
-  : GraphicsPipeline() {
+GraphicsPipeline::GraphicsPipeline(const std::initializer_list<std::filesystem::path> &paths) {
+  glCreateProgramPipelines(1, &shader_pipeline_handle_);
   for (const auto &path : paths) {
     auto shader_bin = ReadFile(path);
     auto shader_index = GetShaderIndex(path);

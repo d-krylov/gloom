@@ -41,7 +41,8 @@ void SetViewport(int32_t x, int32_t y, uint32_t width, uint32_t height);
 
 void DrawElements(PrimitiveKind kind, uint32_t count);
 
- 
+void DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t groups_z);
+void MemoryBarrier(BarrierBit bb);
 
 
 void DrawElementsBaseVertex(PrimitiveKind kind, uint32_t count, CoreType index_type, uint64_t offset, int32_t base_vertex);

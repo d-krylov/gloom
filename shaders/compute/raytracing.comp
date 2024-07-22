@@ -1,0 +1,21 @@
+#version 460
+
+layout (local_size_x = 10, local_size_y = 10, local_size_z = 1) in;
+
+layout(rgba32f, binding = 0) uniform image2D out_image;
+
+layout (location = 0) uniform float t;
+
+void main() {
+  vec4 value = vec4(0.0, 0.0, 0.0, 1.0);
+  
+  ivec2 uv = ivec2(gl_GlobalInvocationID.xy);
+    
+  float speed = 100.0;
+  float width = 1000;
+
+  value.x = mod(float(uv.x) + t * speed, width) / (gl_NumWorkGroups.x * gl_WorkGroupSize.x);
+  value.y = float(uv.y) / (gl_NumWorkGroups.y * gl_WorkGroupSize.y);
+  
+  imageStore(out_image, uv, value);
+}

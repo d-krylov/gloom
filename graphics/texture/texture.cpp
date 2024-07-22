@@ -2,25 +2,25 @@
 
 namespace Gloom {
 
-Texture::Texture(const TextureDescription &description)
-  : target_(description.target_), internal_format_(description.format_),
-    size_(description.size_), depth_(description.size_.z) {
+Texture::Texture(TextureTarget target, TextureInternalFormat format, int32_t w, int32_t h,
+                 int32_t depth, uint32_t samples, TextureMagnificationFunction mag,
+                 TextureMinifyingFunction min, TextureWrapMode s, TextureWrapMode t,
+                 TextureWrapMode r)
+  : target_(target), internal_format_(format), size_(w, h), depth_(depth) {
   glCreateTextures(static_cast<uint16_t>(target_), 1, &texture_);
   CreateStorage();
-  SetParameters(description.sampler_ci_);
+  SetParameters(mag, min, s, t, r);
 }
 
 Texture::Texture(const Image &image)
-  : Texture{TextureDescription{.size_ = Vector3i(image.GetSize(), 0),
-                               .target_ = TextureTarget::TEXTURE_2D,
-                               .format_ = image.GetFormat()}} {
+  : Texture(TextureTarget::TEXTURE_2D, image.GetFormat(), image.GetWidth(),
+            image.GetHeight()) {
   SetData(image.GetData());
 }
 
 Texture::Texture(const CubeMap &cubemap)
-  : Texture{TextureDescription{.size_ = Vector3i(cubemap.GetSize(), 0),
-                               .target_ = TextureTarget::TEXTURE_CUBE_MAP,
-                               .format_ = cubemap.GetFormat()}} {
+  : Texture(TextureTarget::TEXTURE_CUBE_MAP, cubemap.GetFormat(), cubemap.GetWidth(),
+            cubemap.GetHeight()) {
   for (int32_t i = 0; i < 6; ++i) {
     auto data = cubemap.GetData(i);
     SetData(data, 0, 0, i);
@@ -49,19 +49,24 @@ void Texture::CreateStorage() {
   }
 }
 
+void Texture::BindImage(uint32_t unit, int32_t level, bool layered, uint32_t layer,
+                        Access access) {
+  glBindImageTexture(unit, texture_, level, layered, layer, uint16_t(access),
+                     uint16_t(internal_format_));
+}
+
 uint64_t Texture::GetHandleARB() const { return glGetTextureHandleARB(texture_); }
 
-// clang-format off
-void Texture::SetParameters(const SamplerCreateInformation &sampler_ci) {
-  glTextureParameteri(texture_, GL_TEXTURE_MIN_FILTER, static_cast<uint16_t>(sampler_ci.minifying_filter_));
-  glTextureParameteri(texture_, GL_TEXTURE_MAG_FILTER, static_cast<uint16_t>(sampler_ci.magnification_filter_));
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_S, static_cast<uint16_t>(sampler_ci.wrap_mode_[0]));
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_T, static_cast<uint16_t>(sampler_ci.wrap_mode_[1]));
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_R, static_cast<uint16_t>(sampler_ci.wrap_mode_[2]));
+void Texture::SetParameters(TextureMagnificationFunction mag, TextureMinifyingFunction min,
+                            TextureWrapMode s, TextureWrapMode t, TextureWrapMode r) {
+  glTextureParameteri(texture_, GL_TEXTURE_MIN_FILTER, uint16_t(min));
+  glTextureParameteri(texture_, GL_TEXTURE_MAG_FILTER, uint16_t(mag));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_S, uint16_t(s));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_T, uint16_t(t));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_R, uint16_t(r));
 
   glGenerateTextureMipmap(texture_);
 }
-// clang-format on
 
 void Texture::SetData(std::span<const std::byte> data, int32_t xoffset, int32_t yoffset,
                       int32_t zoffset) {

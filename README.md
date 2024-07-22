@@ -1,38 +1,37 @@
 # GLoom - OpenGL library
 
-GLM is a small utility library for OpenGL designed to support the development of more complex applications. It includes wrappers for OpenGL objects, a mesh loader, a simple scene, and a renderer.
+## About 
 
-### Platforms:
-
-* Linux
+GLoom is a small utility library for OpenGL designed to support the development of more complex applications. It includes wrappers for OpenGL objects, a mesh loader, a simple scene, and a renderer.
 
 ### Features
 
-* Obj file 
+* Obj file viewing
+* Skybox support
+* Terrain tesselation
 * Blinn-Phong 
 * PBR
 * Dear ImGui interface
 
-### How to build:
+### TODO
 
-```bash
-mkdir build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make
-```
-
-### Examples:
+- [ ] GLTF support
+- [ ] Bindless textures
+- [ ] Indirect renderer 
+- [ ] Refactoring
 
 ### Third Party 
 
-1. [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader)
-2. [stb](https://github.com/nothings/stb)
-3. [linalg](https://github.com/sgorsten/linalg)
+1. [Dear ImGui](https://github.com/ocornut/imgui) for UI
+1. [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader) for OBJ files loading
+2. [STB](https://github.com/nothings/stb) for image processing
+3. [GLM](https://github.com/g-truc/glm) for 3D mathematics 
+4. [EasyLogging++](https://github.com/abumq/easyloggingpp) for logging
 
 ### Gratitudes
 
-Many thanks:
-
 1. Yan Chernikov's [youtube](https://www.youtube.com/@TheCherno) channel and [github](https://github.com/TheCherno)
 2. [Learn OpenGL](https://learnopengl.com/)
+
+### Examples:
+

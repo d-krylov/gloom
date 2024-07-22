@@ -1,5 +1,5 @@
 set(EXECUTABLES
-  example_1
+  compute_raytracing
   wavefront_viewer
   raymarching
   khronos_viewer

@@ -14,8 +14,6 @@ ShaderKind GetShaderKind(ShaderIndex index) {
     return ShaderKind::GEOMETRY;
   case ShaderIndex::FRAGMENT:
     return ShaderKind::FRAGMENT;
-  case ShaderIndex::COMPUTE:
-    return ShaderKind::COMPUTE;
   default:
     break;
   }
@@ -34,8 +32,6 @@ ShaderBit GetShaderBit(ShaderIndex index) {
     return ShaderBit::GEOMETRY;
   case ShaderIndex::FRAGMENT:
     return ShaderBit::FRAGMENT;
-  case ShaderIndex::COMPUTE:
-    return ShaderBit::COMPUTE;
   default:
     break;
   }
@@ -157,7 +153,6 @@ std::optional<ShaderIndex> GetShaderIndex(const std::filesystem::path &path) {
   if (extension == ".tesc") { return ShaderIndex::TESSELATION_CONTROL; }
   if (extension == ".tese") { return ShaderIndex::TESSELATION_EVALUATION; }
   if (extension == ".frag") { return ShaderIndex::FRAGMENT; }
-  if (extension == ".comp") { return ShaderIndex::COMPUTE; }
   return {};
 }
 // clang-format on

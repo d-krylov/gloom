@@ -22,7 +22,7 @@ add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-volatile")
 
 set(MESH_SOURCES
-  ${PROJECT_SOURCE_DIR}/gloom_mesh/mesh_loader.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_mesh/wavefront_loader.cpp
   ${PROJECT_SOURCE_DIR}/gloom_mesh/mesh.cpp
   ${PROJECT_SOURCE_DIR}/gloom_mesh/primitives.cpp
   ${PROJECT_SOURCE_DIR}/gloom_mesh/khronos_loader.cpp
@@ -53,6 +53,7 @@ set(GLOOM_GUI_SOURCES
 set(GRAPHICS_SOURCES
   ${PROJECT_SOURCE_DIR}/graphics/buffer/buffer.cpp
   ${PROJECT_SOURCE_DIR}/graphics/graphics_pipeline/graphics_pipeline.cpp
+  ${PROJECT_SOURCE_DIR}/graphics/compute_pipeline/compute_pipeline.cpp
   ${PROJECT_SOURCE_DIR}/graphics/texture/texture.cpp
   ${PROJECT_SOURCE_DIR}/graphics/texture/sampler.cpp
   ${PROJECT_SOURCE_DIR}/graphics/texture/renderbuffer.cpp
@@ -83,6 +84,7 @@ set(GLOOM_SOURCES
   ${PROJECT_SOURCE_DIR}/external/glad/glad.c
   ${PROJECT_SOURCE_DIR}/external/tinygltf/tiny_gltf.cc
   ${PROJECT_SOURCE_DIR}/external/easyloggingpp/easylogging++.cc
+  ${PROJECT_SOURCE_DIR}/external/tinyobjloader/tiny_obj_loader.cc
   ${PROJECT_SOURCE_DIR}/gloom_core/tools.cpp
   ${PROJECT_SOURCE_DIR}/gloom_core/image.cpp
   ${PROJECT_SOURCE_DIR}/gloom_core/cubemap.cpp

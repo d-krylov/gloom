@@ -78,4 +78,10 @@ void SetPolygonMode(PolygonMode mode) {
   glPolygonMode(GL_FRONT_AND_BACK, static_cast<uint16_t>(mode));
 }
 
+void DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t groups_z) {
+  glDispatchCompute(groups_x, groups_y, groups_z);
+}
+
+void MemoryBarrier(BarrierBit bb) { glMemoryBarrier(uint32_t(bb)); }
+
 } // namespace Gloom::Commands

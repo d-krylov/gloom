@@ -1,4 +1,6 @@
-#include "gloom_mesh/include/mesh.h"
+#include "easyloggingpp/easylogging++.h"
+#include "gloom_core/include/core_types.h"
+#include "gloom_mesh/include/mesh_loader.h"
 #include "tinygltf/tiny_gltf.h"
 #include <filesystem>
 #include <string>
@@ -24,6 +26,10 @@ void GetNodeProperties(const tinygltf::Node &node, const tinygltf::Model &model,
   }
 }
 
+void GetVertices(const tinygltf::Model &model, const tinygltf::Node &node) {
+  LOG(INFO) << "Node name: " << node.name;
+}
+
 void LoadGLTF(const std::filesystem::path &path) {
   tinygltf::Model model;
   tinygltf::TinyGLTF context;
@@ -31,12 +37,40 @@ void LoadGLTF(const std::filesystem::path &path) {
   std::string error;
   std::string warning;
 
-  bool binary;
+  bool binary = false;
 
   bool status = binary ? context.LoadBinaryFromFile(&model, &error, &warning, path.string())
                        : context.LoadASCIIFromFile(&model, &error, &warning, path.string());
 
   if (status) {
+
+    LOG(INFO) << "Scenes: " << model.scenes.size();
+
+    const auto &default_scene = model.scenes[model.defaultScene > -1 ? model.defaultScene : 0];
+
+    LOG(INFO) << "Nodes: " << default_scene.nodes.size();
+
+    const auto mesh = model.meshes[0];
+
+    for (const auto &primitive : mesh.primitives) {
+      const auto &position_accessor = model.accessors[primitive.attributes.at("POSITION")];
+      const auto &position_buffer_view = model.bufferViews[position_accessor.bufferView];
+      const auto &position_buffer = model.buffers[position_buffer_view.buffer];
+
+      auto positions = reinterpret_cast<const Vector3f *>(position_buffer.data.data() +
+                                                          position_buffer_view.byteOffset +
+                                                          position_accessor.byteOffset);
+
+      size_t count = position_accessor.count;
+
+      for (int i = 0; i < count; i++) {
+        LOG(INFO) << (positions + i)->r << " " << (positions + i)->g << " "
+                  << (positions + i)->b;
+      }
+    }
+
+  } else {
+    LOG(FATAL) << error;
   }
 }
 

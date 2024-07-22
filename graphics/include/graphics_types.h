@@ -14,13 +14,14 @@ enum class DataType {
 #include "graphics_types.def"
 };
 
+enum class Access { READ = GL_READ_ONLY, WRITE = GL_WRITE_ONLY, READ_WRITE = GL_READ_WRITE };
+
 enum class ShaderKind {
   VERTEX = GL_VERTEX_SHADER,
   TESSELATION_CONTROL = GL_TESS_CONTROL_SHADER,
   TESSELATION_EVALUATION = GL_TESS_EVALUATION_SHADER,
   GEOMETRY = GL_GEOMETRY_SHADER,
   FRAGMENT = GL_FRAGMENT_SHADER,
-  COMPUTE = GL_COMPUTE_SHADER,
 };
 
 enum class ShaderBit {
@@ -29,7 +30,6 @@ enum class ShaderBit {
   TESSELATION_EVALUATION = GL_TESS_EVALUATION_SHADER_BIT,
   GEOMETRY = GL_GEOMETRY_SHADER_BIT,
   FRAGMENT = GL_FRAGMENT_SHADER_BIT,
-  COMPUTE = GL_COMPUTE_SHADER_BIT,
 };
 
 enum ShaderIndex : std::size_t {
@@ -38,8 +38,9 @@ enum ShaderIndex : std::size_t {
   TESSELATION_EVALUATION = 2,
   GEOMETRY = 3,
   FRAGMENT = 4,
-  COMPUTE = 5,
 };
+
+constexpr std::size_t SHADER_STAGES_COUNT = ShaderIndex::FRAGMENT + 1;
 
 enum class DepthFunction {
   NEVER = GL_NEVER,
@@ -51,8 +52,6 @@ enum class DepthFunction {
   GEQUAL = GL_GEQUAL,
   ALWAYS = GL_ALWAYS
 };
-
-constexpr std::size_t SHADER_STAGES_COUNT = ShaderIndex::COMPUTE + 1;
 
 enum class AttributeUsage {
   NONE = 0,
@@ -254,6 +253,22 @@ enum class StencilOption {
   INVERT = GL_INVERT
 };
 
+enum class BarrierBit {
+  VERTEX_ATTRIB_ARRAY = GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT,
+  ELEMENT_ARRAY = GL_ELEMENT_ARRAY_BARRIER_BIT,
+  UNIFORM_ = GL_UNIFORM_BARRIER_BIT,
+  TEXTURE_FETCH = GL_TEXTURE_FETCH_BARRIER_BIT,
+  SHADER_IMAGE_ACCESS = GL_SHADER_IMAGE_ACCESS_BARRIER_BIT,
+  COMMAND = GL_COMMAND_BARRIER_BIT,
+  PIXEL_BUFFER = GL_PIXEL_BUFFER_BARRIER_BIT,
+  TEXTURE_UPDATE = GL_TEXTURE_UPDATE_BARRIER_BIT,
+  BUFFER_UPDATE = GL_BUFFER_UPDATE_BARRIER_BIT,
+  FRAMEBUFFER_BARRIER = GL_FRAMEBUFFER_BARRIER_BIT,
+  TRANSFORM_FEEDBACK = GL_TRANSFORM_FEEDBACK_BARRIER_BIT,
+  ATOMIC_COUNTER = GL_ATOMIC_COUNTER_BARRIER_BIT,
+  SHADER_STORAGE = GL_SHADER_STORAGE_BARRIER_BIT
+};
+
 enum class PolygonMode { POINT = GL_POINT, LINE = GL_LINE, FILL = GL_FILL };
 
 using Handle = uint32_t;
@@ -288,23 +303,6 @@ struct DrawElementsIndirectCommand {
   uint32_t first_index_{0};
   int32_t base_vertex_{0};
   uint32_t base_instance_{0};
-};
-
-struct SamplerCreateInformation {
-  SamplerCreateInformation(
-    TextureMagnificationFunction mag = TextureMagnificationFunction::LINEAR,
-    TextureMinifyingFunction min = TextureMinifyingFunction::LINEAR,
-    TextureComparisonFunction comp = TextureComparisonFunction::NEVER,
-    TextureWrapMode ws = TextureWrapMode::CLAMP_TO_EDGE,
-    TextureWrapMode wt = TextureWrapMode::CLAMP_TO_EDGE,
-    TextureWrapMode wr = TextureWrapMode::CLAMP_TO_EDGE)
-    : magnification_filter_(mag), minifying_filter_(min),
-      compare_function_(comp), wrap_mode_{ws, wr, wt} {}
-
-  TextureMagnificationFunction magnification_filter_;
-  TextureMinifyingFunction minifying_filter_;
-  TextureComparisonFunction compare_function_;
-  std::array<TextureWrapMode, 3> wrap_mode_;
 };
 
 constexpr auto ARRAYS_COMMAND_SIZE = sizeof(DrawArraysIndirectCommand);
