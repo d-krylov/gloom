@@ -1,4 +1,5 @@
 #include "gloom/include/application.h"
+#include "gloom_widgets/include/camera_widget.h"
 #include "window.h"
 #include <iostream>
 
@@ -14,30 +15,18 @@ public:
     Gloom::EnableDebug();
   }
 
-  void OnImGui() override {
-
-    auto position = camera_.GetPosition();
-
-    auto yaw = camera_.GetYaw();
-    auto pitch = camera_.GetPitch();
-
-    ImGui::Begin("Window");
-    ImGui::InputFloat3("camera position", glm::value_ptr(position));
-    ImGui::SliderFloat("camera yaw", &yaw, 0.0f, 2.0f * Gloom::PI);
-    ImGui::SliderFloat("camera pitch", &pitch, 0.0f, 2.0f * Gloom::PI);
-    ImGui::End();
-
-    camera_.SetPosition(position);
-    camera_.SetYaw(yaw);
-    camera_.SetPitch(pitch);
-  }
+  void OnImGui() override { camera_.OnImGui(); }
 
   void OnUpdate() override {
     Gloom::Commands::SetDepthTesting(true);
     Gloom::Commands::Clear(true);
     glDepthFunc(GL_LEQUAL);
-    auto projection = camera_.GetPerspectiveMatrix();
-    auto look = camera_.GetLookAtMatrix();
+
+    camera_.OnUpdate();
+    auto &camera = camera_.GetCamera();
+
+    auto projection = camera.GetPerspectiveMatrix();
+    auto look = camera.GetLookAtMatrix();
     graphics_pipeline_.Bind();
     vao_.Bind();
     texture_->Bind(0);
@@ -67,7 +56,7 @@ public:
   }
 
 private:
-  Gloom::Camera camera_;
+  Gloom::CameraWidget camera_;
   Gloom::VertexArray vao_;
   Gloom::VertexBuffer vbo_;
   Gloom::GraphicsPipeline graphics_pipeline_;

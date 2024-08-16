@@ -28,7 +28,7 @@ using Quaternion = glm::quat;
 
 constexpr auto X = Vector3f(1.0f, 0.0f, 0.0f);
 constexpr auto Y = Vector3f(0.0f, 1.0f, 0.0f);
-constexpr auto Z = Vector3f(0.0f, 1.0f, 0.0f);
+constexpr auto Z = Vector3f(0.0f, 0.0f, 1.0f);
 
 constexpr float PI = glm::pi<float>();
 

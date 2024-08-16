@@ -17,16 +17,19 @@ GLoom is a small utility library for OpenGL designed to support the development 
 
 - [ ] GLTF support
 - [ ] Bindless textures
-- [ ] Indirect renderer 
+- [ ] Direct renderer
+- [ ] Indirect renderer
+- [ ] BVH 
 - [ ] Refactoring
 
 ### Third Party 
 
 1. [Dear ImGui](https://github.com/ocornut/imgui) for UI
 1. [tinyobjloader](https://github.com/tinyobjloader/tinyobjloader) for OBJ files loading
-2. [STB](https://github.com/nothings/stb) for image processing
-3. [GLM](https://github.com/g-truc/glm) for 3D mathematics 
-4. [EasyLogging++](https://github.com/abumq/easyloggingpp) for logging
+2. [tinygltf](https://github.com/syoyo/tinygltf)
+3. [STB](https://github.com/nothings/stb) for image processing
+4. [GLM](https://github.com/g-truc/glm) for 3D mathematics 
+5. [EasyLogging++](https://github.com/abumq/easyloggingpp) for logging
 
 ### Gratitudes
 

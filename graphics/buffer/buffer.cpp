@@ -3,10 +3,14 @@
 namespace Gloom {
 
 Buffer::Buffer(BufferTarget target, std::size_t size, BufferStorage storage)
-  : target_(target), buffer_size_(size), storage_(storage) {
+  : target_(target), buffer_size_(size), buffer_capacity_(size), storage_(storage) {
   glCreateBuffers(1, &buffer_);
   glNamedBufferStorage(buffer_, buffer_size_, nullptr, static_cast<uint16_t>(storage_));
 }
+
+Buffer::Buffer(Buffer &&other) noexcept
+  : buffer_{std::exchange(other.buffer_, 0)}, target_(other.target_), storage_(other.storage_),
+    buffer_size_(other.buffer_size_), buffer_capacity_(other.buffer_capacity_) {}
 
 Buffer::~Buffer() { Destroy(); }
 
@@ -29,14 +33,13 @@ void Buffer::Unmap() {
 }
 
 void Buffer::FlushRange(std::size_t offset, std::size_t size) {
-  CORE_VERIFY(offset + size <= buffer_size_);
   glFlushMappedNamedBufferRange(buffer_, offset, size);
 }
 
-void Buffer::SetData(std::span<const std::byte> raw) {
+void Buffer::SetData(std::span<const std::byte> raw, std::size_t offset) {
   CORE_VERIFY(storage_ == BufferStorage::DYNAMIC_STORAGE);
-  CORE_VERIFY(buffer_offset_ + raw.size() <= buffer_size_);
-  glNamedBufferSubData(buffer_, buffer_offset_, raw.size(), raw.data());
+  CORE_VERIFY(buffer_capacity_ >= offset + raw.size());
+  glNamedBufferSubData(buffer_, offset, raw.size(), raw.data());
 }
 
 void Buffer::Bind() { glBindBuffer(static_cast<uint16_t>(target_), buffer_); }

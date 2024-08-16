@@ -1,5 +1,7 @@
 #include "gloom/include/application.h"
-#include "graphics.h"
+#include "gloom_widgets/include/camera_widget.h"
+#include "gloom_widgets/include/transform_widget.h"
+#include "graphics/include/graphics.h"
 #include "window.h"
 #include <iostream>
 
@@ -10,30 +12,33 @@ class MyApp : public Gloom::Application {
 public:
   MyApp()
     : Application(), vao_(), vbo_(512_MiB, Gloom::Vertex::GetFormat()),
-      graphics_pipeline_{Gloom::GetRoot() / "shaders" / "vertex_pnt.vert",
-                         Gloom::GetRoot() / "shaders" / "blinn_phong.frag"} {
+      graphics_pipeline_{Gloom::GetRoot() / "shaders" / "mesh" / "direct.vert",
+                         Gloom::GetRoot() / "shaders" / "mesh" / "direct_phong.frag"} {
     Gloom::EnableDebug();
   }
 
   void OnImGui() override {
-    auto position = camera_.GetPosition();
+    camera_.OnImGui();
+    transform_.OnImGui();
 
     ImGui::Begin("Window");
     ImGui::InputFloat3("light position", glm::value_ptr(light_.position_));
     ImGui::InputFloat3("light ambient", glm::value_ptr(light_.ambient_));
     ImGui::InputFloat3("light diffuse", glm::value_ptr(light_.diffuse_));
     ImGui::InputFloat3("light specular", glm::value_ptr(light_.specular_));
-    ImGui::InputFloat3("camera position", glm::value_ptr(position));
-    ImGui::SliderFloat3("Rotation", glm::value_ptr(rotation_), 0.0f, 2.0f * Gloom::PI);
     ImGui::End();
-
-    camera_.SetPosition(position);
   }
 
   void SetUniform() {
-    auto projection = camera_.GetPerspectiveMatrix();
-    auto look = camera_.GetLookAtMatrix();
 
+    camera_.OnUpdate();
+    auto camera = camera_.GetCamera();
+    auto projection = camera.GetPerspectiveMatrix();
+    auto look = camera.GetLookAtMatrix();
+
+    auto model = transform_.GetTransform().GetModelMatrix();
+
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_model_matrix", model);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_view_matrix", look);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_projection_matrix",
                                   projection);
@@ -46,17 +51,11 @@ public:
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light.specular",
                                   light_.specular_);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_view_position",
-                                  camera_.GetPosition());
+                                  camera.GetPosition());
 
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_material.ambient_map", 0);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_material.diffuse_map", 1);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_material.specular_map", 2);
-
-    auto rotate = glm::rotate(Gloom::Matrix4f(1.0f), rotation_.x, Gloom::X);
-    rotate = glm::rotate(rotate, rotation_.y, Gloom::Y);
-    rotate = glm::rotate(rotate, rotation_.z, Gloom::Z);
-
-    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_model_matrix", rotate);
   }
 
   void OnUpdate() {
@@ -66,7 +65,7 @@ public:
     vao_.Bind();
     graphics_pipeline_.Bind();
 
-    auto sub_count = mesh_->offsets_.size();
+    auto sub_count = mesh_->offsets_.size() - 1;
 
     SetUniform();
 
@@ -100,13 +99,7 @@ public:
         mesh_->materials_[material_index].specular_texture_->Bind(2);
       }
 
-      uint32_t count{0};
-
-      if (i < sub_count - 1) {
-        count = mesh_->offsets_[i + 1] - mesh_->offsets_[i];
-      } else {
-        count = mesh_->vertices_.size() - mesh_->offsets_[i];
-      }
+      auto count = mesh_->offsets_[i + 1] - mesh_->offsets_[i];
 
       Gloom::Commands::DrawArrays(mesh_->offsets_[i], count);
     }
@@ -125,8 +118,8 @@ public:
 private:
   std::shared_ptr<Gloom::Mesh> mesh_;
   Gloom::Light light_;
-  Gloom::Camera camera_;
-  Gloom::Vector3f rotation_;
+  Gloom::CameraWidget camera_;
+  Gloom::TransformWidget transform_;
   Gloom::VertexBuffer vbo_;
   Gloom::VertexArray vao_;
   Gloom::GraphicsPipeline graphics_pipeline_;

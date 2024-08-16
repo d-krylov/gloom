@@ -1,8 +1,7 @@
 #ifndef VERTEX_ARRAY_H
 #define VERTEX_ARRAY_H
 
-#include "vertex_buffer.h"
-#include "vertex_format.h"
+#include "graphics/buffer/vertex_buffer.h"
 
 namespace Gloom {
 

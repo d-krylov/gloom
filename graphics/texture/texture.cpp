@@ -27,6 +27,10 @@ Texture::Texture(const CubeMap &cubemap)
   }
 }
 
+Texture::Texture(Texture &&other) noexcept
+  : texture_{std::exchange(other.texture_, 0)}, target_(other.target_),
+    internal_format_(other.internal_format_), size_(other.size_), depth_(other.depth_) {}
+
 Texture::~Texture() { Destroy(); }
 
 void Texture::Destroy() { glDeleteTextures(1, &texture_); }

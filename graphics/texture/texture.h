@@ -3,7 +3,7 @@
 
 #include "gloom_core/include/cubemap.h"
 #include "gloom_core/include/image.h"
-#include "graphics_types.h"
+#include "graphics/include/graphics_types.h"
 #include <span>
 
 namespace Gloom {
@@ -17,6 +17,8 @@ public:
           TextureWrapMode s = TextureWrapMode::CLAMP_TO_EDGE,
           TextureWrapMode t = TextureWrapMode::CLAMP_TO_EDGE,
           TextureWrapMode r = TextureWrapMode::CLAMP_TO_EDGE);
+
+  Texture(Texture &&other) noexcept;
 
   void BindImage(uint32_t unit, int32_t level, bool layered, uint32_t layer, Access access);
 

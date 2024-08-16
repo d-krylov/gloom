@@ -3,6 +3,8 @@
 
 #include "material.h"
 #include "vertex.h"
+#include <map>
+#include <string>
 
 namespace tinyobj {
 class ObjReader;
@@ -22,15 +24,11 @@ public:
 
 protected:
   void Load(const std::filesystem::path &path);
-  void LoadVertices(const tinyobj::ObjReader &reader);
+  void LoadVertices(const tinyobj::ObjReader &reader, std::span<Vertex> vertices);
   void LoadMaterials(const tinyobj::ObjReader &reader);
 
 public:
   std::filesystem::path path_;
-  std::vector<Vector3f> positions_;
-  std::vector<Vector3i> indices_;
-  std::vector<Vector3f> normals_;
-  std::vector<Vector2f> uv_;
   std::vector<Vertex> vertices_;
   std::vector<std::size_t> offsets_;
   std::vector<Material> materials_;

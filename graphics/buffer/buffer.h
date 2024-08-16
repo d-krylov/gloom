@@ -1,7 +1,7 @@
-#ifndef BUFFER_H
-#define BUFFER_H
+#ifndef GLOOM_BUFFER_H
+#define GLOOM_BUFFER_H
 
-#include "graphics_types.h"
+#include "graphics/include/graphics_types.h"
 #include <span>
 #include <vector>
 
@@ -16,6 +16,8 @@ public:
 
   NO_COPY_SEMANTIC(Buffer);
 
+  Buffer(Buffer &&other) noexcept;
+
   template <typename T> void SetData(const std::vector<T> &data) {
     std::span<const T> span_data(data.data(), data.size());
     SetData(std::as_bytes(span_data));
@@ -23,7 +25,8 @@ public:
 
   template <typename T> void SetData(std::span<T> data) { SetData(std::as_bytes(data)); }
 
-  void SetData(std::span<const std::byte> data);
+  void SetData(std::span<const std::byte> data, std::size_t offset = 0);
+
   void FlushRange(std::size_t offset, std::size_t size);
   void MapRange(std::size_t offset, std::size_t size);
   void Unmap();
@@ -31,12 +34,10 @@ public:
   void Bind();
   void BindRange(uint32_t index, int64_t offset = 0, uint64_t size = WHOLE_SIZE);
 
-  void Reset() { buffer_offset_ = 0; }
-
   operator Handle() const { return buffer_; }
 
   [[nodiscard]] std::size_t GetSize() const { return buffer_size_; }
-  [[nodiscard]] std::size_t GetOffset() const { return buffer_offset_; }
+  [[nodiscard]] std::size_t GetCapacity() const { return buffer_capacity_; }
   [[nodiscard]] BufferTarget GetTarget() const { return target_; }
   [[nodiscard]] BufferStorage GetStorage() const { return storage_; }
 
@@ -48,10 +49,10 @@ private:
   BufferTarget target_;
   BufferStorage storage_{BufferStorage::DYNAMIC_STORAGE};
   std::size_t buffer_size_{0};
-  std::size_t buffer_offset_{0};
+  std::size_t buffer_capacity_{0};
   std::span<std::byte> data_;
 };
 
 } // namespace Gloom
 
-#endif // BUFFER_H
+#endif // GLOOM_BUFFER_H

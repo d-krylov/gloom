@@ -6,6 +6,7 @@
 namespace Gloom {
 
 void LoadGLTF(const std::filesystem::path &path);
+void LoadOBJ(const std::filesystem::path &path);
 
 } // namespace Gloom
 

@@ -27,11 +27,7 @@ set(MESH_SOURCES
   ${PROJECT_SOURCE_DIR}/gloom_mesh/primitives.cpp
   ${PROJECT_SOURCE_DIR}/gloom_mesh/khronos_loader.cpp
   ${PROJECT_SOURCE_DIR}/gloom_mesh/terrain.cpp
-)
-
-set(IMGUI_BACKEND_SOURCES
-  ${PROJECT_SOURCE_DIR}/external/imgui/backend/imgui_impl_glfw.cpp
-  ${PROJECT_SOURCE_DIR}/external/imgui/backend/imgui_impl_opengl3.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_mesh/transform.cpp
 )
 
 set(IMGUI_SOURCES
@@ -39,7 +35,11 @@ set(IMGUI_SOURCES
   ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui_tables.cpp
   ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui_widgets.cpp
   ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui.cpp
-  ${IMGUI_BACKEND_SOURCES}
+)
+
+set(GLOOM_WIDGET_SOURCES  
+  ${PROJECT_SOURCE_DIR}/gloom_widgets/camera_widget.cpp
+  ${PROJECT_SOURCE_DIR}/gloom_widgets/transform_widget.cpp
 )
 
 set(GLOOM_GUI_SOURCES
@@ -66,12 +66,11 @@ set(GRAPHICS_SOURCES
 )
 
 set(RENDERER_SOURCES
-  ${PROJECT_SOURCE_DIR}/renderer/renderer.cpp
+  ${PROJECT_SOURCE_DIR}/renderer/direct_renderer.cpp
 )
 
 set(SCENE_SOURCES
   ${PROJECT_SOURCE_DIR}/scene/camera.cpp
-  ${PROJECT_SOURCE_DIR}/scene/material.cpp
 )
 
 set(GLOOM_SOURCES
@@ -81,6 +80,7 @@ set(GLOOM_SOURCES
   ${RENDERER_SOURCES}
   ${GRAPHICS_SOURCES}
   ${SCENE_SOURCES}
+  ${GLOOM_WIDGET_SOURCES}
   ${PROJECT_SOURCE_DIR}/external/glad/glad.c
   ${PROJECT_SOURCE_DIR}/external/tinygltf/tiny_gltf.cc
   ${PROJECT_SOURCE_DIR}/external/easyloggingpp/easylogging++.cc
@@ -110,14 +110,10 @@ add_library(${PROJECT_NAME} SHARED
 target_include_directories(${PROJECT_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/external/
-  ${PROJECT_SOURCE_DIR}/graphics/buffer
-  ${PROJECT_SOURCE_DIR}/graphics/include
-  ${PROJECT_SOURCE_DIR}/graphics/vertex
   ${PROJECT_SOURCE_DIR}/graphics/graphics_pipeline
   ${PROJECT_SOURCE_DIR}/external/imgui/include
   ${PROJECT_SOURCE_DIR}/external/imgui/backend
   ${PROJECT_SOURCE_DIR}/scene/include
-  ${PROJECT_SOURCE_DIR}/renderer/include
   ${PROJECT_SOURCE_DIR}/gui/include
   ${PROJECT_SOURCE_DIR}/gui/imgui
 )

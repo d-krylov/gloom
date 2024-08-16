@@ -7,14 +7,15 @@ namespace Gloom {
 
 class CameraWidget {
 public:
-  CameraWidget();
-
   void OnImGui();
+  void OnUpdate();
 
   [[nodiscard]] const Camera &GetCamera() const { return camera_; }
   [[nodiscard]] Camera &GetCamera() { return camera_; }
 
 private:
+  Vector3f position_;
+  Vector3f rotation_;
   Camera camera_;
 };
 

@@ -1,4 +1,4 @@
-#include "graphics_types.h"
+#include "graphics/include/graphics_types.h"
 
 namespace Gloom {
 
@@ -43,7 +43,7 @@ std::size_t GetTextureDimensions(TextureTarget target) {
 #define TEXTURE_TARGET(X, D, L)                                                               \
   case TextureTarget::X:                                                                      \
     return D;
-#include "graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     break;
   }
@@ -55,7 +55,7 @@ bool IsTextureLayered(TextureTarget target) {
 #define TEXTURE_TARGET(X, D, L)                                                               \
   case TextureTarget::X:                                                                      \
     return L;
-#include "graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     break;
   }
@@ -67,7 +67,7 @@ CoreType GetPixelDataType(TextureInternalFormat format) {
 #define TEXTURE_INTERNAL_FORMAT(X, Y, Z)                                                      \
   case TextureInternalFormat::X:                                                              \
     return CoreType::Z;
-#include "graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     break;
   }
@@ -79,7 +79,7 @@ PixelFormat GetPixelDataFormat(TextureInternalFormat format) {
 #define TEXTURE_INTERNAL_FORMAT(X, Y, Z)                                                      \
   case TextureInternalFormat::X:                                                              \
     return PixelFormat::Y;
-#include "graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     break;
   }
@@ -91,7 +91,7 @@ std::pair<PixelFormat, CoreType> GetPixelFormatAndType(TextureInternalFormat for
 #define TEXTURE_INTERNAL_FORMAT(X, Y, Z)                                                      \
   case TextureInternalFormat::X:                                                              \
     return std::make_pair(PixelFormat::Y, CoreType::Z);
-#include "graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     break;
   }
@@ -103,7 +103,7 @@ std::size_t GetComponentCount(DataType type) {
 #define GLSL_DATA_TYPE(X, Y, Z, W, V)                                                         \
   case DataType::X:                                                                           \
     return Y;
-#include "graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     break;
   }
@@ -115,7 +115,7 @@ std::size_t GetComponentSize(DataType type) {
 #define GLSL_DATA_TYPE(X, Y, Z, W, V)                                                         \
   case DataType::X:                                                                           \
     return Z;
-#include "graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     break;
   }
@@ -127,7 +127,7 @@ CoreType GetComponentType(DataType type) {
 #define GLSL_DATA_TYPE(X, Y, Z, W, V)                                                         \
   case DataType::X:                                                                           \
     return CoreType::W;
-#include "graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     break;
   }

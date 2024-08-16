@@ -13,25 +13,20 @@ Matrix4f Camera::GetLookAtMatrix() const {
 }
 
 void Camera::UpdateVectors() {
-  Vector3f front;
-  front.x = glm::cos(yaw_) * glm::cos(pitch_);
-  front.y = glm::sin(pitch_);
-  front.z = glm::sin(yaw_) * glm::cos(pitch_);
-  front_ = glm::normalize(front);
-  right_ = glm::normalize(glm::cross(front_, world_up_));
-  up_ = glm::normalize(glm::cross(right_, front_));
+  auto x = glm::rotate(glm::mat4(1.0f), glm::radians(rotation_.x), X);
+  auto y = glm::rotate(glm::mat4(1.0f), glm::radians(rotation_.y), Y);
+  auto z = glm::rotate(glm::mat4(1.0f), glm::radians(rotation_.z), Z);
+  auto R = x * y * z;
+  front_ = Vector3f(R * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f));
+  right_ = Vector3f(R * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f));
+  up_ = Vector3f(R * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
 }
 
 void Camera::SetPosition(const Vector3f &position) { position_ = position; }
 void Camera::SetAspect(float aspect) { aspect_ = aspect; }
 
-void Camera::SetYaw(float value) {
-  yaw_ = value;
-  UpdateVectors();
-}
-
-void Camera::SetPitch(float value) {
-  pitch_ = value;
+void Camera::SetRotation(const Vector3f &rotation) {
+  rotation_ = rotation;
   UpdateVectors();
 }
 

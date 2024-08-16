@@ -1,5 +1,5 @@
 #include "gloom/include/application.h"
-#include "graphics.h"
+#include "graphics/include/graphics.h"
 #include "window.h"
 #include <iostream>
 

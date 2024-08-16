@@ -2,7 +2,7 @@
 #define VERTEX_BUFFER_H
 
 #include "buffer.h"
-#include "vertex_format.h"
+#include "graphics/vertex/vertex_format.h"
 
 namespace Gloom {
 

@@ -1,7 +1,6 @@
 #ifndef FRAMEBUFFER_H
 #define FRAMEBUFFER_H
 
-#include "graphics_types.h"
 #include "renderbuffer.h"
 #include "texture.h"
 

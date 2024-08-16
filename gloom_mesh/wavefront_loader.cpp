@@ -2,16 +2,17 @@
 #include "gloom_mesh/include/mesh.h"
 #include "tinyobjloader/tiny_obj_loader.h"
 #include <iostream>
-#include <set>
+#include <unordered_set>
 
 namespace Gloom {
 
-void Mesh::LoadVertices(const tinyobj::ObjReader &reader) {
+void Mesh::LoadVertices(const tinyobj::ObjReader &reader, std::span<Vertex> vertices) {
   auto &shapes = reader.GetShapes();
   auto &attributes = reader.GetAttrib();
+  std::size_t vi{0};
   for (const auto &shape : shapes) {
     std::size_t index_offset = 0;
-    offsets_.emplace_back(vertices_.size());
+    offsets_.emplace_back(vi);
     material_indices_.emplace_back(shape.mesh.material_ids[0]);
 
     for (std::size_t i = 0; i < shape.mesh.num_face_vertices.size(); i++) {
@@ -24,32 +25,34 @@ void Mesh::LoadVertices(const tinyobj::ObjReader &reader) {
         auto vy = attributes.vertices[3 * index.vertex_index + 1];
         auto vz = attributes.vertices[3 * index.vertex_index + 2];
         vertex.position_ = Vector3f(vx, vy, vz);
-        positions_.emplace_back(vertex.position_);
 
         if (attributes.normals.empty() == false) {
           auto nx = attributes.normals[3 * index.normal_index + 0];
           auto ny = attributes.normals[3 * index.normal_index + 1];
           auto nz = attributes.normals[3 * index.normal_index + 2];
           vertex.normal_ = Vector3f(nx, ny, nz);
-          normals_.emplace_back(vertex.normal_);
         }
 
         if (index.texcoord_index >= 0) {
           auto uvx = attributes.texcoords[2 * index.texcoord_index + 0];
           auto uvy = attributes.texcoords[2 * index.texcoord_index + 1];
           vertex.uv_ = Vector2f(uvx, uvy);
-          uv_.emplace_back(vertex.uv_);
         }
-        vertices_.emplace_back(vertex);
+        vertices[vi++] = vertex;
       }
       index_offset += vertices_in_face;
     }
   }
+  offsets_.emplace_back(vi);
 }
 
 void Mesh::LoadMaterials(const tinyobj::ObjReader &reader) {
   auto &materials = reader.GetMaterials();
-  for (auto &m : materials) {
+
+  uint32_t count{0};
+
+  for (uint32_t i = 0; i < materials.size(); i++) {
+    auto m = materials[i];
 
     auto &material = materials_.emplace_back();
 
@@ -88,7 +91,17 @@ void Mesh::Load(const std::filesystem::path &path) {
 
   auto status = reader.ParseFromFile(path.string(), reader_config);
 
-  LoadVertices(reader);
+  auto &attributes = reader.GetAttrib();
+  auto &shapes = reader.GetShapes();
+
+  std::size_t faces{0};
+  for (auto &shape : shapes) {
+    faces += shape.mesh.num_face_vertices.size();
+  }
+
+  vertices_.resize(faces * 3);
+
+  LoadVertices(reader, std::span<Vertex>(vertices_));
 
   LoadMaterials(reader);
 }

@@ -1,4 +1,5 @@
 #include "gloom/include/application.h"
+#include "gloom_widgets/include/camera_widget.h"
 #include <iostream>
 
 using Gloom::operator""_KiB;
@@ -17,22 +18,12 @@ public:
   }
 
   void OnImGui() override {
-    auto position = camera_.GetPosition();
-
-    auto yaw = camera_.GetYaw();
-    auto pitch = camera_.GetPitch();
+    camera_.OnImGui();
 
     ImGui::Begin("Window");
-    ImGui::InputFloat3("camera position", glm::value_ptr(position));
-    ImGui::SliderFloat("camera yaw", &yaw, 0.0f, 2.0f * Gloom::PI);
-    ImGui::SliderFloat("camera pitch", &pitch, 0.0f, 2.0f * Gloom::PI);
     ImGui::InputFloat3("light direction", glm::value_ptr(light_direction_));
     ImGui::InputFloat3("zoom", glm::value_ptr(zoom_));
     ImGui::End();
-
-    camera_.SetPosition(position);
-    camera_.SetYaw(yaw);
-    camera_.SetPitch(pitch);
   }
 
   void OnUpdate() override {
@@ -45,8 +36,11 @@ public:
     texture_->Bind(0);
     vao_.Bind();
 
-    auto projection = camera_.GetPerspectiveMatrix();
-    auto look = camera_.GetLookAtMatrix();
+    camera_.OnUpdate();
+    auto &camera = camera_.GetCamera();
+
+    auto projection = camera.GetPerspectiveMatrix();
+    auto look = camera.GetLookAtMatrix();
 
     auto zoom = glm::scale(Gloom::Matrix4f(1.0f), zoom_);
 
@@ -86,7 +80,7 @@ private:
   std::unique_ptr<Gloom::Texture> texture_;
   Gloom::Vector3f light_direction_;
   Gloom::Vector3f zoom_;
-  Gloom::Camera camera_;
+  Gloom::CameraWidget camera_;
 };
 
 int main() {

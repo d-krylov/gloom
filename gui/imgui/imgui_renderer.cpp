@@ -1,9 +1,6 @@
 #include "imgui_renderer.h"
 #include <GLFW/glfw3.h>
 
-using Gloom::operator""_KiB;
-using Gloom::operator""_MiB;
-
 namespace Gloom {
 
 VertexFormat GetImGuiVertexFormat() {
@@ -22,7 +19,8 @@ Commands::BlendInformation GetBlendInformation() {
 // clang-format on
 
 ImGuiRenderer::ImGuiRenderer()
-  : graphics_pipeline_{GetRoot() / "shaders/gui.vert", GetRoot() / "shaders/gui.frag"},
+  : graphics_pipeline_{GetRoot() / "shaders" / "gui" / "gui.vert",
+                       GetRoot() / "shaders" / "gui" / "gui.frag"},
     vertex_array_(), vertex_buffer_(4_MiB, GetImGuiVertexFormat()),
     index_buffer_(BufferTarget::ELEMENT_ARRAY_BUFFER, 4_MiB) {
 

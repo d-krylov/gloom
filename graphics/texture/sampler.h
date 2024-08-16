@@ -1,7 +1,7 @@
 #ifndef SAMPLER_H
 #define SAMPLER_H
 
-#include "graphics_types.h"
+#include "graphics/include/graphics_types.h"
 
 namespace Gloom {
 

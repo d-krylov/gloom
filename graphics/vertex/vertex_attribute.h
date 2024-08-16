@@ -1,7 +1,7 @@
 #ifndef VERTEX_ATTRIBUTE_H
 #define VERTEX_ATTRIBUTE_H
 
-#include "graphics_types.h"
+#include "graphics/include/graphics_types.h"
 
 namespace Gloom {
 
