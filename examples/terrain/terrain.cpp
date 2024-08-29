@@ -27,8 +27,8 @@ public:
   }
 
   void OnUpdate() override {
-    Gloom::Commands::SetDepthTesting(true);
-    Gloom::Commands::Clear(true);
+    Gloom::Command::SetDepthTesting(true);
+    Gloom::Command::Clear(true);
 
     glPatchParameteri(GL_PATCH_VERTICES, 4);
 
@@ -46,16 +46,15 @@ public:
 
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::TESSELATION_EVALUATION, "u_view_matrix",
                                   look);
-    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::TESSELATION_EVALUATION,
-                                  "u_projection_matrix", projection);
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::TESSELATION_EVALUATION, "u_projection_matrix",
+                                  projection);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::TESSELATION_EVALUATION, "u_model_matrix",
                                   zoom);
-    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::TESSELATION_EVALUATION, "u_height_map",
-                                  0);
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::TESSELATION_EVALUATION, "u_height_map", 0);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "u_light_direction",
                                   light_direction_);
-    // Gloom::Commands::SetPolygonMode(Gloom::PolygonMode::LINE);
-    Gloom::Commands::DrawElements(Gloom::PrimitiveKind::PATCHES, 4 * 64 * 64);
+    // Gloom::Command::SetPolygonMode(Gloom::PolygonMode::LINE);
+    Gloom::Command::DrawElements(Gloom::PrimitiveKind::PATCHES, 4 * 64 * 64);
   }
 
   void OnInitialize() override {

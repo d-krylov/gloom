@@ -1,10 +1,10 @@
 set(EXECUTABLES
   compute_raytracing
-  wavefront_viewer
-  raymarching
+  viewer
+  #raymarching
   khronos_viewer
-  skybox
-  terrain
+  #skybox
+  #terrain
 )
 
 foreach(exe ${EXECUTABLES})

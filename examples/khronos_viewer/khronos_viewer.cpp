@@ -1,14 +1,14 @@
-#include "gloom/include/application.h"
-#include "gloom_mesh/include/mesh_loader.h"
+#include "gloom/application/include/gloom.h"
 #include <array>
 #include <iostream>
 
-using Gloom::operator""_KiB;
-using Gloom::operator""_MiB;
+using namespace Gloom;
 
 int main() {
 
-  Gloom::LoadGLTF(Gloom::GetRoot() / "assets" / "khronos" / "Box.gltf");
+  Model model;
+
+  model.LoadAssimp(ROOT / "assets" / "sponza1" / "sponza.obj");
 
   return 0;
 }

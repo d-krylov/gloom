@@ -91,7 +91,7 @@ public:
   }
 
   void OnUpdate() override {
-    Gloom::Commands::Clear(true);
+    Gloom::Command::Clear(true);
     vao_.Bind();
     graphics_pipeline_.Bind();
     ligth_ssbo.BindRange(0);
@@ -100,7 +100,7 @@ public:
     object_ssbo.SetData(std::span<Object>(objects_));
     material_ssbo.BindRange(2);
     material_ssbo.SetData(std::span<Material>(materials_));
-    Gloom::Commands::DrawArrays(0, 3);
+    Gloom::Command::DrawArrays(0, 3);
   }
 
 private:

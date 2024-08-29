@@ -1,6 +1,4 @@
-#include "gloom/include/application.h"
-#include "graphics/include/graphics.h"
-#include "window.h"
+#include "gloom/application/include/gloom.h"
 #include <iostream>
 
 using namespace Gloom;
@@ -8,17 +6,19 @@ using namespace Gloom;
 constexpr uint32_t TEXTURE_WIDTH = 1000;
 constexpr uint32_t TEXTURE_HEIGHT = 1000;
 
-class ComputeRaytracing : public Gloom::Application {
+class ComputeRaytracing : public Layer {
 public:
   ComputeRaytracing()
-    : Application(), vao_(),
-      compute_pipeline_(GetRoot() / "shaders" / "compute" / "raytracing.comp"),
-      graphics_pipeline_{GetRoot() / "shaders" / "raytracing" / "canvas.vert",
-                         GetRoot() / "shaders" / "raytracing" / "canvas.frag"} {
+    : vao_(), compute_pipeline_(SHADERS_DIR / "compute" / "raytracing.comp"),
+      graphics_pipeline_{SHADERS_DIR / "raytracing" / "canvas.vert",
+                         SHADERS_DIR / "raytracing" / "canvas.frag"} {
     Gloom::EnableDebug();
   }
 
-  void OnImGui() override {}
+  void OnImGui() override {
+    ImGui::Begin("Hello");
+    ImGui::End();
+  }
 
   void OnUpdate() override {
     texture_->Bind(0);
@@ -27,18 +27,16 @@ public:
     compute_pipeline_.Bind();
     compute_pipeline_.SetUniform("t", float(GetTime()));
 
-    Commands::DispatchCompute(TEXTURE_WIDTH / 10, TEXTURE_HEIGHT / 10, 1);
-    Commands::MemoryBarrier(BarrierBit::SHADER_IMAGE_ACCESS);
+    Command::DispatchCompute(TEXTURE_WIDTH / 10, TEXTURE_HEIGHT / 10, 1);
+    Command::MemoryBarrier(BarrierBit::SHADER_IMAGE_ACCESS);
 
     graphics_pipeline_.Bind();
     texture_->Bind(0);
-    Commands::DrawArrays(0, 3);
+    Command::DrawArrays(0, 3);
   }
 
-  void OnInitialize() override {
-    texture_ =
-      std::make_unique<Texture>(TextureTarget::TEXTURE_2D, TextureInternalFormat::RGBA32F,
-                                TEXTURE_WIDTH, TEXTURE_HEIGHT);
+  void OnAttach() override {
+    texture_ = std::make_unique<Texture2D>(TEXTURE_WIDTH, TEXTURE_HEIGHT, InternalFormat::RGBA32F);
   }
 
 private:
@@ -49,9 +47,9 @@ private:
 };
 
 int main() {
-  ComputeRaytracing application;
-
+  Application application;
+  ComputeRaytracing compute_raytracing;
+  application.AddLayer(&compute_raytracing);
   application.Run();
-
   return 0;
 }

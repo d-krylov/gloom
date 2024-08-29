@@ -1,6 +1,6 @@
-#include "gloom/include/application.h"
-#include "gloom_widgets/include/camera_widget.h"
-#include "window.h"
+#include "gloom/application/include/application.h"
+#include "gloom/gui/include/window.h"
+#include "gloom/widgets/include/camera_widget.h"
 #include <iostream>
 
 using Gloom::operator""_KiB;
@@ -18,8 +18,8 @@ public:
   void OnImGui() override { camera_.OnImGui(); }
 
   void OnUpdate() override {
-    Gloom::Commands::SetDepthTesting(true);
-    Gloom::Commands::Clear(true);
+    Gloom::Command::SetDepthTesting(true);
+    Gloom::Command::Clear(true);
     glDepthFunc(GL_LEQUAL);
 
     camera_.OnUpdate();
@@ -32,10 +32,9 @@ public:
     texture_->Bind(0);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_view_matrix",
                                   Gloom::Matrix4f(Gloom::Matrix3f(look)));
-    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_projection_matrix",
-                                  projection);
+    graphics_pipeline_.SetUniform(Gloom::ShaderIndex::VERTEX, "u_projection_matrix", projection);
     graphics_pipeline_.SetUniform(Gloom::ShaderIndex::FRAGMENT, "skybox", 0);
-    Gloom::Commands::DrawArrays(0, 36);
+    Gloom::Command::DrawArrays(0, 36);
     glDepthFunc(GL_LESS);
   }
 
