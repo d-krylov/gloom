@@ -5,14 +5,17 @@
 
 namespace Gloom {
 
+constexpr uint32_t v3_size = 3;
+constexpr uint32_t v2_size = 2;
+
 void SetMeshMaterial(const tinyobj::ObjReader &reader, Mesh &mesh, const tinyobj::shape_t &shape) {
   auto &materials = reader.GetMaterials();
   auto material_index = shape.mesh.material_ids[0];
   auto &material = materials[material_index];
-  mesh.material_.textures_[TextureType::AMBIENT] = material.ambient_texname;
-  mesh.material_.textures_[TextureType::DIFFUSE] = material.diffuse_texname;
-  mesh.material_.textures_[TextureType::SPECULAR] = material.specular_texname;
-  mesh.material_.textures_[TextureType::BUMP] = material.bump_texname;
+  mesh.material_.names_.ambient_ = material.ambient_texname;
+  mesh.material_.names_.diffuse_ = material.diffuse_texname;
+  mesh.material_.names_.specular_ = material.specular_texname;
+  mesh.material_.names_.bump_ = material.bump_texname;
   mesh.material_.shininess = material.shininess;
 }
 
@@ -22,10 +25,7 @@ void LoadMeshes(const tinyobj::ObjReader &reader, std::vector<Vertex> &vertices,
   auto &shapes = reader.GetShapes();
   auto &attributes = reader.GetAttrib();
 
-  uint64_t vertex_index{0};
-
-  constexpr uint32_t v3_size = 3;
-  constexpr uint32_t v2_size = 2;
+  uint64_t vertex_count{0};
 
   for (const auto &shape : shapes) {
     uint64_t index_offset = 0;
@@ -123,18 +123,6 @@ void Model::LoadWavefront(const std::filesystem::path &path) {
 
   auto &attributes = reader.GetAttrib();
   auto &shapes = reader.GetShapes();
-
-  uint64_t indices_size{0};
-
-  for (auto &shape : shapes) {
-    indices_size += shape.mesh.num_face_vertices.size();
-  }
-
-  auto vertices_size = attributes.vertices.size();
-
-  std::cout << vertices_size << " " << indices_size << std::endl;
-
-  vertices_.reserve(indices_size);
 
   LoadMeshes(reader, vertices_, meshes_);
   LoadMaterials(path_, reader, textures_);

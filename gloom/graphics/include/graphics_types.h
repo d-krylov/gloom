@@ -2,6 +2,7 @@
 #define GLOOM_TYPES_H
 
 #include "glad/glad.h"
+#include "gloom/core/include/concepts.h"
 #include "gloom/core/include/core_assert.h"
 #include "gloom/core/include/core_types.h"
 #include "gloom/core/include/macros.h"
@@ -12,87 +13,47 @@ namespace Gloom {
 enum class Access { READ = GL_READ_ONLY, WRITE = GL_WRITE_ONLY, READ_WRITE = GL_READ_WRITE };
 enum class PolygonMode { POINT = GL_POINT, LINE = GL_LINE, FILL = GL_FILL };
 
-enum class BufferStorage {
-  MAP_READ = GL_MAP_READ_BIT,
-  MAP_WRITE = GL_MAP_WRITE_BIT,
-  MAP_PERSISTENT = GL_MAP_PERSISTENT_BIT,
-  MAP_COHERENT = GL_MAP_COHERENT_BIT,
-  DYNAMIC_STORAGE = GL_DYNAMIC_STORAGE_BIT,
-  CLIENT_STORAGE = GL_CLIENT_STORAGE_BIT,
-  MAP_READ_WRITE = MAP_READ | MAP_WRITE,
-  MAP_READ_WRITE_PERSISTENT = MAP_READ_WRITE | MAP_PERSISTENT | MAP_COHERENT
-};
-
-enum class ShaderBit {
-  VERTEX = GL_VERTEX_SHADER_BIT,
-  TESS_CONTROL = GL_TESS_CONTROL_SHADER_BIT,
-  TESS_EVALUATION = GL_TESS_EVALUATION_SHADER_BIT,
-  GEOMETRY = GL_GEOMETRY_SHADER_BIT,
-  FRAGMENT = GL_FRAGMENT_SHADER_BIT,
-};
-
 enum class PixelFormat {
-  RED = GL_RED,
-  RG = GL_RG,
-  RGB = GL_RGB,
-  RGBA = GL_RGBA,
-  BGR = GL_BGR,
-  BGRA = GL_BGRA,
-  DEPTH_COMPONENT = GL_DEPTH_COMPONENT,
-  DEPTH_STENCIL = GL_DEPTH_STENCIL,
-  STENCIL_INDEX = GL_STENCIL_INDEX
+#define PIXEL_FORMAT(X) X = GL_##X,
+#include "graphics_types.def"
 };
 
 enum class MinFilter {
-  NEAREST = GL_NEAREST,
-  LINEAR = GL_LINEAR,
-  NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
-  LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
-  NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
-  LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
+#define MIN_FILTER(X) X = GL_##X,
+#include "graphics_types.def"
 };
 
-enum class MagFilter { NEAREST = GL_NEAREST, LINEAR = GL_LINEAR };
+enum class MagFilter {
+#define MAG_FILTER(X) X = GL_##X,
+#include "graphics_types.def"
+};
 
 enum class WrapMode {
-  CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
-  CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER,
-  MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
-  REPEAT = GL_REPEAT,
-  MIRROR_CLAMP_TO_EDGE = GL_MIRROR_CLAMP_TO_EDGE
-};
-
-enum class BlendOperation {
-  ADD = GL_FUNC_ADD,
-  SUBTRACT = GL_FUNC_SUBTRACT,
-  REVERSE_SUBTRACT = GL_FUNC_REVERSE_SUBTRACT,
-  MIN = GL_MIN,
-  MAX = GL_MAX
-};
-
-enum class BlendFactor {
-  ZERO = GL_ZERO,
-  ONE = GL_ONE,
-  SRC_COLOR = GL_SRC_COLOR,
-  ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
-  DST_COLOR = GL_DST_COLOR,
-  ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
-  SRC_ALPHA = GL_SRC_ALPHA,
-  ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
-  DST_ALPHA = GL_DST_ALPHA,
-  ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA,
-  CONSTANT_COLOR = GL_CONSTANT_COLOR,
-  ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_COLOR,
-  CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
-  ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA,
-  SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE,
-  SRC1_COLOR = GL_SRC1_COLOR,
-  ONE_MINUS_SRC1_COLOR = GL_ONE_MINUS_SRC1_COLOR,
-  SRC1_ALPHA = GL_SRC1_ALPHA,
-  ONE_MINUS_SRC1_ALPHA = GL_ONE_MINUS_SRC1_ALPHA
+#define WRAP_MODE(X) X = GL_##X,
+#include "graphics_types.def"
 };
 
 inline constexpr uint32_t SHADER_STAGES_COUNT = 5;
+
+enum class BlendOperation {
+#define BLEND_OPERATION(X) X = GL_##X,
+#include "graphics_types.def"
+};
+
+enum class BlendFactor {
+#define BLEND_FACTOR(X) X = GL_##X,
+#include "graphics_types.def"
+};
+
+enum class ShaderBit {
+#define SHADER_BIT(X) X = GL_##X##_SHADER_BIT,
+#include "graphics_types.def"
+};
+
+enum class BufferStorage {
+#define BUFFER_STORAGE(X) X = GL_##X##_BIT,
+#include "graphics_types.def"
+};
 
 enum class ShaderKind {
 #define SHADER_KIND(X, N) X = GL_##X##_SHADER,
@@ -134,15 +95,19 @@ enum class BarrierBit {
 #include "graphics_types.def"
 };
 
+enum class ComparasionFunction {
+#define COMPARASION_FUNCTION(X) X = GL_##X,
+#include "graphics_types.def"
+};
+
+enum class StencilOperation {
+#define STENCIL_OPERATION(X) X = GL_##X,
+#include "graphics_types.def"
+};
+
 enum class PrimitiveDataType {
-  BYTE = GL_BYTE,
-  UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
-  SHORT = GL_SHORT,
-  UNSIGNED_SHORT = GL_UNSIGNED_SHORT,
-  INT = GL_INT,
-  UNSIGNED_INT = GL_UNSIGNED_INT,
-  FLOAT = GL_FLOAT,
-  DOUBLE = GL_DOUBLE
+#define PRIMITIVE_DATA_TYPE(X) X = GL_##X,
+#include "graphics_types.def"
 };
 
 enum class PixelType {
@@ -153,28 +118,6 @@ enum class PixelType {
   INT = GL_INT,
   UNSIGNED_INT = GL_UNSIGNED_INT,
   FLOAT = GL_FLOAT
-};
-
-enum class StencilFunction {
-  NEVER = GL_NEVER,
-  LESS = GL_LESS,
-  EQUAL = GL_EQUAL,
-  LEQUAL = GL_LEQUAL,
-  GREATER = GL_GREATER,
-  NOTEQUAL = GL_NOTEQUAL,
-  GEQUAL = GL_GEQUAL,
-  ALWAYS = GL_ALWAYS
-};
-
-enum class StencilOption {
-  KEEP = GL_KEEP,
-  ZERO = GL_ZERO,
-  REPLACE = GL_REPLACE,
-  INCREMENT = GL_INCR,
-  INCREMENT_WRAP = GL_INCR_WRAP,
-  DECREMENT = GL_DECR,
-  DECREMENT_WRAP = GL_DECR_WRAP,
-  INVERT = GL_INVERT
 };
 
 enum class IndexType {
@@ -199,6 +142,8 @@ struct DrawElementsIndirectCommand {
   int32_t base_vertex_{0};
   uint32_t base_instance_{0};
 };
+
+ALLOW_BITMASK_ENUM(BufferStorage);
 
 [[nodiscard]] uint32_t GetShaderIndex(ShaderKind kind);
 [[nodiscard]] std::optional<ShaderKind> GetShaderKind(const std::filesystem::path &path);

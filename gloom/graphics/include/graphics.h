@@ -8,6 +8,7 @@
 #include "gloom/graphics/pipeline/compute_pipeline.h"
 #include "gloom/graphics/pipeline/graphics_pipeline.h"
 #include "gloom/graphics/texture/framebuffer.h"
+#include "gloom/graphics/texture/renderbuffer.h"
 #include "gloom/graphics/texture/sampler.h"
 #include "gloom/graphics/texture/texture_2d.h"
 #include "gloom/graphics/vertex/vertex_array.h"

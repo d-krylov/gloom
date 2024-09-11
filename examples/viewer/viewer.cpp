@@ -5,10 +5,24 @@ using namespace Gloom;
 
 class Viewer : public Layer {
 public:
+  Viewer()
+    : renderer_(Application::Get().GetWindow().GetWidth(),
+                Application::Get().GetWindow().GetHeight()) {}
+
   void OnImGui() override {
     transform_.OnImGui();
     camera_.OnImGui();
     light_.OnImGui();
+  }
+
+  void OnEvent(Event &event) {
+    EventDispatcher dispatcher(event);
+    dispatcher.Dispatch<WindowResizeEvent>(BIND_FUNCTION(Viewer::OnWindowResizeEvent));
+  }
+
+  bool OnWindowResizeEvent(const WindowResizeEvent &event) {
+    renderer_.OnWindowSize(event.GetWidth(), event.GetHeight());
+    return true;
   }
 
   void OnUpdate() override {
@@ -17,10 +31,8 @@ public:
     camera_.OnUpdate();
     auto &camera = camera_.GetCamera();
 
-    renderer_.SetCamera(camera);
-    renderer_.SetLights(light_.GetPointLights());
-
-    renderer_.Draw(model_, transform_.GetTransform());
+    renderer_.DrawWithPasses(model_, transform_.GetTransform(), light_.GetPointLights().front(),
+                             camera);
   }
 
   void OnAttach() override {

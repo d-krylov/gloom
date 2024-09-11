@@ -7,7 +7,8 @@ namespace Gloom {
 
 class Renderbuffer {
 public:
-  Renderbuffer(InternalFormat internal_format, int32_t width, int32_t height, uint32_t samples = 0);
+  Renderbuffer(InternalFormat internal_format, uint32_t width, uint32_t height,
+               uint32_t samples = 0);
 
   ~Renderbuffer();
 
@@ -20,8 +21,9 @@ protected:
 
 private:
   uint32_t renderbuffer_{0};
-  InternalFormat internal_format_;
-  Vector2i size_;
+  InternalFormat format_;
+  uint32_t width_;
+  uint32_t height_;
   uint32_t samples_;
 };
 

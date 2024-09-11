@@ -1,0 +1,9 @@
+#ifndef SHADER
+#define SHADER(PATH, PIPELINE)
+#endif 
+
+SHADER("mesh/mesh.vert", MESH)
+SHADER("mesh/mesh.frag", MESH)
+
+
+#undef SHADER

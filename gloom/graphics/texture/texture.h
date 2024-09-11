@@ -7,12 +7,20 @@
 
 namespace Gloom {
 
+struct Wrap {
+  Wrap(WrapMode v) : s_(v), t_(v), r_(v) {}
+  Wrap(WrapMode s, WrapMode t, WrapMode r) : s_(s), t_(t), r_(r) {}
+  WrapMode s_;
+  WrapMode t_;
+  WrapMode r_;
+};
+
 class Texture {
 public:
   Texture() = default;
 
   Texture(int32_t width, int32_t height, int32_t depth, TextureTarget target, InternalFormat format,
-          bool mipmap, MinFilter min, MagFilter mag, WrapMode s, WrapMode t, WrapMode r);
+          bool mipmap, MinFilter min, MagFilter mag, const Wrap &wrap);
 
   NO_COPY_SEMANTIC(Texture);
 
@@ -39,12 +47,13 @@ public:
 
 protected:
   void CreateStorage();
-  void SetParameters(MagFilter mag, MinFilter min, WrapMode s, WrapMode t, WrapMode r);
+  void SetParameters(MagFilter mag, MinFilter min, const Wrap &wrap);
 
 private:
   uint32_t texture_{0};
   TextureTarget target_;
   InternalFormat format_;
+  uint32_t levels_{1};
   Vector3i size_;
 };
 

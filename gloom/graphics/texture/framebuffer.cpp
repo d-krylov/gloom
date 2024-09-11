@@ -17,15 +17,17 @@ void Framebuffer::Attach(const FramebufferAttachment &attachment) {
   if (attachment.texture_ != nullptr) {
     if (attachment.texture_->IsLayered()) {
       glNamedFramebufferTextureLayer(framebuffer_, uint16_t(attachment.type_), *attachment.texture_,
-                                     attachment.texture_level_, attachment.texture_layer_);
+                                     attachment.level_, attachment.layer_);
     } else {
       glNamedFramebufferTexture(framebuffer_, uint16_t(attachment.type_), *attachment.texture_,
-                                attachment.texture_level_);
+                                attachment.level_);
     }
   } else if (attachment.renderbuffer_ != nullptr) {
     glNamedFramebufferRenderbuffer(framebuffer_, uint16_t(attachment.type_), GL_RENDERBUFFER,
                                    *attachment.renderbuffer_);
   }
+
+  CORE_VERIFY(GetStatus());
 }
 
 void Framebuffer::Bind() { glBindFramebuffer(GL_FRAMEBUFFER, framebuffer_); }

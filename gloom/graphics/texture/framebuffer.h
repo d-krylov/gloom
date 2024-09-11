@@ -9,17 +9,16 @@ class Texture;
 class Renderbuffer;
 
 struct FramebufferAttachment {
-  FramebufferAttachment(AttachmentType type, Texture *texture, uint32_t texture_level = 0,
-                        uint32_t texture_layer = 0)
-    : type_{type}, texture_level_{texture_level}, texture_layer_{texture_layer}, texture_{texture} {
-  }
+  FramebufferAttachment(AttachmentType type, Texture *texture, uint32_t level = 0,
+                        uint32_t layer = 0)
+    : type_{type}, level_{level}, layer_{layer}, texture_{texture} {}
 
   FramebufferAttachment(AttachmentType type, Renderbuffer *renderbuffer)
     : type_{type}, renderbuffer_{renderbuffer} {}
 
   AttachmentType type_;
-  uint32_t texture_level_{0};
-  uint32_t texture_layer_{0};
+  uint32_t level_{0};
+  uint32_t layer_{0};
   Texture *texture_{nullptr};
   Renderbuffer *renderbuffer_{nullptr};
 };

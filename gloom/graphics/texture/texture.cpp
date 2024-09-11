@@ -2,14 +2,19 @@
 
 namespace Gloom {
 
+uint32_t GetMipLevels(const Vector3u &e) {
+  auto m = std::max(e.x, std::max(e.y, e.z));
+  return static_cast<uint32_t>(std::floor(std::log2(m))) + 1;
+}
+
 Texture::Texture(int32_t width, int32_t height, int32_t depth, TextureTarget target,
-                 InternalFormat format, bool mipmap, MinFilter min, MagFilter mag, WrapMode s,
-                 WrapMode t, WrapMode r)
+                 InternalFormat format, bool mipmap, MinFilter min, MagFilter mag, const Wrap &wrap)
   : size_(width, height, depth), target_(target), format_(format) {
   glCreateTextures(uint16_t(target_), 1, &texture_);
   CreateStorage();
   if (mipmap == true) {
     glGenerateTextureMipmap(texture_);
+    levels_ = GetMipLevels(size_);
   }
 }
 
@@ -23,13 +28,13 @@ void Texture::CreateStorage() {
   auto dimensions = GetTextureDimensions(target_);
   switch (dimensions) {
   case 1:
-    glTextureStorage1D(texture_, 1, uint16_t(format_), size_.x);
+    glTextureStorage1D(texture_, levels_, uint16_t(format_), size_.x);
     break;
   case 2:
-    glTextureStorage2D(texture_, 1, uint16_t(format_), size_.x, size_.y);
+    glTextureStorage2D(texture_, levels_, uint16_t(format_), size_.x, size_.y);
     break;
   case 3:
-    glTextureStorage3D(texture_, 0, uint16_t(format_), size_.x, size_.y, size_.z);
+    glTextureStorage3D(texture_, levels_, uint16_t(format_), size_.x, size_.y, size_.z);
     break;
   default:
     break;
@@ -56,12 +61,12 @@ void Texture::SetData(std::span<const std::byte> data, int32_t x, int32_t y, int
   }
 }
 
-void Texture::SetParameters(MagFilter mag, MinFilter min, WrapMode s, WrapMode t, WrapMode r) {
+void Texture::SetParameters(MagFilter mag, MinFilter min, const Wrap &wrap) {
   glTextureParameteri(texture_, GL_TEXTURE_MIN_FILTER, uint16_t(min));
   glTextureParameteri(texture_, GL_TEXTURE_MAG_FILTER, uint16_t(mag));
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_S, uint16_t(s));
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_T, uint16_t(t));
-  glTextureParameteri(texture_, GL_TEXTURE_WRAP_R, uint16_t(r));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_S, uint16_t(wrap.s_));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_T, uint16_t(wrap.t_));
+  glTextureParameteri(texture_, GL_TEXTURE_WRAP_R, uint16_t(wrap.r_));
 }
 
 void Texture::Bind(std::size_t unit) { glBindTextureUnit(unit, texture_); }

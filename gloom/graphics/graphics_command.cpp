@@ -30,13 +30,13 @@ void EnableMultisample(bool b) { b ? glEnable(GL_MULTISAMPLE) : glDisable(GL_MUL
 void EnableStencilTest(bool b) { b ? glEnable(GL_STENCIL_TEST) : glDisable(GL_STENCIL_TEST); }
 void EnableFaceCulling(bool b) { b ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE); }
 
-void SetStencilFunction(StencilFunction function, int32_t reference, uint32_t mask) {
+void SetStencilFunction(ComparasionFunction function, int32_t reference, uint32_t mask) {
   glStencilFunc(uint16_t(function), reference, mask);
 }
 
 void SetScissor(int32_t x, int32_t y, uint32_t w, uint32_t h) { glScissor(x, y, w, h); }
 
-void SetStencilOption(StencilOption fail, StencilOption zfail, StencilOption zpass) {
+void SetStencilOperation(StencilOperation fail, StencilOperation zfail, StencilOperation zpass) {
   glStencilOp(uint16_t(fail), uint16_t(zfail), uint16_t(zpass));
 }
 

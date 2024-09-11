@@ -50,6 +50,7 @@ set(EXTERNAL_SOURCES
 
 set(RENDERER_SOURCES
   ${GLOOM_SOURCE_DIR}/renderer/renderer.cpp
+  ${GLOOM_SOURCE_DIR}/renderer/shader_library.cpp
 )
 
 set(SCENE_SOURCES

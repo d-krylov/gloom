@@ -122,6 +122,20 @@ private:
   Action action_;
 };
 
+class WindowResizeEvent : public Event {
+public:
+  WindowResizeEvent(int32_t width, int32_t height) : width_(width), height_(height) {}
+
+  [[nodiscard]] int32_t GetWidth() const { return width_; }
+  [[nodiscard]] int32_t GetHeight() const { return height_; }
+
+  EVENT_CLASS_KIND(WINDOW_RESIZE);
+
+private:
+  int32_t width_;
+  int32_t height_;
+};
+
 } // namespace Gloom
 
 #endif // GLOOM_EVENT_H

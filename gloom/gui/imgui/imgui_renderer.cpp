@@ -109,7 +109,7 @@ void ImGuiRenderer::Begin() {
   Command::EnableFaceCulling(false);
   Command::EnableDepthTest(false);
   Command::EnableStencilTest(false);
-  Command::SetBlendOperation(BlendOperation::ADD);
+  Command::SetBlendOperation(BlendOperation::FUNC_ADD);
   Command::SetBlendFunction(BlendFactor::SRC_ALPHA, BlendFactor::ONE_MINUS_SRC_ALPHA,
                             BlendFactor::ONE, BlendFactor::ONE_MINUS_SRC_ALPHA);
 

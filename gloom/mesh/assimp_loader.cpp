@@ -6,33 +6,26 @@
 
 namespace Gloom {
 
-aiTextureType GetAssimpTextureType(TextureType type) {
-  switch (type) {
-  case TextureType::AMBIENT:
-    return aiTextureType_AMBIENT;
-  case TextureType::DIFFUSE:
-    return aiTextureType_DIFFUSE;
-  case TextureType::SPECULAR:
-    return aiTextureType_SPECULAR;
-  case TextureType::BUMP:
-    return aiTextureType_DISPLACEMENT;
-  default:
-    return aiTextureType_UNKNOWN;
-  }
-}
-
 void LoadMaterial(const aiScene *scene, Model &model, aiMesh *assimp_mesh, Mesh &mesh) {
   aiMaterial *material = scene->mMaterials[assimp_mesh->mMaterialIndex];
-  for (uint32_t i = TextureType::AMBIENT; i < TextureType::COUNT; i++) {
+
+  std::vector<aiTextureType> required{
+    aiTextureType::aiTextureType_AMBIENT, aiTextureType::aiTextureType_DIFFUSE,
+    aiTextureType::aiTextureType_SPECULAR, aiTextureType::aiTextureType_DISPLACEMENT};
+
+  std::vector<std::string TextureNames::*> fields{&TextureNames::ambient_, &TextureNames::diffuse_,
+                                                  &TextureNames::specular_, &TextureNames::bump_};
+
+  for (auto i = 0; i < required.size(); i++) {
     aiString assimp_texture_name;
-    material->GetTexture(GetAssimpTextureType(TextureType(i)), 0, &assimp_texture_name);
+    material->GetTexture(required[i], 0, &assimp_texture_name);
     if (assimp_texture_name.length > 0) {
       std::string texture_name(assimp_texture_name.C_Str());
       if (model.textures_.find(texture_name) == model.textures_.end()) {
         auto texture_path = model.path_.parent_path() / texture_name;
         model.textures_.emplace(texture_name, Texture2D(texture_path));
       }
-      mesh.material_.textures_[i] = texture_name;
+      mesh.material_.names_.*fields[i] = texture_name;
     }
   }
   auto ret = material->Get(AI_MATKEY_SHININESS, mesh.material_.shininess);

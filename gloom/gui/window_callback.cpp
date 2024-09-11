@@ -43,7 +43,12 @@ void MouseButtonCallback(GLFWwindow *native_window, int32_t button, int32_t acti
   handler(event);
 }
 
-void WindowSizeCallback(GLFWwindow *native_window, int32_t width, int32_t height) {}
+void WindowSizeCallback(GLFWwindow *native_window, int32_t width, int32_t height) {
+  auto *window = GetWindow(native_window);
+  auto &handler = window->GetEventCallback();
+  WindowResizeEvent event(width, height);
+  handler(event);
+}
 
 void WindowCloseCallback(GLFWwindow *native_window) {}
 

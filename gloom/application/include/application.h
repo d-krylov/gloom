@@ -4,6 +4,7 @@
 #include "gloom/gui/imgui/imgui_layer.h"
 #include "gloom/gui/imgui/imgui_renderer.h"
 #include "gloom/gui/include/window.h"
+#include "gloom/renderer/include/shader_library.h"
 #include <string>
 
 namespace Gloom {
@@ -14,15 +15,22 @@ public:
 
   virtual ~Application() = default;
 
-  void Run();
+  [[nodiscard]] static Application &Get();
 
+  void Run();
   void AddLayer(Layer *layer);
+  void OnEvent(Event &event);
+
+  [[nodiscard]] Window &GetWindow() { return window_; }
 
 private:
   Window window_;
   ImGuiLayer imgui_layer_;
   ImGuiRenderer imgui_renderer_;
+  ShaderLibrary shader_library_;
   std::vector<Layer *> layers_;
+
+  static Application *instance_;
 };
 
 } // namespace Gloom
