@@ -1,8 +1,8 @@
 set(EXECUTABLES
   compute_raytracing
   viewer
-  #raymarching
-  khronos_viewer
+  primitives
+  isometric
   #skybox
   #terrain
 )

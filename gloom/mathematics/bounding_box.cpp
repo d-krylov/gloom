@@ -8,8 +8,8 @@ void BoundingBox::Expand(const Vector3f &p) {
 }
 
 bool BoundingBox::Intersect(const Ray &ray, float &t0, float &t1) const {
-  auto t_min = (min_ - ray.GetOrigin()) / ray.GetDirection();
-  auto t_max = (max_ - ray.GetOrigin()) / ray.GetDirection();
+  auto t_min = (min_ - ray.Origin()) / ray.Direction();
+  auto t_max = (max_ - ray.Origin()) / ray.Direction();
 
   auto temp = glm::min(t_min, t_max);
 

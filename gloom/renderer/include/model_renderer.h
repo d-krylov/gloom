@@ -12,9 +12,9 @@ class Camera;
 class Transform;
 class PointLight;
 
-class Renderer {
+class ModelRenderer {
 public:
-  Renderer(uint32_t width, uint32_t height);
+  ModelRenderer(uint32_t width, uint32_t height);
 
   void Begin();
 

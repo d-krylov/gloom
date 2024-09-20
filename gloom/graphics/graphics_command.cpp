@@ -18,6 +18,11 @@ void DrawElements(uint32_t count, uint64_t offset, IndexType index, PrimitiveKin
   glDrawElements(uint16_t(kind), count, uint16_t(index), (void *)offset);
 }
 
+void DrawArraysInstanced(uint32_t indices_count, uint32_t instance_count, uint32_t first,
+                         PrimitiveKind kind) {
+  glDrawArraysInstanced(uint16_t(kind), first, indices_count, instance_count);
+}
+
 void DrawElementsBaseVertex(uint32_t count, int32_t base_vertex, std::byte *offset, IndexType index,
                             PrimitiveKind kind) {
   glDrawElementsBaseVertex(uint16_t(kind), count, uint16_t(index), offset, base_vertex);

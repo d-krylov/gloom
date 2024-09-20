@@ -39,7 +39,7 @@ public:
     camera_.OnUpdate();
     auto &camera = camera_.GetCamera();
 
-    auto projection = camera.GetPerspectiveMatrix();
+    auto projection = camera.GetProjectionMatrix();
     auto look = camera.GetLookAtMatrix();
 
     auto zoom = glm::scale(Gloom::Matrix4f(1.0f), zoom_);

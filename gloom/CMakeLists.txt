@@ -49,12 +49,15 @@ set(EXTERNAL_SOURCES
 )
 
 set(RENDERER_SOURCES
-  ${GLOOM_SOURCE_DIR}/renderer/renderer.cpp
+  ${GLOOM_SOURCE_DIR}/renderer/model_renderer.cpp
+  ${GLOOM_SOURCE_DIR}/renderer/primitive_renderer.cpp
   ${GLOOM_SOURCE_DIR}/renderer/shader_library.cpp
 )
 
 set(SCENE_SOURCES
   ${GLOOM_SOURCE_DIR}/scene/camera.cpp
+  ${GLOOM_SOURCE_DIR}/scene/perspective_camera.cpp
+  ${GLOOM_SOURCE_DIR}/scene/orthographic_camera.cpp
 )
 
 set(GLOOM_SOURCES

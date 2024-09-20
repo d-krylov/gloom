@@ -2,8 +2,12 @@
 #define GLOOM_BVH_H
 
 #include "bounding_box.h"
+#include "ray.h"
+#include <vector>
 
 namespace Gloom {
+
+class Model;
 
 class BVHNode {
 public:
@@ -18,7 +22,14 @@ private:
 
 class BVH {
 public:
+  void Intersect(const Ray &ray);
+
+  void Build(const Model &model);
+
+  void Subdivide(uint32_t node_index);
+
 private:
+  std::vector<BVHNode> nodes_;
 };
 
 } // namespace Gloom

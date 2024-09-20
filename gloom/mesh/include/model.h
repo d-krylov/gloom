@@ -32,7 +32,6 @@ public:
 public:
   std::vector<Mesh> meshes_;
   std::vector<Vertex> vertices_;
-  std::vector<uint32_t> indices_;
   std::map<std::string, Texture2D> textures_;
   std::filesystem::path path_;
 };

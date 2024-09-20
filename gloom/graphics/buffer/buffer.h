@@ -27,10 +27,11 @@ public:
 
   void Resize(uint64_t size);
 
-  template <typename T> void Push(T &&data) {
-    auto raw_data = std::as_bytes(std::span(data));
-    SetRawData(size_, raw_data);
-    size_ += raw_data.size();
+  template <typename R>
+  requires std::ranges::contiguous_range<R> &&std::ranges::sized_range<R> void Push(R &&source) {
+    auto size = std::ranges::size(source) * sizeof(std::ranges::range_value_t<R>);
+    glNamedBufferSubData(buffer_, size_, size, std::ranges::data(source));
+    size_ += size;
   }
 
   void FlushRange(uint64_t offset, uint64_t size);
@@ -38,7 +39,7 @@ public:
   void Unmap();
 
   void Bind();
-  void BindRange(uint32_t index, int64_t offset, uint64_t size);
+  void BindRange(uint32_t index, int64_t offset = 0, uint64_t size = 0);
 
 protected:
   void SetRawData(uint64_t offset, std::span<const std::byte> raw);

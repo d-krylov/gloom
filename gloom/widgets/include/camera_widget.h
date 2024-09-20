@@ -1,22 +1,31 @@
 #ifndef GLOOM_CAMERA_WIDGET_H
 #define GLOOM_CAMERA_WIDGET_H
 
-#include "gloom/scene/include/camera.h"
+#include "gloom/scene/include/orthographic_camera.h"
+#include "gloom/scene/include/perspective_camera.h"
 
 namespace Gloom {
 
 class CameraWidget {
 public:
   void OnImGui();
-  void OnUpdate();
 
-  [[nodiscard]] const Camera &GetCamera() const { return camera_; }
-  [[nodiscard]] Camera &GetCamera() { return camera_; }
+  [[nodiscard]] const PerspectiveCamera &GetPerspectiveCamera() const { return perspective_; }
+  [[nodiscard]] const OrthographicCamera &GetOrthographicCamera() const { return orthographic_; }
+  [[nodiscard]] const Camera &GetActiveCamera() const;
+
+  void OnResize(uint32_t width, uint32_t height);
+
+private:
+  void DrawPerspective();
+  void DrawOrthographic();
 
 private:
   Vector3f position_;
   Vector3f rotation_;
-  Camera camera_;
+  PerspectiveCamera perspective_;
+  OrthographicCamera orthographic_;
+  uint32_t selected_{0};
 };
 
 } // namespace Gloom

@@ -22,14 +22,14 @@ public:
 
   bool OnWindowResizeEvent(const WindowResizeEvent &event) {
     renderer_.OnWindowSize(event.GetWidth(), event.GetHeight());
+    camera_.OnResize(event.GetWidth(), event.GetHeight());
     return true;
   }
 
   void OnUpdate() override {
     renderer_.Begin();
 
-    camera_.OnUpdate();
-    auto &camera = camera_.GetCamera();
+    auto &camera = camera_.GetActiveCamera();
 
     renderer_.DrawWithPasses(model_, transform_.GetTransform(), light_.GetPointLights().front(),
                              camera);
@@ -42,7 +42,7 @@ public:
   }
 
 private:
-  Renderer renderer_;
+  ModelRenderer renderer_;
   Model model_;
   TransformWidget transform_;
   CameraWidget camera_;

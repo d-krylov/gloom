@@ -12,6 +12,9 @@ void DrawArrays(int32_t first, uint32_t count, PrimitiveKind kind = PrimitiveKin
 void DrawElements(uint32_t count, uint64_t offset = 0, IndexType index = IndexType::UNSIGNED_INT,
                   PrimitiveKind kind = PrimitiveKind::TRIANGLES);
 
+void DrawArraysInstanced(uint32_t indices_count, uint32_t instance_count, uint32_t first = 0,
+                         PrimitiveKind kind = PrimitiveKind::TRIANGLES);
+
 void DrawElementsBaseVertex(uint32_t count, int32_t base_vertex, std::byte *offset,
                             IndexType index = IndexType::UNSIGNED_INT,
                             PrimitiveKind kind = PrimitiveKind::TRIANGLES);

@@ -30,6 +30,8 @@ void Buffer::Resize(uint64_t size) { size_ = size; }
 
 void Buffer::Bind() { glBindBuffer(uint16_t(target_), buffer_); }
 
-void Buffer::BindRange(uint32_t index, int64_t offset, uint64_t size) {}
+void Buffer::BindRange(uint32_t index, int64_t offset, uint64_t size) {
+  glBindBufferRange(uint32_t(target_), index, buffer_, offset, (size == 0) ? capacity_ : size);
+}
 
 } // namespace Gloom

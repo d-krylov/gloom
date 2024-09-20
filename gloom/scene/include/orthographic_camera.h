@@ -1,6 +1,23 @@
-#ifndef ORTHOGRAPHIC_CAMERA_H
-#define ORTHOGRAPHIC_CAMERA_H
+#ifndef GLOOM_ORTHOGRAPHIC_CAMERA_H
+#define GLOOM_ORTHOGRAPHIC_CAMERA_H
 
-namespace Gloom {} // namespace Gloom
+#include "camera.h"
 
-#endif // ORTHOGRAPHIC_CAMERA_H
+namespace Gloom {
+
+class OrthographicCamera : public Camera {
+public:
+  OrthographicCamera();
+
+  Matrix4f GetProjectionMatrix() const override;
+
+public:
+  float left_;
+  float right_;
+  float bottom_;
+  float top_;
+};
+
+} // namespace Gloom
+
+#endif // GLOOM_ORTHOGRAPHIC_CAMERA_H

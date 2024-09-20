@@ -14,6 +14,9 @@ ShaderLibrary::ShaderLibrary()
                        SHADERS_DIR / "mesh" / "shadow_mapping.frag"},
       GraphicsPipeline{SHADERS_DIR / "mesh" / "mesh_shadow.vert",
                        SHADERS_DIR / "mesh" / "mesh_shadow.frag"},
+      GraphicsPipeline{SHADERS_DIR / "primitives" / "box.vert",
+                       SHADERS_DIR / "primitives" / "primitives.frag"}
+
     } {
   shader_library_instance_ = this;
 }

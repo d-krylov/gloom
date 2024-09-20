@@ -25,7 +25,7 @@ public:
     camera_.OnUpdate();
     auto &camera = camera_.GetCamera();
 
-    auto projection = camera.GetPerspectiveMatrix();
+    auto projection = camera.GetProjectionMatrix();
     auto look = camera.GetLookAtMatrix();
     graphics_pipeline_.Bind();
     vao_.Bind();

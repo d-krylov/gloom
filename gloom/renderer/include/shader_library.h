@@ -6,7 +6,7 @@
 
 namespace Gloom {
 
-constexpr inline uint32_t GRAPHICS_PIPELINES_COUNT = 4;
+constexpr inline uint32_t GRAPHICS_PIPELINES_COUNT = 5;
 
 class ShaderLibrary {
 public:

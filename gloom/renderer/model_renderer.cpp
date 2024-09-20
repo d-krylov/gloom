@@ -1,22 +1,22 @@
-#include "gloom/renderer/include/renderer.h"
+#include "gloom/renderer/include/model_renderer.h"
 #include "gloom/application/include/gloom.h"
 #include "gloom/renderer/include/shader_library.h"
 
 namespace Gloom {
 
-Renderer::Renderer(uint32_t width, uint32_t height)
+ModelRenderer::ModelRenderer(uint32_t width, uint32_t height)
   : vertex_buffer_(500_MiB, Vertex::GetFormat()), vertex_array_(vertex_buffer_), dummy_vao_() {
   OnWindowSize(width, height);
 }
 
-void Renderer::Add(Model &model) {
+void ModelRenderer::Add(Model &model) {
   offsets_[model.path_] = vertex_buffer_.GetSize();
 
   vertex_buffer_.Push(model.vertices_);
 }
 
-void Renderer::SetCamera(const Camera &camera) {
-  auto projection = camera.GetPerspectiveMatrix();
+void ModelRenderer::SetCamera(const Camera &camera) {
+  auto projection = camera.GetProjectionMatrix();
   auto view = camera.GetLookAtMatrix();
 
   auto &scene_pipeline = ShaderLibrary::Get().GetGraphicsPipeline(3);
@@ -27,7 +27,7 @@ void Renderer::SetCamera(const Camera &camera) {
 }
 
 // clang-format off
-void Renderer::SetLights(const std::vector<PointLight> &point) {
+void ModelRenderer::SetLights(const std::vector<PointLight> &point) {
   auto &scene_pipeline = ShaderLibrary::Get().GetGraphicsPipeline(3);
 
   for (auto i = 0; i < point.size(); i++) {
@@ -39,7 +39,7 @@ void Renderer::SetLights(const std::vector<PointLight> &point) {
 }
 // clang-format on
 
-void Renderer::OnWindowSize(uint32_t width, uint32_t height) {
+void ModelRenderer::OnWindowSize(uint32_t width, uint32_t height) {
   color_texture_ = std::make_unique<Texture2D>(width, height, InternalFormat::RGB8);
   depth_texture_ = std::make_unique<TextureDepth>(1024, 1024);
   renderbuffer_ = std::make_unique<Renderbuffer>(InternalFormat::DEPTH_COMPONENT32F, width, height);
@@ -51,7 +51,7 @@ void Renderer::OnWindowSize(uint32_t width, uint32_t height) {
   framebuffer_->Attach(attachment_3);
 }
 
-void Renderer::Begin() {
+void ModelRenderer::Begin() {
 
   auto &scene_pipeline = ShaderLibrary::Get().GetGraphicsPipeline(3);
 
@@ -64,8 +64,8 @@ void Renderer::Begin() {
   scene_pipeline.SetUniform(ShaderKind::FRAGMENT, "u_shadow_map", 3);
 }
 
-void Renderer::Draw(Model &model, const Transform &transform, const PointLight &light,
-                    const Camera &camera) {
+void ModelRenderer::Draw(Model &model, const Transform &transform, const PointLight &light,
+                         const Camera &camera) {
   Begin();
 
   auto &scene_pipeline = ShaderLibrary::Get().GetGraphicsPipeline(3);
@@ -108,7 +108,7 @@ void Renderer::Draw(Model &model, const Transform &transform, const PointLight &
   }
 }
 
-void Renderer::DrawDepth(Model &model, const Transform &transform, const PointLight &light) {
+void ModelRenderer::DrawDepth(Model &model, const Transform &transform, const PointLight &light) {
   auto &depth_pipeline = ShaderLibrary::Get().GetGraphicsPipeline(2);
 
   depth_pipeline.Bind();
@@ -129,8 +129,8 @@ void Renderer::DrawDepth(Model &model, const Transform &transform, const PointLi
   }
 }
 
-void Renderer::DrawWithPasses(Model &model, const Transform &transform, const PointLight &light,
-                              const Camera &camera) {
+void ModelRenderer::DrawWithPasses(Model &model, const Transform &transform,
+                                   const PointLight &light, const Camera &camera) {
 
   Command::EnableDepthTest(true);
   Command::Clear(true, true);

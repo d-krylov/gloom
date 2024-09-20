@@ -10,6 +10,8 @@ public:
   BoundingBox(const Vector3f &p1, const Vector3f &p2)
     : min_(glm::min(p1, p2)), max_(glm::max(p1, p2)) {}
 
+  BoundingBox(const Vector3f &p) : BoundingBox(p, p) {}
+
   void Expand(const Vector3f &p);
 
   [[nodiscard]] Vector3f GetDiameter() const { return max_ - min_; }

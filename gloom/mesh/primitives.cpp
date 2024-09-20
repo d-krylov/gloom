@@ -3,110 +3,34 @@
 namespace Gloom {
 
 // clang-format off
-std::array<Vertex, 6> MakeSquare() {
-  return std::array<Vertex, 6>{
-    Vertex{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-    Vertex{{+0.5f, +0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
-    Vertex{{+0.5f, +0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
-    Vertex{{-0.5f, +0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
-    Vertex{{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f}}};
-}
+std::array<Vector3f, 8> box_vertices{
+  Vector3f(-0.5f, -0.5f, +0.5f), Vector3f(+0.5f, -0.5f, +0.5f),
+  Vector3f(+0.5f, +0.5f, +0.5f), Vector3f(-0.5f, +0.5f, +0.5f),
+  Vector3f(-0.5f, -0.5f, -0.5f), Vector3f(+0.5f, -0.5f, -0.5f),
+  Vector3f(+0.5f, +0.5f, -0.5f), Vector3f(-0.5f, +0.5f, -0.5f)};
+
+std::array<Vector3f, 6> box_normals{
+  Vector3f(+0.0, +0.0, +1.0), Vector3f(+1.0, +0.0, +0.0), 
+  Vector3f(+0.0, +0.0, +1.0), Vector3f(-1.0, +0.0, +0.0),
+  Vector3f(+0.0, +1.0, +0.0), Vector3f(+0.0, -1.0, +0.0)};
+
+std::array<Vector2f, 6> box_uv{ 
+  Vector2f{0.0f, 0.0f}, Vector2f{1.0f, 0.0f}, Vector2f{1.0f, 1.0f},
+  Vector2f{1.0f, 1.0f}, Vector2f{0.0f, 1.0f}, Vector2f{0.0f, 0.0f}};
+
+std::array<uint32_t, 36> box_indices{
+  0, 1, 2, 2, 3, 0, 1, 5, 6, 6, 2, 1, 5, 4, 7, 7, 6, 5, 
+  4, 0, 3, 3, 7, 4, 3, 2, 6, 6, 7, 3, 4, 5, 1, 1, 0, 4};
 // clang-format on
 
 std::array<Vertex, 36> MakeBox() {
-  return std::array<Vertex, 36>{
-    // Right face
-    Vertex{{+0.5f, +0.5f, +0.5f}, {+1.0f, +0.0f, +0.0f}, {1.0f, 0.0f}}, // top-left
-    Vertex{{+0.5f, -0.5f, -0.5f}, {+1.0f, +0.0f, +0.0f}, {0.0f, 1.0f}}, // bottom-right
-    Vertex{{+0.5f, +0.5f, -0.5f}, {+1.0f, +0.0f, +0.0f}, {1.0f, 1.0f}}, // top-right
-    Vertex{{+0.5f, -0.5f, -0.5f}, {+1.0f, +0.0f, +0.0f}, {0.0f, 1.0f}}, // bottom-right
-    Vertex{{+0.5f, +0.5f, +0.5f}, {+1.0f, +0.0f, +0.0f}, {1.0f, 0.0f}}, // top-left
-    Vertex{{+0.5f, -0.5f, +0.5f}, {+1.0f, +0.0f, +0.0f}, {0.0f, 0.0f}}, // bottom-left
-    // Left face
-    Vertex{{-0.5f, +0.5f, +0.5f}, {-1.0f, +0.0f, +0.0f}, {1.0f, 0.0f}}, // top-right
-    Vertex{{-0.5f, +0.5f, -0.5f}, {-1.0f, +0.0f, +0.0f}, {1.0f, 1.0f}}, // top-left
-    Vertex{{-0.5f, -0.5f, -0.5f}, {-1.0f, +0.0f, +0.0f}, {0.0f, 1.0f}}, // bottom-left
-    Vertex{{-0.5f, -0.5f, -0.5f}, {-1.0f, +0.0f, +0.0f}, {0.0f, 1.0f}}, // bottom-left
-    Vertex{{-0.5f, -0.5f, +0.5f}, {-1.0f, +0.0f, +0.0f}, {0.0f, 0.0f}}, // bottom-right
-    Vertex{{-0.5f, +0.5f, +0.5f}, {-1.0f, +0.0f, +0.0f}, {1.0f, 0.0f}}, // top-right
-    // Top face
-    Vertex{{-0.5f, +0.5f, -0.5f}, {+0.0f, +1.0f, +0.0f}, {0.0f, 1.0f}}, // top-left
-    Vertex{{+0.5f, +0.5f, +0.5f}, {+0.0f, +1.0f, +0.0f}, {1.0f, 0.0f}}, // bottom-right
-    Vertex{{+0.5f, +0.5f, -0.5f}, {+0.0f, +1.0f, +0.0f}, {1.0f, 1.0f}}, // top-right
-    Vertex{{+0.5f, +0.5f, +0.5f}, {+0.0f, +1.0f, +0.0f}, {1.0f, 0.0f}}, // bottom-right
-    Vertex{{-0.5f, +0.5f, -0.5f}, {+0.0f, +1.0f, +0.0f}, {0.0f, 1.0f}}, // top-left
-    Vertex{{-0.5f, +0.5f, +0.5f}, {+0.0f, +1.0f, +0.0f}, {0.0f, 0.0f}}, // bottom-left
-    // Bottom face
-    Vertex{{-0.5f, -0.5f, -0.5f}, {+0.0f, -1.0f, +0.0f}, {0.0f, 1.0f}}, // top-right
-    Vertex{{+0.5f, -0.5f, -0.5f}, {+0.0f, -1.0f, +0.0f}, {1.0f, 1.0f}}, // top-left
-    Vertex{{+0.5f, -0.5f, +0.5f}, {+0.0f, -1.0f, +0.0f}, {1.0f, 0.0f}}, // bottom-left
-    Vertex{{+0.5f, -0.5f, +0.5f}, {+0.0f, -1.0f, +0.0f}, {1.0f, 0.0f}}, // bottom-left
-    Vertex{{-0.5f, -0.5f, +0.5f}, {+0.0f, -1.0f, +0.0f}, {0.0f, 0.0f}}, // bottom-right
-    Vertex{{-0.5f, -0.5f, -0.5f}, {+0.0f, -1.0f, +0.0f}, {0.0f, 1.0f}}, // top-right
-    // Front face
-    Vertex{{-0.5f, -0.5f, +0.5f}, {+0.0f, +0.0f, +1.0f}, {0.0f, 0.0f}}, // bottom-left
-    Vertex{{+0.5f, -0.5f, +0.5f}, {+0.0f, +0.0f, +1.0f}, {1.0f, 0.0f}}, // bottom-right
-    Vertex{{+0.5f, +0.5f, +0.5f}, {+0.0f, +0.0f, +1.0f}, {1.0f, 1.0f}}, // top-right
-    Vertex{{+0.5f, +0.5f, +0.5f}, {+0.0f, +0.0f, +1.0f}, {1.0f, 1.0f}}, // top-right
-    Vertex{{-0.5f, +0.5f, +0.5f}, {+0.0f, +0.0f, +1.0f}, {0.0f, 1.0f}}, // top-left
-    Vertex{{-0.5f, -0.5f, +0.5f}, {+0.0f, +0.0f, +1.0f}, {0.0f, 0.0f}}, // bottom-left
-    // Back face
-    Vertex{{-0.5f, -0.5f, -0.5f}, {+0.0f, +0.0f, -1.0f}, {0.0f, 0.0f}},  // Bottom-left
-    Vertex{{+0.5f, +0.5f, -0.5f}, {+0.0f, +0.0f, -1.0f}, {1.0f, 1.0f}},  // top-right
-    Vertex{{+0.5f, -0.5f, -0.5f}, {+0.0f, +0.0f, -1.0f}, {1.0f, 0.0f}},  // bottom-right
-    Vertex{{+0.5f, +0.5f, -0.5f}, {+0.0f, +0.0f, -1.0f}, {1.0f, 1.0f}},  // top-right
-    Vertex{{-0.5f, -0.5f, -0.5f}, {+0.0f, +0.0f, -1.0f}, {0.0f, 0.0f}},  // bottom-left
-    Vertex{{-0.5f, +0.5f, -0.5f}, {+0.0f, +0.0f, -1.0f}, {0.0f, 1.0f}}}; // top-left
-}
-
-// clang-format off
-std::array<Vertex, 24> MakeOctahedron() {
-  auto vertices = std::array<Vertex, 24>{
-    // Left Top Front face
-    Vertex{{-0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, +0.0f, +0.5f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, +0.5f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    // Right Top Front face
-    Vertex{{+0.0f, +0.0f, +0.5f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, +0.5f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    // Right Top Back face
-    Vertex{{+0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, +0.0f, -0.5f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, +0.5f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    // Left Top Back face
-    Vertex{{+0.0f, +0.0f, -0.5f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{-0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, +0.5f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    // Left Bottom Front face
-    Vertex{{-0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, -0.5f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, +0.0f, +0.5f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    // Right Bottom Front face
-    Vertex{{+0.0f, +0.0f, +0.5f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, -0.5f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    // Right Bottom Back face
-    Vertex{{+0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, -0.5f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, +0.0f, -0.5f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    // Left Bottom Back face
-    Vertex{{+0.0f, +0.0f, -0.5f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{+0.0f, -0.5f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}},
-    Vertex{{-0.5f, +0.0f, +0.0f}, {+0.0f, +0.0f, +0.0f}, {0.0f, 0.0f}}};
-
-  for (uint32_t i = 0; i < vertices.size() - 2; i += 3) {
-    auto normal = glm::triangleNormal(vertices[i + 0].position_, 
-                                      vertices[i + 1].position_,
-                                      vertices[i + 2].position_);
-    vertices[i + 0].normal_ = normal;
-    vertices[i + 1].normal_ = normal;
-    vertices[i + 2].normal_ = normal;
+  std::array<Vertex, 36> data;
+  for (uint32_t i = 0; i < 36; i++) {
+    data[i].position_ = box_vertices[box_indices[i]];
+    data[i].normal_ = box_normals[i / 6];
+    data[i].uv_ = box_uv[i % 6];
   }
-
-  return vertices;
+  return data;
 }
-// clang-format on
 
 } // namespace Gloom
