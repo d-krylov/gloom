@@ -39,10 +39,10 @@ set(GRAPHICS_SOURCES
 )
 
 set(EXTERNAL_SOURCES
-  ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui_draw.cpp
-  ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui_tables.cpp
-  ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui_widgets.cpp
-  ${PROJECT_SOURCE_DIR}/external/imgui/sources/imgui.cpp
+  ${imgui_SOURCE_DIR}/imgui_draw.cpp
+  ${imgui_SOURCE_DIR}/imgui_tables.cpp
+  ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+  ${imgui_SOURCE_DIR}/imgui.cpp
   ${PROJECT_SOURCE_DIR}/external/glad/glad.c
   ${PROJECT_SOURCE_DIR}/external/stb/stb_image.cpp
   ${PROJECT_SOURCE_DIR}/external/tinyobjloader/tiny_obj_loader.cc
@@ -62,7 +62,6 @@ set(SCENE_SOURCES
 
 set(GLOOM_SOURCES
   ${MESH_SOURCES}
-  ${IMGUI_SOURCES}
   ${GLOOM_GUI_SOURCES}
   ${EXTERNAL_SOURCES}
   ${GRAPHICS_SOURCES}
@@ -85,7 +84,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
   ${PROJECT_SOURCE_DIR}
   ${ASSIMP_INCLUDE_DIR}
   ${PROJECT_SOURCE_DIR}/external/
-  ${PROJECT_SOURCE_DIR}/external/imgui/include
+  ${imgui_SOURCE_DIR}
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 

@@ -17,6 +17,7 @@ find_package(assimp REQUIRED)
 include(cmake/Libraries.cmake)
 
 FetchContent_MakeAvailable(glm)
+FetchContent_MakeAvailable(imgui)
 
 add_definitions(-DGLM_ENABLE_EXPERIMENTAL)
 
