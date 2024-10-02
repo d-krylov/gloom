@@ -18,7 +18,6 @@ set(GLOOM_GUI_SOURCES
   ${GLOOM_SOURCE_DIR}/gui/imgui/imgui_renderer.cpp
   ${GLOOM_SOURCE_DIR}/gui/imgui/imgui_layer.cpp
   ${GLOOM_SOURCE_DIR}/gui/window.cpp
-  ${GLOOM_SOURCE_DIR}/gui/key.cpp
   ${GLOOM_SOURCE_DIR}/gui/window_callback.cpp
 )
 

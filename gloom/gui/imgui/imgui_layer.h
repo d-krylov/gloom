@@ -6,6 +6,12 @@
 namespace Gloom {
 
 class Window;
+class Event;
+class KeyEvent;
+class MouseButtonEvent;
+class MouseScrollEvent;
+class MouseMoveEvent;
+class CharEvent;
 
 class ImGuiLayer : public Layer {
 public:

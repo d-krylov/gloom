@@ -1,6 +1,5 @@
 #include "gloom/gui/include/event.h"
 #include "gloom/gui/include/window.h"
-#include <GLFW/glfw3.h>
 
 namespace Gloom {
 
@@ -11,7 +10,7 @@ Window *GetWindow(GLFWwindow *native_window) {
 void KeyCallback(GLFWwindow *native_window, int32_t key, int32_t scan, int32_t action, int32_t m) {
   auto *window = GetWindow(native_window);
   auto &handler = window->GetEventCallback();
-  KeyEvent event(ToKey(key), scan, ToAction(action));
+  KeyEvent event(Key(key), scan, Action(action));
   handler(event);
 }
 
@@ -39,7 +38,7 @@ void ScrollCallback(GLFWwindow *native_window, double x, double y) {
 void MouseButtonCallback(GLFWwindow *native_window, int32_t button, int32_t action, int32_t mods) {
   auto *window = GetWindow(native_window);
   auto &handler = window->GetEventCallback();
-  MouseButtonEvent event(ToMouseButton(button), ToAction(action));
+  auto event = MouseButtonEvent(MouseButton(button), Action(action));
   handler(event);
 }
 

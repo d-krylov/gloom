@@ -1,9 +1,9 @@
 #ifndef GLOOM_LAYER_H
 #define GLOOM_LAYER_H
 
-#include "gloom/gui/include/event.h"
-
 namespace Gloom {
+
+class Event;
 
 class Layer {
 public:

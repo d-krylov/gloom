@@ -4,6 +4,7 @@
 #include "application.h"
 #include "gloom/core/include/tools.h"
 #include "gloom/graphics/include/graphics.h"
+#include "gloom/gui/include/event.h"
 #include "gloom/mesh/include/model.h"
 #include "gloom/mesh/include/primitives.h"
 #include "gloom/mesh/include/terrain.h"

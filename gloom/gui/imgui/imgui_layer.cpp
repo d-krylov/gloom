@@ -1,8 +1,8 @@
 #include "imgui_layer.h"
 #include "gloom/core/include/macros.h"
+#include "gloom/gui/include/event.h"
 #include "gloom/gui/include/window.h"
 #include "imgui.h"
-#include <GLFW/glfw3.h>
 
 namespace Gloom {
 
@@ -62,7 +62,7 @@ bool ImGuiLayer::OnKeyEvent(const KeyEvent &event) {
   auto key = ToImGuiKey(event.GetKey());
   UpdateKeyModifiers(window_->GetNativeWindow());
   io.AddKeyEvent(key, (action == Action::PRESS));
-  io.SetKeyEventNativeData(key, ToNativeKey(event.GetKey()), event.GetScanCode());
+  io.SetKeyEventNativeData(key, uint32_t(event.GetKey()), event.GetScanCode());
   return true;
 }
 
