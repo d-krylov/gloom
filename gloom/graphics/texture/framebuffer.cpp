@@ -14,17 +14,17 @@ uint16_t Framebuffer::GetStatus() const {
 }
 
 void Framebuffer::Attach(const FramebufferAttachment &attachment) {
+  auto level = attachment.level_;
+  auto layer = attachment.layer_;
+  auto type = uint16_t(attachment.type_);
   if (attachment.texture_ != nullptr) {
     if (attachment.texture_->IsLayered()) {
-      glNamedFramebufferTextureLayer(framebuffer_, uint16_t(attachment.type_), *attachment.texture_,
-                                     attachment.level_, attachment.layer_);
+      glNamedFramebufferTextureLayer(framebuffer_, type, *attachment.texture_, level, layer);
     } else {
-      glNamedFramebufferTexture(framebuffer_, uint16_t(attachment.type_), *attachment.texture_,
-                                attachment.level_);
+      glNamedFramebufferTexture(framebuffer_, type, *attachment.texture_, level);
     }
   } else if (attachment.renderbuffer_ != nullptr) {
-    glNamedFramebufferRenderbuffer(framebuffer_, uint16_t(attachment.type_), GL_RENDERBUFFER,
-                                   *attachment.renderbuffer_);
+    glNamedFramebufferRenderbuffer(framebuffer_, type, GL_RENDERBUFFER, *attachment.renderbuffer_);
   }
 
   CORE_VERIFY(GetStatus());

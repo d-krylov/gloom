@@ -1,4 +1,4 @@
-#include "gloom/mesh/include/terrain.h"
+#include "mesh/include/terrain.h"
 
 namespace Gloom {
 

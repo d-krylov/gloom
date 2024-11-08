@@ -1,9 +1,20 @@
-#include "gloom/graphics/include/graphics_command.h"
+#include "graphics/include/graphics_command.h"
 
 namespace Gloom ::Command {
 
-void Clear(bool c, bool d, bool s) {
-  glClear((GL_COLOR_BUFFER_BIT * c) | (GL_DEPTH_BUFFER_BIT * d) | (GL_STENCIL_BUFFER_BIT * s));
+void ClearColor(Vector4f color) {
+  glClearColor(color.r, color.g, color.b, color.a);
+  glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void ClearDepth(Vector4f depth) {
+  glClearColor(depth.r, depth.g, depth.b, depth.a);
+  glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void ClearStencil(Vector4f stencil) {
+  glClearColor(stencil.r, stencil.g, stencil.b, stencil.a);
+  glClear(GL_STENCIL_BUFFER_BIT);
 }
 
 void SetViewport(int32_t x, int32_t y, uint32_t width, uint32_t height) {
@@ -49,20 +60,6 @@ void SetBlendOperation(BlendOperation op) { glBlendEquation(uint16_t(op)); }
 
 void SetBlendFunction(BlendFactor srgb, BlendFactor drgb, BlendFactor sa, BlendFactor da) {
   glBlendFuncSeparate(uint16_t(srgb), uint16_t(drgb), uint16_t(sa), uint16_t(da));
-}
-
-ClipOrigin GetClipOrigin() {
-  int32_t ret = 0;
-  glGetIntegerv(GL_CLIP_ORIGIN, &ret);
-  switch (ret) {
-  case uint16_t(ClipOrigin::LOWER_LEFT):
-    return ClipOrigin::LOWER_LEFT;
-  case uint16_t(ClipOrigin::UPPER_LEFT):
-    return ClipOrigin::UPPER_LEFT;
-  default:
-    UNREACHABLE();
-    break;
-  }
 }
 
 void SetPolygonMode(PolygonMode mode) {

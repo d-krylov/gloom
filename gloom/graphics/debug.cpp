@@ -1,4 +1,4 @@
-#include "gloom/graphics/include/debug.h"
+#include "graphics/include/debug.h"
 #include <cstdio>
 
 namespace Gloom {

@@ -1,10 +1,5 @@
 set(EXECUTABLES
-  compute_raytracing
   viewer
-  primitives
-  isometric
-  #skybox
-  #terrain
 )
 
 foreach(exe ${EXECUTABLES})

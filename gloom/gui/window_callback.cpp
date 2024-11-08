@@ -1,5 +1,5 @@
-#include "gloom/gui/include/event.h"
-#include "gloom/gui/include/window.h"
+#include "gui/include/event.h"
+#include "gui/include/window.h"
 
 namespace Gloom {
 

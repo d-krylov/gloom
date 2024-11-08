@@ -1,7 +1,7 @@
 #ifndef GLOOM_GRAPHICS_PIPELINE_H
 #define GLOOM_GRAPHICS_PIPELINE_H
 
-#include "shader_uniform.h"
+#include "graphics/include/graphics_types.h"
 #include <array>
 #include <filesystem>
 #include <string>
@@ -17,11 +17,7 @@ public:
   operator uint32_t() const { return graphics_pipeline_; }
 
   template <typename T>
-  void SetUniform(ShaderKind kind, std::string_view name, T value, bool transpose = false) {
-    auto index = GetShaderIndex(kind);
-    auto location = glGetUniformLocation(shaders_[index], name.data());
-    SetShaderUniform(shaders_[index], location, value, transpose);
-  }
+  void SetUniform(ShaderKind kind, std::string_view name, T value, bool transpose = false);
 
   void Bind() const;
 

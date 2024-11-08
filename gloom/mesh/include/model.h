@@ -1,18 +1,11 @@
 #ifndef GLOOM_MODEL_H
 #define GLOOM_MODEL_H
 
-#include "gloom/core/include/image.h"
-#include "gloom/graphics/texture/texture_2d.h"
+#include "graphics/include/graphics.h"
 #include "material.h"
 #include "vertex.h"
-#include <filesystem>
 #include <map>
-#include <memory>
 #include <string>
-
-struct aiNode;
-struct aiScene;
-struct aiMesh;
 
 namespace Gloom {
 
@@ -26,6 +19,15 @@ struct Mesh {
 
 class Model {
 public:
+  Model();
+  Model(Model &&);
+  Model &operator=(Model &&);
+
+  NO_COPY_SEMANTIC(Model)
+
+  Model(const std::filesystem::path &path);
+
+protected:
   void LoadAssimp(const std::filesystem::path &path);
   void LoadWavefront(const std::filesystem::path &path);
 

@@ -1,7 +1,7 @@
 #ifndef GLOOM_LIGHT_H
 #define GLOOM_LIGHT_H
 
-#include "gloom/core/include/core_types.h"
+#include "core/include/core_types.h"
 
 namespace Gloom {
 

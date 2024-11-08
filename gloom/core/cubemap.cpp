@@ -1,5 +1,5 @@
-#include "gloom/core/include/cubemap.h"
-#include "gloom/core/include/tools.h"
+#include "core/include/cubemap.h"
+#include "core/include/tools.h"
 #include "stb/stb_image.h"
 
 namespace Gloom {

@@ -1,10 +1,9 @@
 #ifndef GLOOM_APPLICATION_H
 #define GLOOM_APPLICATION_H
 
-#include "gloom/gui/imgui/imgui_layer.h"
-#include "gloom/gui/imgui/imgui_renderer.h"
-#include "gloom/gui/include/window.h"
-#include "gloom/renderer/include/shader_library.h"
+#include "gui/imgui/imgui_layer.h"
+#include "gui/imgui/imgui_renderer.h"
+#include "gui/include/window.h"
 #include <string>
 
 namespace Gloom {
@@ -27,7 +26,6 @@ private:
   Window window_;
   ImGuiLayer imgui_layer_;
   ImGuiRenderer imgui_renderer_;
-  ShaderLibrary shader_library_;
   std::vector<Layer *> layers_;
 
   static Application *instance_;

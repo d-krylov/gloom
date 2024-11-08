@@ -1,7 +1,7 @@
 #ifndef GLOOM_CUBEMAP_H
 #define GLOOM_CUBEMAP_H
 
-#include "gloom/graphics/include/graphics_types.h"
+#include "graphics/include/graphics_types.h"
 #include <span>
 
 namespace Gloom {

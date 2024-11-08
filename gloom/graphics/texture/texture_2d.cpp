@@ -1,5 +1,5 @@
 #include "texture_2d.h"
-#include "gloom/core/include/image.h"
+#include "core/include/image.h"
 
 namespace Gloom {
 

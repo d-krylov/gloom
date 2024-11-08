@@ -1,8 +1,8 @@
 #ifndef PRIMITIVE_RENDERER_H
 #define PRIMITIVE_RENDERER_H
 
-#include "gloom/core/include/concepts.h"
-#include "gloom/graphics/include/graphics.h"
+#include "core/include/concepts.h"
+#include "graphics/include/graphics.h"
 
 namespace Gloom {
 
@@ -19,6 +19,7 @@ public:
 private:
   VertexArray vertex_array_;
   Buffer storage_buffer_;
+  GraphicsPipeline graphics_pipeline_;
 };
 
 } // namespace Gloom

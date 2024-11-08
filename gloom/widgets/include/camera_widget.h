@@ -1,8 +1,8 @@
 #ifndef GLOOM_CAMERA_WIDGET_H
 #define GLOOM_CAMERA_WIDGET_H
 
-#include "gloom/scene/include/orthographic_camera.h"
-#include "gloom/scene/include/perspective_camera.h"
+#include "scene/include/orthographic_camera.h"
+#include "scene/include/perspective_camera.h"
 
 namespace Gloom {
 

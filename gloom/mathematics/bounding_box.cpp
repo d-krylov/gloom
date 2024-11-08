@@ -1,4 +1,4 @@
-#include "gloom/mathematics/include/bounding_box.h"
+#include "mathematics/include/bounding_box.h"
 
 namespace Gloom {
 

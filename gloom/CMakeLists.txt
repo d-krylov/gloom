@@ -6,12 +6,14 @@ set(MESH_SOURCES
   ${GLOOM_SOURCE_DIR}/mesh/assimp_loader.cpp
   ${GLOOM_SOURCE_DIR}/mesh/terrain.cpp
   ${GLOOM_SOURCE_DIR}/mesh/transform.cpp
+  ${GLOOM_SOURCE_DIR}/mesh/model.cpp
 )
 
 set(GLOOM_WIDGET_SOURCES  
   ${GLOOM_SOURCE_DIR}/widgets/camera_widget.cpp
   ${GLOOM_SOURCE_DIR}/widgets/transform_widget.cpp
   ${GLOOM_SOURCE_DIR}/widgets/light_widget.cpp
+  ${GLOOM_SOURCE_DIR}/widgets/editor_widget.cpp
 )
 
 set(GLOOM_GUI_SOURCES
@@ -48,15 +50,21 @@ set(EXTERNAL_SOURCES
 )
 
 set(RENDERER_SOURCES
+  ${GLOOM_SOURCE_DIR}/renderer/renderer.cpp
   ${GLOOM_SOURCE_DIR}/renderer/model_renderer.cpp
   ${GLOOM_SOURCE_DIR}/renderer/primitive_renderer.cpp
-  ${GLOOM_SOURCE_DIR}/renderer/shader_library.cpp
 )
 
 set(SCENE_SOURCES
   ${GLOOM_SOURCE_DIR}/scene/camera.cpp
   ${GLOOM_SOURCE_DIR}/scene/perspective_camera.cpp
   ${GLOOM_SOURCE_DIR}/scene/orthographic_camera.cpp
+)
+
+set(CORE_SOURCES
+  ${GLOOM_SOURCE_DIR}/core/tools.cpp
+  ${GLOOM_SOURCE_DIR}/core/image.cpp
+  ${GLOOM_SOURCE_DIR}/core/cubemap.cpp
 )
 
 set(GLOOM_SOURCES
@@ -67,9 +75,7 @@ set(GLOOM_SOURCES
   ${SCENE_SOURCES}
   ${GLOOM_WIDGET_SOURCES}
   ${RENDERER_SOURCES}
-  ${GLOOM_SOURCE_DIR}/core/tools.cpp
-  ${GLOOM_SOURCE_DIR}/core/image.cpp
-  ${GLOOM_SOURCE_DIR}/core/cubemap.cpp
+  ${CORE_SOURCES}
   ${GLOOM_SOURCE_DIR}/mathematics/triangle.cpp
   ${GLOOM_SOURCE_DIR}/mathematics/bounding_box.cpp
   ${GLOOM_SOURCE_DIR}/application/application.cpp
@@ -80,7 +86,7 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-  ${PROJECT_SOURCE_DIR}
+  ${GLOOM_SOURCE_DIR}
   ${ASSIMP_INCLUDE_DIR}
   ${PROJECT_SOURCE_DIR}/external/
   ${imgui_SOURCE_DIR}
@@ -92,3 +98,5 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
   glm::glm
   assimp
 )
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC GLOOM_PROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")

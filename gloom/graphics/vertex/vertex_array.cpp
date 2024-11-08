@@ -1,6 +1,5 @@
 #include "vertex_array.h"
-#include "gloom/graphics/buffer/index_buffer.h"
-#include "gloom/graphics/buffer/vertex_buffer.h"
+#include "graphics/buffer/buffers.h"
 
 namespace Gloom {
 

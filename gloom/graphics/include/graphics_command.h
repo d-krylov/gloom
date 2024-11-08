@@ -6,7 +6,9 @@
 
 namespace Gloom ::Command {
 
-void Clear(bool color, bool depth = false, bool stencil = false);
+void ClearColor(Vector4f color = Vector4f(0.0f, 0.0f, 0.0f, 0.0f));
+void ClearDepth(Vector4f depth = Vector4f(0.0f, 0.0f, 0.0f, 0.0f));
+void ClearStencil(Vector4f stencil = Vector4f(0.0f, 0.0f, 0.0f, 0.0f));
 
 void DrawArrays(int32_t first, uint32_t count, PrimitiveKind kind = PrimitiveKind::TRIANGLES);
 void DrawElements(uint32_t count, uint64_t offset = 0, IndexType index = IndexType::UNSIGNED_INT,
@@ -34,8 +36,6 @@ void SetViewport(int32_t x, int32_t y, uint32_t width, uint32_t height);
 
 void DispatchCompute(uint32_t groups_x, uint32_t groups_y, uint32_t groups_z);
 void MemoryBarrier(BarrierBit bb);
-
-ClipOrigin GetClipOrigin();
 
 } // namespace Gloom::Command
 

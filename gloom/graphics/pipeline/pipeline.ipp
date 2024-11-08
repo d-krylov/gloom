@@ -1,7 +1,8 @@
 #ifndef GLOOM_SHADER_UNIFORM_H
 #define GLOOM_SHADER_UNIFORM_H
 
-#include "gloom/graphics/include/graphics_types.h"
+#include "compute_pipeline.h"
+#include "graphics_pipeline.h"
 #include <type_traits>
 
 namespace Gloom {
@@ -29,6 +30,19 @@ inline void SetShaderUniform(uint32_t shader, int32_t location, T const &value, 
   }
 }
 // clang-format on
+
+template <typename T>
+void GraphicsPipeline::SetUniform(ShaderKind kind, std::string_view name, T value, bool transpose) {
+  auto index = GetShaderIndex(kind);
+  auto location = glGetUniformLocation(shaders_[index], name.data());
+  SetShaderUniform(shaders_[index], location, value, transpose);
+}
+
+template <typename T>
+void ComputePipeline::SetUniform(std::string_view name, T value, bool transpose) {
+  auto location = glGetUniformLocation(compute_shader_, name.data());
+  SetShaderUniform(compute_shader_, location, value, transpose);
+}
 
 } // namespace Gloom
 

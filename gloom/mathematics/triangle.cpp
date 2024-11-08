@@ -1,4 +1,4 @@
-#include "gloom/mathematics/include/triangle.h"
+#include "mathematics/include/triangle.h"
 
 namespace Gloom {
 

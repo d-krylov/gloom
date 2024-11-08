@@ -1,8 +1,8 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "gloom/core/include/cubemap.h"
-#include "gloom/graphics/include/graphics_types.h"
+#include "core/include/cubemap.h"
+#include "graphics/include/graphics_types.h"
 #include <span>
 
 namespace Gloom {

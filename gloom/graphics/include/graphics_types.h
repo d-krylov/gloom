@@ -1,17 +1,19 @@
 #ifndef GLOOM_TYPES_H
 #define GLOOM_TYPES_H
 
+#include "core/include/concepts.h"
+#include "core/include/core_types.h"
+#include "core/include/macros.h"
+#include "core/include/tools.h"
 #include "glad/glad.h"
-#include "gloom/core/include/concepts.h"
-#include "gloom/core/include/core_assert.h"
-#include "gloom/core/include/core_types.h"
-#include "gloom/core/include/macros.h"
 #include <array>
 
 namespace Gloom {
 
-enum class Access { READ = GL_READ_ONLY, WRITE = GL_WRITE_ONLY, READ_WRITE = GL_READ_WRITE };
-enum class PolygonMode { POINT = GL_POINT, LINE = GL_LINE, FILL = GL_FILL };
+enum class PolygonMode {
+#define POLYGON_MODE(X) X = GL_##X,
+#include "graphics_types.def"
+};
 
 enum class PixelFormat {
 #define PIXEL_FORMAT(X) X = GL_##X,
@@ -52,6 +54,16 @@ enum class ShaderBit {
 
 enum class BufferStorage {
 #define BUFFER_STORAGE(X) X = GL_##X##_BIT,
+#include "graphics_types.def"
+};
+
+enum class MapAccess {
+#define MAP_ACCESS(X) X = GL_MAP_##X##_BIT,
+#include "graphics_types.def"
+};
+
+enum class Access {
+#define ACCESS(X) X = GL_##X,
 #include "graphics_types.def"
 };
 
@@ -111,22 +123,14 @@ enum class PrimitiveDataType {
 };
 
 enum class PixelType {
-  BYTE = GL_BYTE,
-  UNSIGNED_BYTE = GL_UNSIGNED_BYTE,
-  SHORT = GL_SHORT,
-  UNSIGNED_SHORT = GL_UNSIGNED_SHORT,
-  INT = GL_INT,
-  UNSIGNED_INT = GL_UNSIGNED_INT,
-  FLOAT = GL_FLOAT
+#define PIXEL_TYPE(X) X = GL_##X,
+#include "graphics_types.def"
 };
 
 enum class IndexType {
-  BYTE = GL_UNSIGNED_BYTE,
-  UNSIGNED_SHORT = GL_UNSIGNED_SHORT,
-  UNSIGNED_INT = GL_UNSIGNED_INT
+#define INDEX_TYPE(X) X = GL_##X,
+#include "graphics_types.def"
 };
-
-enum class ClipOrigin { LOWER_LEFT = GL_LOWER_LEFT, UPPER_LEFT = GL_UPPER_LEFT };
 
 struct DrawArraysIndirectCommand {
   uint32_t count_{0};
@@ -144,6 +148,7 @@ struct DrawElementsIndirectCommand {
 };
 
 ALLOW_BITMASK_ENUM(BufferStorage);
+ALLOW_BITMASK_ENUM(MapAccess);
 
 [[nodiscard]] uint32_t GetShaderIndex(ShaderKind kind);
 [[nodiscard]] std::optional<ShaderKind> GetShaderKind(const std::filesystem::path &path);

@@ -1,31 +1,31 @@
 #ifndef GLOOM_IMAGE_H
 #define GLOOM_IMAGE_H
 
-#include "gloom/graphics/include/graphics_types.h"
+#include "graphics/include/graphics_types.h"
 #include <filesystem>
-#include <span>
+#include <vector>
 
 namespace Gloom {
 
 class Image {
 public:
+  Image(int32_t width = 1, int32_t height = 1, int32_t channels = 4);
   Image(const std::filesystem::path &path);
 
-  ~Image();
+  [[nodiscard]] std::span<const std::byte> GetData() const { return data_; }
 
-  [[nodiscard]] std::span<const std::byte> GetData() const { return image_data_; }
-
-  [[nodiscard]] const Vector2i &GetSize() const { return size_; }
-  [[nodiscard]] int32_t GetWidth() const { return size_.x; }
-  [[nodiscard]] int32_t GetHeight() const { return size_.y; }
+  [[nodiscard]] int32_t GetWidth() const { return width_; }
+  [[nodiscard]] int32_t GetHeight() const { return height_; }
   [[nodiscard]] int32_t GetChannels() const { return channels_; }
+  [[nodiscard]] int32_t GetSize() const { return width_ * height_ * channels_; }
 
   [[nodiscard]] InternalFormat GetFormat() const { return GetInternalFormat(channels_); }
 
 private:
   int32_t channels_;
-  Vector2i size_;
-  std::span<std::byte> image_data_;
+  int32_t width_;
+  int32_t height_;
+  std::vector<std::byte> data_;
 };
 
 } // namespace Gloom

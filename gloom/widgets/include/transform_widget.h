@@ -1,7 +1,7 @@
 #ifndef GLOOM_TRANSFORM_WIDGET_H
 #define GLOOM_TRANSFORM_WIDGET_H
 
-#include "gloom/mesh/include/transform.h"
+#include "mesh/include/transform.h"
 
 namespace Gloom {
 

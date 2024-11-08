@@ -18,8 +18,8 @@ template <AllowedBitmaskEnum Enum> Enum operator|(Enum LHS, Enum RHS) {
   return static_cast<Enum>(static_cast<underlying>(LHS) | static_cast<underlying>(RHS));
 }
 
-template <typename R, typename U>
-concept Range = std::ranges::contiguous_range<R> &&std::same_as<std::ranges::range_value_t<R>, U>;
+template <typename R>
+concept ContiguousSizedRange = std::ranges::contiguous_range<R> &&std::ranges::sized_range<R>;
 
 } // namespace Gloom
 

@@ -1,7 +1,7 @@
 #ifndef IMGUI_RENDERER_H
 #define IMGUI_RENDERER_H
 
-#include "gloom/graphics/include/graphics.h"
+#include "graphics/include/graphics.h"
 #include <memory>
 
 struct ImDrawData;

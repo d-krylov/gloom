@@ -1,7 +1,7 @@
 #include "imgui_layer.h"
-#include "gloom/core/include/macros.h"
-#include "gloom/gui/include/event.h"
-#include "gloom/gui/include/window.h"
+#include "core/include/macros.h"
+#include "gui/include/event.h"
+#include "gui/include/window.h"
 #include "imgui.h"
 
 namespace Gloom {
@@ -11,7 +11,7 @@ ImGuiKey ToImGuiKey(Key key) {
 #define KEY(X, Y)                                                                                  \
   case Key::K_##X:                                                                                 \
     return ImGuiKey::ImGuiKey_##Y;
-#include "gloom/gui/include/key.def"
+#include "gui/include/key.def"
   default:
     UNREACHABLE();
     break;

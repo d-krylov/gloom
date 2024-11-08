@@ -1,4 +1,5 @@
-#include "gloom/mesh/include/model.h"
+#include "core/include/image.h"
+#include "mesh/include/model.h"
 #include "tinyobjloader/tiny_obj_loader.h"
 #include <iostream>
 #include <unordered_set>
@@ -10,13 +11,18 @@ constexpr uint32_t v2_size = 2;
 
 void SetMeshMaterial(const tinyobj::ObjReader &reader, Mesh &mesh, const tinyobj::shape_t &shape) {
   auto &materials = reader.GetMaterials();
-  auto material_index = shape.mesh.material_ids[0];
-  auto &material = materials[material_index];
-  mesh.material_.names_.ambient_ = material.ambient_texname;
-  mesh.material_.names_.diffuse_ = material.diffuse_texname;
-  mesh.material_.names_.specular_ = material.specular_texname;
-  mesh.material_.names_.bump_ = material.bump_texname;
-  mesh.material_.shininess = material.shininess;
+  if (materials.size() > 0) {
+    auto material_index = shape.mesh.material_ids[0];
+    auto &material = materials[material_index];
+    mesh.material_.names_.ambient_ =
+      material.ambient_texname.empty() ? "default" : material.ambient_texname;
+    mesh.material_.names_.diffuse_ =
+      material.diffuse_texname.empty() ? "default" : material.diffuse_texname;
+    mesh.material_.names_.specular_ =
+      material.specular_texname.empty() ? "default" : material.specular_texname;
+    mesh.material_.names_.bump_ = material.bump_texname;
+    mesh.material_.shininess = material.shininess;
+  }
 }
 
 void LoadMeshes(const tinyobj::ObjReader &reader, std::vector<Vertex> &vertices,
@@ -116,14 +122,10 @@ void LoadMaterials(const std::filesystem::path &path, const tinyobj::ObjReader &
 void Model::LoadWavefront(const std::filesystem::path &path) {
   tinyobj::ObjReader reader;
   tinyobj::ObjReaderConfig reader_config;
-
-  path_ = path;
-
   auto status = reader.ParseFromFile(path.string(), reader_config);
-
   auto &attributes = reader.GetAttrib();
   auto &shapes = reader.GetShapes();
-
+  textures_.emplace("default", Texture2D(Image()));
   LoadMeshes(reader, vertices_, meshes_);
   LoadMaterials(path_, reader, textures_);
 }

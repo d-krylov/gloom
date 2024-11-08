@@ -1,4 +1,4 @@
-#include "gloom/widgets/include/camera_widget.h"
+#include "widgets/include/camera_widget.h"
 #include "imgui.h"
 
 namespace Gloom {

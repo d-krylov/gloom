@@ -1,4 +1,4 @@
-#include "gloom/graphics/include/graphics_types.h"
+#include "graphics/include/graphics_types.h"
 
 namespace Gloom {
 
@@ -7,7 +7,7 @@ std::size_t GetDataTypeComponentCount(DataType type) {
 #define GLSL_DATA_TYPE(X, Y, Z, W, V)                                                              \
   case DataType::X:                                                                                \
     return Y;
-#include "gloom/graphics/include/graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     UNREACHABLE();
     break;
@@ -19,7 +19,7 @@ std::size_t GetDataTypeComponentSize(DataType type) {
 #define GLSL_DATA_TYPE(X, Y, Z, W, V)                                                              \
   case DataType::X:                                                                                \
     return Z;
-#include "gloom/graphics/include/graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     UNREACHABLE();
     break;
@@ -31,7 +31,7 @@ PrimitiveDataType GetDataTypeComponentType(DataType type) {
 #define GLSL_DATA_TYPE(X, Y, Z, W, V)                                                              \
   case DataType::X:                                                                                \
     return PrimitiveDataType::W;
-#include "gloom/graphics/include/graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     UNREACHABLE();
     break;
@@ -49,7 +49,7 @@ uint32_t GetShaderIndex(ShaderKind kind) {
 #define SHADER_KIND(X, Y)                                                                          \
   case ShaderKind::X:                                                                              \
     return Y;
-#include "gloom/graphics/include/graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     UNREACHABLE();
     break;
@@ -61,7 +61,7 @@ bool IsTextureLayered(TextureTarget target) {
 #define TEXTURE_TARGET(X, D, L)                                                                    \
   case TextureTarget::X:                                                                           \
     return L;
-#include "gloom/graphics/include/graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     UNREACHABLE();
     break;
@@ -73,7 +73,7 @@ uint32_t GetTextureDimensions(TextureTarget target) {
 #define TEXTURE_TARGET(X, D, L)                                                                    \
   case TextureTarget::X:                                                                           \
     return D;
-#include "gloom/graphics/include/graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     UNREACHABLE();
     break;
@@ -85,7 +85,7 @@ std::pair<PixelFormat, PixelType> GetPixelFormatAndType(InternalFormat format) {
 #define TEXTURE_FORMAT(X, Y, Z)                                                                    \
   case InternalFormat::X:                                                                          \
     return std::make_pair(PixelFormat::Y, PixelType::Z);
-#include "gloom/graphics/include/graphics_types.def"
+#include "graphics/include/graphics_types.def"
   default:
     UNREACHABLE();
     break;

@@ -1,4 +1,4 @@
-#include "gloom/scene/include/perspective_camera.h"
+#include "scene/include/perspective_camera.h"
 
 namespace Gloom {
 

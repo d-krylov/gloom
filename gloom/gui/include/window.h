@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "gloom/core/include/core_types.h"
+#include "core/include/core_types.h"
 #include <functional>
 #include <string_view>
 
@@ -63,7 +63,7 @@ protected:
 private:
   GLFWwindow *native_window_;
   GLFWcursor *mouse_cursors_[GLFW_CURSOR_COUNT];
-  EventCallbackFunction event_callback_;
+  EventCallbackFunction event_callback_{[](Event &) {}};
 };
 
 } // namespace Gloom

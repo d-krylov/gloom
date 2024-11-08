@@ -1,7 +1,7 @@
 #ifndef GLOOM_TEXTURE_CUBEMAP_H
 #define GLOOM_TEXTURE_CUBEMAP_H
 
-#include "gloom/core/include/cubemap.h"
+#include "core/include/cubemap.h"
 #include "texture.h"
 
 namespace Gloom {

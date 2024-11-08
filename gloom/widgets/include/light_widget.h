@@ -1,7 +1,7 @@
 #ifndef GLOOM_LIGHT_WIDGET_H
 #define GLOOM_LIGHT_WIDGET_H
 
-#include "gloom/scene/include/light.h"
+#include "scene/include/light.h"
 #include <vector>
 
 namespace Gloom {

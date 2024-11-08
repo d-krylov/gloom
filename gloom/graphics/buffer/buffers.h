@@ -1,8 +1,8 @@
-#ifndef GLOOM_VERTEX_BUFFER_H
-#define GLOOM_VERTEX_BUFFER_H
+#ifndef GLOOM_BUFFERS_H
+#define GLOOM_BUFFERS_H
 
-#include "buffer.h"
-#include "gloom/graphics/vertex/vertex_format.h"
+#include "buffer.ipp"
+#include "graphics/vertex/vertex_format.h"
 
 namespace Gloom {
 
@@ -21,6 +21,18 @@ private:
   uint32_t binding_{0};
 };
 
+class IndexBuffer : public Buffer {
+public:
+  IndexBuffer(std::size_t size, IndexType index_type = IndexType::UNSIGNED_INT,
+              BufferStorage storage = BufferStorage::DYNAMIC_STORAGE)
+    : Buffer(BufferTarget::ELEMENT_ARRAY, size, storage), index_type_(index_type) {}
+
+  [[nodiscard]] IndexType GetIndexType() const { return index_type_; }
+
+private:
+  IndexType index_type_{0};
+};
+
 } // namespace Gloom
 
-#endif // GLOOM_VERTEX_BUFFER_H
+#endif // GLOOM_BUFFERS_H

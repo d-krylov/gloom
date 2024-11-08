@@ -1,5 +1,5 @@
 #include "imgui_renderer.h"
-#include "gloom/core/include/tools.h"
+#include "core/include/tools.h"
 #include "imgui.h"
 #include <GLFW/glfw3.h>
 
@@ -42,33 +42,27 @@ void ImGuiRenderer::RenderDrawData(ImDrawData *draw_data) {
 
     for (uint32_t i = 0; i < commands->CmdBuffer.Size; i++) {
       const auto *command = &commands->CmdBuffer[i];
-      if (command->UserCallback != nullptr) {
-        if (command->UserCallback == ImDrawCallback_ResetRenderState) {
-        } else {
-          command->UserCallback(commands, command);
-        }
-      } else {
-        Vector2f clip_min((command->ClipRect.x - clip_off.x) * clip_scale.x,
-                          (command->ClipRect.y - clip_off.y) * clip_scale.y);
-        Vector2f clip_max((command->ClipRect.z - clip_off.x) * clip_scale.x,
-                          (command->ClipRect.w - clip_off.y) * clip_scale.y);
 
-        if (clip_max.x <= clip_min.x || clip_max.y <= clip_min.y) {
-          continue;
-        }
+      Vector2f clip_min((command->ClipRect.x - clip_off.x) * clip_scale.x,
+                        (command->ClipRect.y - clip_off.y) * clip_scale.y);
+      Vector2f clip_max((command->ClipRect.z - clip_off.x) * clip_scale.x,
+                        (command->ClipRect.w - clip_off.y) * clip_scale.y);
 
-        Vector4f v(command->ClipRect.x, command->ClipRect.y, command->ClipRect.z,
-                   command->ClipRect.w);
-
-        // Command::SetScissor(int(clip_min.x), int(float(fh) - clip_max.y),
-        //                    int(clip_max.x - clip_min.x), int(clip_max.y - clip_min.y));
-
-        glBindTextureUnit(0, (GLuint)(intptr_t)command->GetTexID());
-
-        auto offset = reinterpret_cast<std::byte *>(command->IdxOffset * sizeof(ImDrawIdx));
-        Command::DrawElementsBaseVertex(command->ElemCount, command->VtxOffset, offset,
-                                        index_buffer_.GetIndexType());
+      if (clip_max.x <= clip_min.x || clip_max.y <= clip_min.y) {
+        continue;
       }
+
+      Vector4f v(command->ClipRect.x, command->ClipRect.y, command->ClipRect.z,
+                 command->ClipRect.w);
+
+      // Command::SetScissor(int(clip_min.x), int(float(fh) - clip_max.y),
+      //                    int(clip_max.x - clip_min.x), int(clip_max.y - clip_min.y));
+
+      glBindTextureUnit(0, (GLuint)(intptr_t)command->GetTexID());
+
+      auto offset = reinterpret_cast<std::byte *>(command->IdxOffset * sizeof(ImDrawIdx));
+      Command::DrawElementsBaseVertex(command->ElemCount, command->VtxOffset, offset,
+                                      index_buffer_.GetIndexType());
     }
   }
 }
@@ -81,10 +75,6 @@ void ImGuiRenderer::SetupRenderState(ImDrawData *draw_data, int32_t fw, int32_t 
   float R = draw_data->DisplayPos.x + draw_data->DisplaySize.x;
   float T = draw_data->DisplayPos.y;
   float B = draw_data->DisplayPos.y + draw_data->DisplaySize.y;
-
-  if (Command::GetClipOrigin() == ClipOrigin::UPPER_LEFT) {
-    std::swap(T, B);
-  }
 
   auto orthographic = glm::ortho(L, R, B, T);
   graphics_pipeline_.SetUniform(ShaderKind::VERTEX, "u_projection_matrix", orthographic);

@@ -1,5 +1,5 @@
-#include "gloom/mathematics/include/bvh.h"
-#include "gloom/mesh/include/model.h"
+#include "mathematics/include/bvh.h"
+#include "mesh/include/model.h"
 
 namespace Gloom {
 

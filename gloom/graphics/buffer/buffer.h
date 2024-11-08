@@ -1,8 +1,8 @@
 #ifndef GLOOM_BUFFER_H
 #define GLOOM_BUFFER_H
 
-#include "gloom/graphics/include/graphics_types.h"
-#include <span>
+#include "core/include/concepts.h"
+#include "graphics/include/graphics_types.h"
 #include <vector>
 
 namespace Gloom {
@@ -18,6 +18,8 @@ public:
 
   ~Buffer();
 
+  [[nodiscard]] std::span<std::byte> GetMap() const { return data_; }
+
   [[nodiscard]] uint64_t GetSize() const { return size_; }
   [[nodiscard]] uint64_t GetCapacity() const { return capacity_; }
   [[nodiscard]] BufferTarget GetTarget() const { return target_; }
@@ -27,22 +29,14 @@ public:
 
   void Resize(uint64_t size);
 
-  template <typename R>
-  requires std::ranges::contiguous_range<R> &&std::ranges::sized_range<R> void Push(R &&source) {
-    auto size = std::ranges::size(source) * sizeof(std::ranges::range_value_t<R>);
-    glNamedBufferSubData(buffer_, size_, size, std::ranges::data(source));
-    size_ += size;
-  }
+  template <ContiguousSizedRange R> void Push(R &&source);
 
-  void FlushRange(uint64_t offset, uint64_t size);
-  void MapRange(uint64_t offset, uint64_t size);
+  void Map(uint64_t offset, uint64_t size, MapAccess access);
   void Unmap();
+  void Flush(uint64_t offset, uint64_t size);
 
   void Bind();
-  void BindRange(uint32_t index, int64_t offset = 0, uint64_t size = 0);
-
-protected:
-  void SetRawData(uint64_t offset, std::span<const std::byte> raw);
+  void Bind(uint32_t index);
 
 private:
   uint32_t buffer_{0};

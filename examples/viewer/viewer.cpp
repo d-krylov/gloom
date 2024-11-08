@@ -1,4 +1,4 @@
-#include "gloom/application/include/gloom.h"
+#include "application/include/gloom.h"
 #include <iostream>
 
 using namespace Gloom;
@@ -36,7 +36,7 @@ public:
   }
 
   void OnAttach() override {
-    model_.LoadWavefront(ROOT / "assets" / "sponza1" / "sponza.obj");
+    model_ = Model(ROOT / "assets" / "sponza1" / "sponza.obj");
     renderer_.Add(model_);
     light_.AddPointLight();
   }

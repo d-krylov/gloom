@@ -1,7 +1,7 @@
 #ifndef GLOOM_PRIMITIVES_H
 #define GLOOM_PRIMITIVES_H
 
-#include "gloom/core/include/core_types.h"
+#include "core/include/core_types.h"
 #include "vertex.h"
 
 namespace Gloom {

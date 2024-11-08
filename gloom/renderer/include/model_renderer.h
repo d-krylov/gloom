@@ -1,7 +1,7 @@
 #ifndef GLOOM_RENDERER_H
 #define GLOOM_RENDERER_H
 
-#include "gloom/graphics/include/graphics.h"
+#include "graphics/include/graphics.h"
 #include <memory>
 #include <unordered_map>
 
@@ -21,7 +21,7 @@ public:
   void SetLights(const std::vector<PointLight> &point);
   void SetCamera(const Camera &camera);
 
-  void Add(Model &model);
+  void Add(const Model &model);
   void OnWindowSize(uint32_t width, uint32_t height);
 
   void Draw(Model &model, const Transform &transform, const PointLight &light,
@@ -34,8 +34,10 @@ protected:
 
 private:
   VertexBuffer vertex_buffer_;
-  VertexArray vertex_array_;
-  VertexArray dummy_vao_;
+  VertexArray vertex_array_1_;
+  VertexArray vertex_array_2_;
+  GraphicsPipeline graphics_pipeline_1_;
+  GraphicsPipeline graphics_pipeline_2_;
   std::unique_ptr<Framebuffer> framebuffer_;
   std::unique_ptr<Texture2D> color_texture_;
   std::unique_ptr<TextureDepth> depth_texture_;

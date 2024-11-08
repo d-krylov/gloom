@@ -1,5 +1,5 @@
 
-#include "gloom/gui/include/window.h"
+#include "gui/include/window.h"
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 
@@ -14,17 +14,11 @@ void GLFWInitialize() {
 }
 
 Window::Window(std::string_view name, uint32_t w, uint32_t h) {
-
   GLFWInitialize();
-
   native_window_ = glfwCreateWindow(w, h, name.data(), nullptr, nullptr);
-
   glfwMakeContextCurrent(native_window_);
-
   auto status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-
   glfwSetWindowUserPointer(native_window_, this);
-
   SetCursors();
   SetCallbacks();
 }

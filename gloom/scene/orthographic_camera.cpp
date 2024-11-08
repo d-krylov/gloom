@@ -1,4 +1,4 @@
-#include "gloom/scene/include/orthographic_camera.h"
+#include "scene/include/orthographic_camera.h"
 
 namespace Gloom {
 

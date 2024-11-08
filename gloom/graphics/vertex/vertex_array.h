@@ -1,7 +1,7 @@
 #ifndef GLOOM_VERTEX_ARRAY_H
 #define GLOOM_VERTEX_ARRAY_H
 
-#include "gloom/graphics/include/graphics_types.h"
+#include "graphics/include/graphics_types.h"
 
 namespace Gloom {
 

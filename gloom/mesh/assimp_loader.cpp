@@ -1,4 +1,5 @@
-#include "gloom/mesh/include/model.h"
+#include "core/include/image.h"
+#include "mesh/include/model.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -18,6 +19,7 @@ void LoadMaterial(const aiScene *scene, Model &model, aiMesh *assimp_mesh, Mesh 
 
   for (auto i = 0; i < required.size(); i++) {
     aiString assimp_texture_name;
+    mesh.material_.names_.*fields[i] = "default";
     material->GetTexture(required[i], 0, &assimp_texture_name);
     if (assimp_texture_name.length > 0) {
       std::string texture_name(assimp_texture_name.C_Str());
@@ -89,6 +91,8 @@ void Model::LoadAssimp(const std::filesystem::path &path) {
       (scene->mRootNode == nullptr)) {
     return;
   }
+
+  textures_.emplace("default", Texture2D(Image()));
 
   ProcessNode(scene->mRootNode, scene, *this);
 }

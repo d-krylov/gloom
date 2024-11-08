@@ -1,6 +1,6 @@
-#include "graphics_pipeline.h"
-#include "gloom/core/include/tools.h"
-#include "gloom/graphics/include/debug.h"
+#include "core/include/tools.h"
+#include "graphics/include/debug.h"
+#include "pipeline.ipp"
 #include <iostream>
 
 namespace Gloom {

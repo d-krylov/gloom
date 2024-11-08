@@ -1,7 +1,8 @@
 #ifndef GLOOM_COMPUTE_PIPELINE_H
 #define GLOOM_COMPUTE_PIPELINE_H
 
-#include "shader_uniform.h"
+#include <filesystem>
+#include <string_view>
 
 namespace Gloom {
 
@@ -13,10 +14,7 @@ public:
 
   void Bind();
 
-  template <typename T> void SetUniform(std::string_view name, T value, bool transpose = false) {
-    auto location = glGetUniformLocation(compute_shader_, name.data());
-    SetShaderUniform(compute_shader_, location, value, transpose);
-  }
+  template <typename T> void SetUniform(std::string_view name, T value, bool transpose = false);
 
 private:
   uint32_t compute_pipeline_;

@@ -1,4 +1,4 @@
-#include "buffer.h"
+#include "buffer.ipp"
 
 namespace Gloom {
 
@@ -14,24 +14,28 @@ Buffer::Buffer(Buffer &&other) noexcept
 
 Buffer::~Buffer() { glDeleteBuffers(1, &buffer_); }
 
-void Buffer::MapRange(std::size_t offset, std::size_t size) {}
-
-void Buffer::Unmap() {}
-
-void Buffer::FlushRange(uint64_t offset, uint64_t size) {
-  glFlushMappedNamedBufferRange(buffer_, offset, size);
+void Buffer::Map(uint64_t offset, uint64_t size, MapAccess access) {
+  CORE_VERIFY(storage_ != BufferStorage::DYNAMIC_STORAGE);
+  auto raw = glMapNamedBufferRange(buffer_, offset, size, uint16_t(access));
+  if (raw) {
+    auto byte_pointer = static_cast<std::byte *>(raw);
+    data_ = std::span<std::byte>(byte_pointer, byte_pointer + size);
+  }
 }
 
-void Buffer::SetRawData(uint64_t offset, std::span<const std::byte> raw) {
-  glNamedBufferSubData(buffer_, offset, raw.size(), raw.data());
+void Buffer::Unmap() {
+  glUnmapNamedBuffer(buffer_);
+  data_ = std::span<std::byte>();
+}
+
+void Buffer::Flush(uint64_t offset, uint64_t size) {
+  glFlushMappedNamedBufferRange(buffer_, offset, size);
 }
 
 void Buffer::Resize(uint64_t size) { size_ = size; }
 
 void Buffer::Bind() { glBindBuffer(uint16_t(target_), buffer_); }
 
-void Buffer::BindRange(uint32_t index, int64_t offset, uint64_t size) {
-  glBindBufferRange(uint32_t(target_), index, buffer_, offset, (size == 0) ? capacity_ : size);
-}
+void Buffer::Bind(uint32_t index) { glBindBufferBase(uint16_t(target_), index, buffer_); }
 
 } // namespace Gloom
